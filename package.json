@@ -4,10 +4,14 @@
   "description": "Consume media in foreign languages by translating only the difficult vocabulary and by learning it.",
   "main": "index.js",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "init-db": "node scripts/initDb.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "sqlite3": "^5.1.6"
+  }
 }
