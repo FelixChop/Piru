@@ -8,10 +8,16 @@ See [SPEC.md](./SPEC.md) for the detailed product and technical specification of
 
 ## Development
 
-Install dependencies (none yet) and run the test suite:
+Install dependencies and run the test suite:
 
 ```bash
 npm test
+```
+
+Initialize the local SQLite database (creates tables if they don't exist):
+
+```bash
+npm run init-db
 ```
 
 ### Algorithms
