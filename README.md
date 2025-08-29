@@ -8,7 +8,13 @@ See [SPEC.md](./SPEC.md) for the detailed product and technical specification of
 
 ## Development
 
-Install dependencies and run the test suite:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the test suite:
 
 ```bash
 npm test
