@@ -41,7 +41,20 @@ const resources = {
   }
 };
 
-const defaultLang = document.getElementById('signup-native').value || 'en';
+const nativeLanguages = [
+  { code: 'fr', label: '🇫🇷 Français' },
+  { code: 'en', label: '🇬🇧 English' }
+];
+
+const nativeSelect = document.getElementById('signup-native');
+nativeLanguages.forEach(({ code, label }) => {
+  const option = document.createElement('option');
+  option.value = code;
+  option.textContent = label;
+  nativeSelect.appendChild(option);
+});
+
+const defaultLang = nativeSelect.value || 'en';
 i18next.init({ lng: defaultLang, resources }).then(() => {
   updateContent();
 });
