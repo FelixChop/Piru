@@ -10,7 +10,7 @@ const resources = {
       email: 'Email',
       password: 'Password',
       native_language: 'Native language',
-      learning_languages: 'Learning languages (comma separated)',
+      learning_languages: 'Learning languages',
       select_language: 'Select language',
       your_works: 'Your Works',
       title: 'Title',
@@ -29,7 +29,7 @@ const resources = {
       email: 'Email',
       password: 'Mot de passe',
       native_language: 'Langue maternelle',
-      learning_languages: 'Langues apprises (séparées par des virgules)',
+      learning_languages: 'Langues apprises',
       select_language: 'Choisir une langue',
       your_works: 'Vos œuvres',
       title: 'Titre',
@@ -74,17 +74,6 @@ document.getElementById('signup-native').addEventListener('change', (e) => {
   updateContent();
 });
 
-document.getElementById('learning-dropdown').addEventListener('change', (e) => {
-  const code = e.target.value;
-  const input = document.getElementById('signup-learning');
-  const languages = input.value ? input.value.split(',').map(l => l.trim()).filter(Boolean) : [];
-  if (!languages.includes(code)) {
-    languages.push(code);
-    input.value = languages.join(', ');
-  }
-  e.target.selectedIndex = 0;
-});
-
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('login-email').value;
@@ -112,7 +101,7 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   const email = document.getElementById('signup-email').value;
   const password = document.getElementById('signup-password').value;
   const nativeLanguage = document.getElementById('signup-native').value;
-  const learningLanguages = document.getElementById('signup-learning').value.split(',').map(l => l.trim());
+  const learningLanguages = Array.from(document.getElementById('signup-learning').selectedOptions).map(o => o.value);
   const res = await fetch('/auth/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
