@@ -3,7 +3,8 @@ const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 
 // Path to SQLite database file
-const dbPath = path.join(__dirname, '..', 'piru.sqlite');
+const dbFile = process.env.NODE_ENV === 'staging' ? 'piru-staging.sqlite' : 'piru.sqlite';
+const dbPath = path.join(__dirname, '..', dbFile);
 // Path to schema SQL file
 const schemaPath = path.join(__dirname, '..', 'src', 'db', 'schema.sql');
 
