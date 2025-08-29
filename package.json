@@ -5,13 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "node --test",
-    "init-db": "node scripts/initDb.js"
+    "init-db": "node scripts/initDb.js",
+    "start": "node src/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "sqlite3": "^5.1.6"
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.6",
+    "supertest": "^7.1.4"
   }
 }
