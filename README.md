@@ -26,6 +26,17 @@ Initialize the local SQLite database (creates tables if they don't exist):
 npm run init-db
 ```
 
+### Staging environment
+
+Run a local staging server with a pre-created test account:
+
+```bash
+npm run init-db:staging   # optional, creates a separate staging database
+npm run start:staging
+```
+
+The staging server listens on port 4000 and exposes the account `staging@example.com` with password `staging123`.
+
 ### Algorithms
 
 The `src/sm2.js` module implements the SM-2 spaced repetition algorithm used

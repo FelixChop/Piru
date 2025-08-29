@@ -8,6 +8,16 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/lib/i18next', express.static(path.join(__dirname, '..', 'node_modules', 'i18next', 'dist')));
 
+if (process.env.NODE_ENV === 'staging') {
+  try {
+    signup('staging@example.com', 'staging123', 'en', ['fr']);
+    // eslint-disable-next-line no-console
+    console.log('Staging user ready: staging@example.com / staging123');
+  } catch (err) {
+    // ignore if user already exists
+  }
+}
+
 app.post('/auth/signup', (req, res) => {
   const { email, password, nativeLanguage, learningLanguages } = req.body;
   try {
