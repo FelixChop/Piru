@@ -8,37 +8,41 @@
 </head>
 <body>
   <header>
-    <h1>Piru</h1>
-    <p>Consume media in foreign languages.</p>
+    <h1 data-i18n="site_name">Piru</h1>
+    <p data-i18n="tagline">Consume media in foreign languages.</p>
   </header>
   <main>
     <section id="auth">
-      <h2>Login</h2>
+      <h2 data-i18n="login">Login</h2>
       <form id="login-form">
-        <input type="email" id="login-email" placeholder="Email" required />
-        <input type="password" id="login-password" placeholder="Password" required />
-        <button type="submit">Login</button>
+        <input type="email" id="login-email" data-i18n-placeholder="email" placeholder="Email" required />
+        <input type="password" id="login-password" data-i18n-placeholder="password" placeholder="Password" required />
+        <button type="submit" data-i18n="login">Login</button>
       </form>
-      <h2>Sign Up</h2>
+      <h2 data-i18n="sign_up">Sign Up</h2>
       <form id="signup-form">
-        <input type="email" id="signup-email" placeholder="Email" required />
-        <input type="password" id="signup-password" placeholder="Password" required />
-        <input type="text" id="signup-native" placeholder="Native language" required />
-        <input type="text" id="signup-learning" placeholder="Learning languages (comma separated)" required />
-        <button type="submit">Sign Up</button>
+        <input type="email" id="signup-email" data-i18n-placeholder="email" placeholder="Email" required />
+        <input type="password" id="signup-password" data-i18n-placeholder="password" placeholder="Password" required />
+        <label for="signup-native" data-i18n="native_language">Native language</label>
+        <select id="signup-native">
+          <option value="fr">🇫🇷 Français</option>
+        </select>
+        <input type="text" id="signup-learning" data-i18n-placeholder="learning_languages" placeholder="Learning languages (comma separated)" required />
+        <button type="submit" data-i18n="sign_up">Sign Up</button>
       </form>
     </section>
     <section id="works" class="hidden">
-      <h2>Your Works</h2>
+      <h2 data-i18n="your_works">Your Works</h2>
       <form id="work-form">
-        <input type="text" id="work-title" placeholder="Title" />
-        <input type="text" id="work-author" placeholder="Author" />
-        <textarea id="work-content" placeholder="Content" required></textarea>
-        <button type="submit">Add Work</button>
+        <input type="text" id="work-title" data-i18n-placeholder="title" placeholder="Title" />
+        <input type="text" id="work-author" data-i18n-placeholder="author" placeholder="Author" />
+        <textarea id="work-content" data-i18n-placeholder="content" placeholder="Content" required></textarea>
+        <button type="submit" data-i18n="add_work">Add Work</button>
       </form>
       <ul id="work-list"></ul>
     </section>
   </main>
+  <script src="/lib/i18next/i18next.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
