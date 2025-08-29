@@ -13,6 +13,3 @@ Install dependencies (none yet) and run the test suite:
 ```bash
 npm test
 ```
-
-The test suite uses Node's built-in runner and currently contains a placeholder
-test that will be expanded as development progresses.
