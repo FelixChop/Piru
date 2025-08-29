@@ -1,9 +1,11 @@
 const express = require('express');
+const path = require('path');
 const { signup, login } = require('./auth');
 const { addWork, listWorks } = require('./works');
 
 const app = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.post('/auth/signup', (req, res) => {
   const { email, password, nativeLanguage, learningLanguages } = req.body;

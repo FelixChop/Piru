@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piru</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Piru</h1>
+    <p>Consume media in foreign languages.</p>
+  </header>
+  <main>
+    <section id="auth">
+      <h2>Login</h2>
+      <form id="login-form">
+        <input type="email" id="login-email" placeholder="Email" required />
+        <input type="password" id="login-password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+      <h2>Sign Up</h2>
+      <form id="signup-form">
+        <input type="email" id="signup-email" placeholder="Email" required />
+        <input type="password" id="signup-password" placeholder="Password" required />
+        <input type="text" id="signup-native" placeholder="Native language" required />
+        <input type="text" id="signup-learning" placeholder="Learning languages (comma separated)" required />
+        <button type="submit">Sign Up</button>
+      </form>
+    </section>
+    <section id="works" class="hidden">
+      <h2>Your Works</h2>
+      <form id="work-form">
+        <input type="text" id="work-title" placeholder="Title" />
+        <input type="text" id="work-author" placeholder="Author" />
+        <textarea id="work-content" placeholder="Content" required></textarea>
+        <button type="submit">Add Work</button>
+      </form>
+      <ul id="work-list"></ul>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
