@@ -23,9 +23,17 @@
       <form id="signup-form">
         <input type="email" id="signup-email" data-i18n-placeholder="email" placeholder="Email" required />
         <input type="password" id="signup-password" data-i18n-placeholder="password" placeholder="Password" required />
-        <label for="signup-native" data-i18n="native_language">Native language</label>
         <select id="signup-native">
+          <option value="" disabled selected data-i18n="native_language">Native language</option>
           <option value="fr">🇫🇷 Français</option>
+        </select>
+        <select id="learning-dropdown">
+          <option value="" disabled selected data-i18n="select_language">Select language</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="fr">🇫🇷 Français</option>
+          <option value="de">🇩🇪 Deutsch</option>
+          <option value="it">🇮🇹 Italiano</option>
         </select>
         <input type="text" id="signup-learning" data-i18n-placeholder="learning_languages" placeholder="Learning languages (comma separated)" required />
         <button type="submit" data-i18n="sign_up">Sign Up</button>

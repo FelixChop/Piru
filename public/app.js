@@ -11,6 +11,7 @@ const resources = {
       password: 'Password',
       native_language: 'Native language',
       learning_languages: 'Learning languages (comma separated)',
+      select_language: 'Select language',
       your_works: 'Your Works',
       title: 'Title',
       author: 'Author',
@@ -29,6 +30,7 @@ const resources = {
       password: 'Mot de passe',
       native_language: 'Langue maternelle',
       learning_languages: 'Langues apprises (séparées par des virgules)',
+      select_language: 'Choisir une langue',
       your_works: 'Vos œuvres',
       title: 'Titre',
       author: 'Auteur',
@@ -57,6 +59,17 @@ function updateContent() {
 document.getElementById('signup-native').addEventListener('change', (e) => {
   i18next.changeLanguage(e.target.value);
   updateContent();
+});
+
+document.getElementById('learning-dropdown').addEventListener('change', (e) => {
+  const code = e.target.value;
+  const input = document.getElementById('signup-learning');
+  const languages = input.value ? input.value.split(',').map(l => l.trim()).filter(Boolean) : [];
+  if (!languages.includes(code)) {
+    languages.push(code);
+    input.value = languages.join(', ');
+  }
+  e.target.selectedIndex = 0;
 });
 
 document.getElementById('login-form').addEventListener('submit', async (e) => {
