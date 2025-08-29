@@ -13,5 +13,3 @@ Install dependencies (none yet) and run the test suite:
 ```bash
 npm test
 ```
-
-Tests are currently placeholders and will evolve alongside the implementation.
