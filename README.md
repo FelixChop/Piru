@@ -14,9 +14,6 @@ Install dependencies (none yet) and run the test suite:
 npm test
 ```
 
-The test suite uses Node's built-in runner and currently contains a placeholder
-test that will be expanded as development progresses.
-
 ### Algorithms
 
 The `src/sm2.js` module implements the SM-2 spaced repetition algorithm used
