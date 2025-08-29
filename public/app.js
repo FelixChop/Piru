@@ -1,5 +1,64 @@
 let userId = null;
 
+const resources = {
+  en: {
+    translation: {
+      site_name: 'Piru',
+      tagline: 'Consume media in foreign languages.',
+      login: 'Login',
+      sign_up: 'Sign Up',
+      email: 'Email',
+      password: 'Password',
+      native_language: 'Native language',
+      learning_languages: 'Learning languages (comma separated)',
+      your_works: 'Your Works',
+      title: 'Title',
+      author: 'Author',
+      content: 'Content',
+      add_work: 'Add Work',
+      account_created: 'Account created. You can now log in.'
+    }
+  },
+  fr: {
+    translation: {
+      site_name: 'Piru',
+      tagline: 'Consommez des médias en langues étrangères.',
+      login: 'Connexion',
+      sign_up: 'Inscription',
+      email: 'Email',
+      password: 'Mot de passe',
+      native_language: 'Langue maternelle',
+      learning_languages: 'Langues apprises (séparées par des virgules)',
+      your_works: 'Vos œuvres',
+      title: 'Titre',
+      author: 'Auteur',
+      content: 'Contenu',
+      add_work: 'Ajouter une œuvre',
+      account_created: 'Compte créé. Vous pouvez maintenant vous connecter.'
+    }
+  }
+};
+
+const defaultLang = document.getElementById('signup-native').value || 'en';
+i18next.init({ lng: defaultLang, resources }).then(() => {
+  updateContent();
+});
+
+function updateContent() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = i18next.t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = i18next.t(el.dataset.i18nPlaceholder);
+  });
+  document.documentElement.lang = i18next.language;
+}
+
+document.getElementById('signup-native').addEventListener('change', (e) => {
+  i18next.changeLanguage(e.target.value);
+  updateContent();
+});
+
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('login-email').value;
@@ -12,6 +71,8 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   const data = await res.json();
   if (res.ok) {
     userId = data.id;
+    i18next.changeLanguage(data.nativeLanguage);
+    updateContent();
     document.getElementById('auth').classList.add('hidden');
     document.getElementById('works').classList.remove('hidden');
     loadWorks();
@@ -33,7 +94,7 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   });
   const data = await res.json();
   if (res.ok) {
-    alert('Account created. You can now log in.');
+    alert(i18next.t('account_created'));
   } else {
     alert(data.error);
   }

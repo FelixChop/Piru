@@ -6,6 +6,7 @@ const { addWork, listWorks } = require('./works');
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use('/lib/i18next', express.static(path.join(__dirname, '..', 'node_modules', 'i18next', 'dist')));
 
 app.post('/auth/signup', (req, res) => {
   const { email, password, nativeLanguage, learningLanguages } = req.body;
