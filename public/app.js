@@ -1,8 +1,11 @@
 let userId = localStorage.getItem('userId');
 
 const nativeLanguages = [
+  { code: 'en', label: '🇬🇧 English' },
+  { code: 'es', label: '🇪🇸 Español' },
   { code: 'fr', label: '🇫🇷 Français' },
-  { code: 'en', label: '🇬🇧 English' }
+  { code: 'de', label: '🇩🇪 Deutsch' },
+  { code: 'it', label: '🇮🇹 Italiano' }
 ];
 
 const learningLanguages = [
@@ -14,8 +17,6 @@ const learningLanguages = [
 ];
 
 const nativeSelect = document.getElementById('signup-native');
-const signupButton = document.querySelector('#signup-form button[type="submit"]');
-const languageError = document.getElementById('signup-language-error');
 nativeLanguages.forEach(({ code, label }) => {
   const option = document.createElement('option');
   option.value = code;
@@ -34,7 +35,6 @@ learningLanguages.forEach(({ code, label }) => {
 // Ensure the placeholder option remains selected by default
 nativeSelect.value = '';
 learningSelect.value = '';
-signupButton.disabled = true;
 
 const defaultLang = nativeSelect.value || 'en';
 initI18n(defaultLang);
@@ -43,13 +43,6 @@ document.getElementById('signup-native').addEventListener('change', (e) => {
   const lang = e.target.value;
   i18next.changeLanguage(lang);
   updateContent();
-  if (lang !== 'fr') {
-    signupButton.disabled = true;
-    languageError.classList.remove('hidden');
-  } else {
-    signupButton.disabled = false;
-    languageError.classList.add('hidden');
-  }
 });
 
 document.getElementById('login-form').addEventListener('submit', async (e) => {
