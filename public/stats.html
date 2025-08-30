@@ -9,16 +9,17 @@
 <body>
   <header>
     <a href="/"><img src="parrot_grey_no_title.png" alt="Piru logo" class="logo" /></a>
-    <h1><a href="/" class="home-link">Piru</a></h1>
+    <h1><a href="/" class="home-link" data-i18n="site_name">Piru</a></h1>
   </header>
   <main>
-    <h2 data-i18n="stats_title">Statistics</h2>
-    <p><span data-i18n="total_words"></span>: <span id="total-words">0</span></p>
-    <p><span data-i18n="mastered_words"></span>: <span id="mastered-words">0</span></p>
-    <p><a href="flashcards.html" data-i18n="review_vocabulary">Review Vocabulary</a></p>
-    <button id="logout-button" class="hidden" data-i18n="logout">Logout</button>
-   </main>
-   <script src="/lib/i18next/umd/i18next.min.js"></script>
-   <script src="stats.js"></script>
- </body>
- </html>
+    <h2 data-i18n="statistics"></h2>
+    <p><span data-i18n="total_words_encountered"></span> <span id="total-words">0</span></p>
+    <p><span data-i18n="mastered_words"></span> <span id="mastered-words">0</span></p>
+    <p><a href="flashcards.html" data-i18n="review_vocabulary"></a></p>
+    <button id="logout-button" class="hidden" data-i18n="logout"></button>
+  </main>
+  <script src="/lib/i18next/umd/i18next.min.js"></script>
+  <script src="i18n.js"></script>
+  <script src="stats.js"></script>
+</body>
+</html>

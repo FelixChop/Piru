@@ -1,48 +1,5 @@
 let userId = null;
 
-const resources = {
-  en: {
-    translation: {
-      site_name: 'Piru',
-      tagline: 'Consume media in foreign languages.',
-      login: 'Login',
-      sign_up: 'Sign Up',
-      email: 'Email',
-      password: 'Password',
-      native_language: 'Native language',
-      learning_language: 'Language to learn',
-      select_language: 'Select language',
-      your_works: 'Your Works',
-      title: 'Title',
-      author: 'Author',
-      content: 'Content',
-      add_work: 'Add Work',
-      account_created: 'Account created. You can now log in.',
-      language_unavailable: 'Language not available'
-    }
-  },
-  fr: {
-    translation: {
-      site_name: 'Piru',
-      tagline: 'Consommez des médias en langues étrangères.',
-      login: 'Connexion',
-      sign_up: 'Inscription',
-      email: 'Email',
-      password: 'Mot de passe',
-      native_language: 'Langue maternelle',
-      learning_language: 'Langue à apprendre',
-      select_language: 'Choisir une langue',
-      your_works: 'Vos œuvres',
-      title: 'Titre',
-      author: 'Auteur',
-      content: 'Contenu',
-      add_work: 'Ajouter une œuvre',
-      account_created: 'Compte créé. Vous pouvez maintenant vous connecter.',
-      language_unavailable: "Cette langue n'est pas disponible"
-    }
-  }
-};
-
 const nativeLanguages = [
   { code: 'fr', label: '🇫🇷 Français' },
   { code: 'en', label: '🇬🇧 English' }
@@ -80,19 +37,7 @@ learningSelect.value = '';
 signupButton.disabled = true;
 
 const defaultLang = nativeSelect.value || 'en';
-i18next.init({ lng: defaultLang, resources }).then(() => {
-  updateContent();
-});
-
-function updateContent() {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = i18next.t(el.dataset.i18n);
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    el.placeholder = i18next.t(el.dataset.i18nPlaceholder);
-  });
-  document.documentElement.lang = i18next.language;
-}
+initI18n(defaultLang);
 
 document.getElementById('signup-native').addEventListener('change', (e) => {
   const lang = e.target.value;

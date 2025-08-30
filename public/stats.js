@@ -50,8 +50,4 @@ async function loadStats() {
   }
 }
 
-const lang = localStorage.getItem('nativeLanguage') || 'en';
-i18next.init({ lng: lang, resources }).then(() => {
-  updateContent();
-  loadStats();
-});
+initI18n().then(loadStats);

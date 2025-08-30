@@ -93,8 +93,4 @@ document.querySelectorAll('#review-buttons button').forEach((btn) => {
   btn.addEventListener('click', () => review(Number(btn.dataset.quality)));
 });
 
-const lang = localStorage.getItem('nativeLanguage') || 'en';
-i18next.init({ lng: lang, resources }).then(() => {
-  updateContent();
-  loadNext();
-});
+initI18n().then(loadNext);
