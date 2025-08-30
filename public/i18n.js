@@ -26,8 +26,6 @@ const i18nResources = {
       view_stats: 'View Stats',
       logout: 'Logout',
       vocabulary_review: 'Vocabulary Review',
-      paste_text_here: 'Paste text here',
-      extract_vocabulary: 'Extract Vocabulary',
       show_definition: 'Show Definition',
       again: 'Again',
       good: 'Good'
@@ -59,8 +57,6 @@ const i18nResources = {
       view_stats: 'Voir ses stats',
       logout: 'Déconnexion',
       vocabulary_review: 'Révision du vocabulaire',
-      paste_text_here: 'Collez le texte ici',
-      extract_vocabulary: 'Extraire le vocabulaire',
       show_definition: 'Afficher la définition',
       again: 'Encore',
       good: 'Bien'
@@ -92,8 +88,6 @@ const i18nResources = {
       view_stats: 'Ver estadísticas',
       logout: 'Cerrar sesión',
       vocabulary_review: 'Revisión de vocabulario',
-      paste_text_here: 'Pega el texto aquí',
-      extract_vocabulary: 'Extraer vocabulario',
       show_definition: 'Mostrar definición',
       again: 'De nuevo',
       good: 'Bien'
@@ -125,8 +119,6 @@ const i18nResources = {
       view_stats: 'Vedi statistiche',
       logout: 'Esci',
       vocabulary_review: 'Revisione del vocabolario',
-      paste_text_here: 'Incolla il testo qui',
-      extract_vocabulary: 'Estrai vocabolario',
       show_definition: 'Mostra definizione',
       again: 'Di nuovo',
       good: 'Bene'
@@ -158,8 +150,6 @@ const i18nResources = {
       view_stats: 'Statistiken ansehen',
       logout: 'Abmelden',
       vocabulary_review: 'Vokabelwiederholung',
-      paste_text_here: 'Text hier einfügen',
-      extract_vocabulary: 'Vokabeln extrahieren',
       show_definition: 'Definition anzeigen',
       again: 'Nochmals',
       good: 'Gut'
