@@ -132,20 +132,6 @@ function initAuthenticatedState() {
   loadWorks();
 }
 
-document.getElementById('learn-button').addEventListener('click', () => {
-  window.location.href = 'flashcards.html';
-});
-
-document.getElementById('stats-button').addEventListener('click', () => {
-  window.location.href = 'stats.html';
-});
-
-document.getElementById('logout-button').addEventListener('click', () => {
-  localStorage.removeItem('userId');
-  localStorage.removeItem('nativeLanguage');
-  window.location.href = '/';
-});
-
 if (userId) {
   initAuthenticatedState();
 }
