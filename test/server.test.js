@@ -1,6 +1,22 @@
 const { describe, it, beforeEach } = require('node:test');
 const assert = require('assert');
 const request = require('supertest');
+
+process.env.OPENAI_API_KEY = 'test';
+global.fetch = async () => ({
+  json: async () => ({
+    choices: [
+      {
+        message: {
+          content: JSON.stringify([
+            { word: 'mockword', definition: 'mock definition', citation: 'mock citation' },
+          ]),
+        },
+      },
+    ],
+  }),
+});
+
 const app = require('../src/server');
 const { _clearUsers } = require('../src/auth');
 const { _clearWorks } = require('../src/works');

@@ -12,17 +12,9 @@ function extractVocabulary(content) {
     id: crypto.randomUUID(),
     word,
     definition: `Definition of ${word}`,
-    citations: [findCitation(content, word)],
+    citations: [],
     status: 'new',
   }));
-}
-
-function findCitation(content, word) {
-  const idx = content.toLowerCase().indexOf(word.toLowerCase());
-  if (idx === -1) return '';
-  const start = Math.max(0, idx - 20);
-  const end = Math.min(content.length, idx + word.length + 20);
-  return content.slice(start, end).trim();
 }
 
 /**

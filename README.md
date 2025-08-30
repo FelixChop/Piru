@@ -14,6 +14,15 @@ Install dependencies:
 npm install
 ```
 
+Configure the OpenAI API key (used for vocabulary extraction):
+
+```bash
+cp .env.example .env
+# then edit .env and set OPENAI_API_KEY
+```
+
+The `.env` file is ignored by git so your API key stays private.
+
 Run the test suite:
 
 ```bash
