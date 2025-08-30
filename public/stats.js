@@ -5,8 +5,7 @@ const statsResources = {
       statistics: 'Statistics',
       total_words_encountered: 'Total words encountered',
       mastered_words: 'Mastered words',
-      review_vocabulary: 'Review Vocabulary',
-      logout: 'Logout'
+      review_vocabulary: 'Review Vocabulary'
     }
   },
   fr: {
@@ -14,25 +13,17 @@ const statsResources = {
       statistics: 'Statistiques',
       total_words_encountered: 'Nombre total de mots rencontrés',
       mastered_words: 'Mots maîtrisés',
-      review_vocabulary: 'Réviser le vocabulaire',
-      logout: 'Déconnexion'
+      review_vocabulary: 'Réviser le vocabulaire'
     }
   }
 };
 
 async function loadStats() {
   const userId = localStorage.getItem('userId');
-  const logoutButton = document.getElementById('logout-button');
   if (!userId) {
     window.location.href = '/';
     return;
   }
-  logoutButton.classList.remove('hidden');
-  logoutButton.addEventListener('click', () => {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('nativeLanguage');
-    window.location.href = '/';
-  });
   const res = await fetch(`/stats/overview?userId=${userId}`);
   if (res.ok) {
     const data = await res.json();
