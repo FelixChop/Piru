@@ -127,3 +127,7 @@ button:hover {
   gap: 0.5rem;
   padding: 0.5rem;
 }
+
+#menu-options.hidden {
+  display: none;
+}
