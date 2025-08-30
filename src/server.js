@@ -1,8 +1,9 @@
 const express = require('express');
 const path = require('path');
 const { signup, login } = require('./auth');
-const { addWork, listWorks } = require('./works');
+const { addWork, listWorks, extractVocabulary } = require('./works');
 const { getOverview } = require('./stats');
+const { addWords, getNextWord, reviewWord } = require('./vocab');
 
 const app = express();
 app.use(express.json());
@@ -59,6 +60,40 @@ app.get('/works', (req, res) => {
   }
   const works = listWorks(userId);
   res.json(works);
+});
+
+// Vocabulary endpoints
+app.post('/vocab/extract', (req, res) => {
+  const { userId, text } = req.body;
+  if (!userId || !text) {
+    return res.status(400).json({ error: 'Missing userId or text' });
+  }
+  const vocab = extractVocabulary(text);
+  const added = addWords(userId, vocab);
+  res.status(201).json(added);
+});
+
+app.get('/vocab/next', (req, res) => {
+  const { userId } = req.query;
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId' });
+  }
+  const word = getNextWord(userId);
+  if (!word) return res.status(204).end();
+  res.json(word);
+});
+
+app.post('/vocab/review', (req, res) => {
+  const { userId, wordId, quality } = req.body;
+  if (!userId || !wordId || typeof quality !== 'number') {
+    return res.status(400).json({ error: 'Missing fields' });
+  }
+  try {
+    const updated = reviewWord(userId, wordId, quality);
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 // Stats endpoints

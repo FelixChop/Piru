@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../src/server');
 const { _clearUsers } = require('../src/auth');
 const { _clearWorks } = require('../src/works');
+const { _clear: _clearVocab } = require('../src/vocab');
 
 describe('Auth API', () => {
   beforeEach(() => {
@@ -91,5 +92,34 @@ describe('Works API', () => {
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.body.length, 1);
     assert.strictEqual(res.body[0].title, 'Story');
+  });
+});
+
+describe('Vocabulary API', () => {
+  beforeEach(() => {
+    _clearVocab();
+  });
+
+  it('extracts vocabulary from text', async () => {
+    const res = await request(app)
+      .post('/vocab/extract')
+      .send({ userId: 'u1', text: 'astonishing intricacies manifest' });
+    assert.strictEqual(res.status, 201);
+    assert.ok(res.body.length > 0);
+  });
+
+  it('returns next word and updates after review', async () => {
+    await request(app)
+      .post('/vocab/extract')
+      .send({ userId: 'u2', text: 'remarkable phenomena abound' });
+    const next = await request(app)
+      .get('/vocab/next')
+      .query({ userId: 'u2' });
+    assert.strictEqual(next.status, 200);
+    const wordId = next.body.id;
+    const review = await request(app)
+      .post('/vocab/review')
+      .send({ userId: 'u2', wordId, quality: 4 });
+    assert.strictEqual(review.status, 200);
   });
 });
