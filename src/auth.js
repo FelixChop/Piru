@@ -3,6 +3,9 @@ const crypto = require('crypto');
 // In-memory store for users
 const users = new Map();
 
+// Supported native languages
+const SUPPORTED_LANGUAGES = new Set(['en', 'fr', 'it', 'es', 'de']);
+
 function hashPassword(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
@@ -22,7 +25,7 @@ function signup(email, password, nativeLanguage, learningLanguages = []) {
   if (users.has(email)) {
     throw new Error('User already exists');
   }
-  if (nativeLanguage !== 'fr') {
+  if (!SUPPORTED_LANGUAGES.has(nativeLanguage)) {
     throw new Error('Native language not available');
   }
   const id = crypto.randomUUID();
