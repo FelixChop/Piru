@@ -136,16 +136,20 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
     alert(i18next.t('select_language'));
     return;
   }
-  const res = await fetch('/auth/signup', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, nativeLanguage, learningLanguages: [learningLanguage] })
-  });
-  const data = await res.json();
-  if (res.ok) {
-    alert(i18next.t('account_created'));
-  } else {
-    alert(data.error);
+  try {
+    const res = await fetch('/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, nativeLanguage, learningLanguages: [learningLanguage] })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      alert(i18next.t('account_created'));
+    } else {
+      alert(data.error);
+    }
+  } catch (err) {
+    alert('An error occurred while signing up. Please try again later.');
   }
 });
 
