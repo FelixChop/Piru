@@ -1,16 +1,29 @@
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
 require('dotenv').config();
 
-async function extractVocabularyWithLLM(text) {
+let prompt;
+try {
+  prompt = fs.readFileSync(
+    path.join(__dirname, 'prompts', 'extract-vocabulary.txt'),
+    'utf8'
+  );
+} catch (err) {
+  console.error('Failed to load prompt file', err);
+  prompt =
+    `Extract vocabulary from the following text. ` +
+    `Return a JSON array where each item has: word, definition (in French), and citation from the text. ` +
+    `Only return JSON.`;
+}
+
+async function extractVocabularyWithLLM(text, outPath) {
   if (!text || !text.trim()) return [];
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     throw new Error('Missing OpenAI API key');
   }
-
-  const prompt = `Extract vocabulary from the following text. ` +
-    `Return a JSON array where each item has: word, definition (in French), and citation from the text. ` +
-    `Only return JSON.`;
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -37,13 +50,27 @@ async function extractVocabularyWithLLM(text) {
     items = [];
   }
 
-  return items.map((item) => ({
+  const mapped = items.map((item) => ({
     id: crypto.randomUUID(),
     word: item.word,
     definition: item.definition,
     citations: [item.citation],
     status: 'new',
   }));
+
+  try {
+    const outputPath =
+      outPath ||
+      path.join(
+        os.tmpdir(),
+        `difficult-words-${crypto.randomUUID()}.json`
+      );
+    fs.writeFileSync(outputPath, JSON.stringify(mapped, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Failed to write difficult words file', err);
+  }
+
+  return mapped;
 }
 
 module.exports = { extractVocabularyWithLLM };
