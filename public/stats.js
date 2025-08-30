@@ -1,22 +1,4 @@
- (function() {
-const statsResources = {
-  en: {
-    translation: {
-      statistics: 'Statistics',
-      total_words_encountered: 'Total words encountered',
-      mastered_words: 'Mastered words',
-      review_vocabulary: 'Review Vocabulary'
-    }
-  },
-  fr: {
-    translation: {
-      statistics: 'Statistiques',
-      total_words_encountered: 'Nombre total de mots rencontrés',
-      mastered_words: 'Mots maîtrisés',
-      review_vocabulary: 'Réviser le vocabulaire'
-    }
-  }
-};
+(function() {
 
 async function loadStats() {
   const userId = localStorage.getItem('userId');
@@ -32,10 +14,8 @@ async function loadStats() {
   }
 }
 
-initI18n().then(() => {
-  Object.keys(statsResources).forEach(lang => {
-    i18next.addResourceBundle(lang, 'translation', statsResources[lang].translation, true, true);
-  });
+const defaultLang = localStorage.getItem('nativeLanguage') || 'en';
+initI18n(defaultLang).then(() => {
   updateContent();
   loadStats();
 });
