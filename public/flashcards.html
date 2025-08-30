@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piru - Flashcards</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>Vocabulary Review</h1>
+    <section id="input-section">
+      <textarea id="input-text" placeholder="Paste text here"></textarea>
+      <button id="extract-btn">Extract Vocabulary</button>
+    </section>
+    <section id="flashcard-section" class="hidden">
+      <div id="word"></div>
+      <div id="definition" class="hidden"></div>
+      <button id="show-btn">Show Definition</button>
+      <div id="review-buttons" class="hidden">
+        <button data-quality="1">Again</button>
+        <button data-quality="4">Good</button>
+      </div>
+    </section>
+  </main>
+  <script src="flashcards.js"></script>
+</body>
+</html>

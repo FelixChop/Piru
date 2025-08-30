@@ -1,0 +1,58 @@
+const { sm2 } = require('./sm2');
+
+// In-memory vocabulary store: userId -> Map(wordId -> word data)
+const vocab = new Map();
+
+function addWords(userId, words) {
+  if (!vocab.has(userId)) {
+    vocab.set(userId, new Map());
+  }
+  const store = vocab.get(userId);
+  const added = [];
+  const now = Date.now();
+  words.forEach((w) => {
+    const entry = {
+      ...w,
+      interval: 0,
+      repetitions: 0,
+      easiness: 2.5,
+      due: now,
+    };
+    store.set(entry.id, entry);
+    added.push(entry);
+  });
+  return added;
+}
+
+function getNextWord(userId) {
+  const store = vocab.get(userId);
+  if (!store) return null;
+  const now = Date.now();
+  const dueWords = Array.from(store.values()).filter((w) => w.due <= now);
+  if (dueWords.length === 0) return null;
+  dueWords.sort((a, b) => a.due - b.due);
+  return dueWords[0];
+}
+
+function reviewWord(userId, wordId, quality) {
+  const store = vocab.get(userId);
+  if (!store) throw new Error('User not found');
+  const word = store.get(wordId);
+  if (!word) throw new Error('Word not found');
+  const { interval, repetitions, easiness } = sm2({
+    interval: word.interval,
+    repetitions: word.repetitions,
+    easiness: word.easiness,
+  }, quality);
+  word.interval = interval;
+  word.repetitions = repetitions;
+  word.easiness = easiness;
+  word.due = Date.now() + interval * 24 * 60 * 60 * 1000;
+  return word;
+}
+
+function _clear() {
+  vocab.clear();
+}
+
+module.exports = { addWords, getNextWord, reviewWord, _clear };
