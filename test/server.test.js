@@ -1,4 +1,4 @@
-const { describe, it, beforeEach } = require('node:test');
+const { describe, it, before, beforeEach } = require('node:test');
 const assert = require('assert');
 const request = require('supertest');
 
@@ -17,14 +17,20 @@ global.fetch = async () => ({
   }),
 });
 
-const app = require('../src/server');
+const { init } = require('../src/db');
+let app;
 const { _clearUsers } = require('../src/auth');
+
+before(async () => {
+  await init();
+  app = require('../src/server');
+});
 const { _clearWorks } = require('../src/works');
 const { _clear: _clearVocab } = require('../src/vocab');
 
 describe('Auth API', () => {
-  beforeEach(() => {
-    _clearUsers();
+  beforeEach(async () => {
+    await _clearUsers();
   });
 
   it('signs up a user', async () => {
