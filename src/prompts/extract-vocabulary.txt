@@ -1,3 +1,0 @@
-Extract vocabulary from the following text.
-Return a JSON array where each item has: word, definition (in French), and citation from the text.
-Only return JSON.

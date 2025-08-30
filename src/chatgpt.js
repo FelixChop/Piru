@@ -4,19 +4,15 @@ const path = require('path');
 const os = require('os');
 require('dotenv').config();
 
-let prompt;
-try {
-  prompt = fs.readFileSync(
-    path.join(__dirname, 'prompts', 'extract-vocabulary.txt'),
-    'utf8'
-  );
-} catch (err) {
-  console.error('Failed to load prompt file', err);
-  prompt =
-    `Extract vocabulary from the following text. ` +
-    `Return a JSON array where each item has: word, definition (in French), and citation from the text. ` +
-    `Only return JSON.`;
-}
+const promptTemplate = fs.readFileSync(
+  path.join(
+    __dirname,
+    '..',
+    'prompts',
+    'extract-vocabulary-en-fr.txt'
+  ),
+  'utf8'
+);
 
 async function extractVocabularyWithLLM(text, outPath) {
   if (!text || !text.trim()) return [];
@@ -24,6 +20,8 @@ async function extractVocabularyWithLLM(text, outPath) {
   if (!apiKey) {
     throw new Error('Missing OpenAI API key');
   }
+
+  const userPrompt = promptTemplate.replace('"""TEXT"""', text);
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -34,20 +32,38 @@ async function extractVocabularyWithLLM(text, outPath) {
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: 'You are a helpful assistant that extracts vocabulary.' },
-        { role: 'user', content: `${prompt}\n\nText:\n"""${text}"""` },
+        {
+          role: 'system',
+          content: 'You are a helpful assistant that extracts vocabulary.',
+        },
+        { role: 'user', content: userPrompt },
       ],
+      response_format: { type: 'json_object' },
     }),
   });
 
   const data = await res.json();
+  if (res.ok === false || data.error) {
+    console.error('OpenAI API error', data);
+    return [];
+  }
+
   let items = [];
   try {
     const content = data.choices?.[0]?.message?.content?.trim() || '[]';
     items = JSON.parse(content);
   } catch (err) {
-    console.error('Failed to parse LLM response', err);
-    items = [];
+    const match =
+      data.choices?.[0]?.message?.content?.match(/\[[\s\S]*\]/);
+    if (match) {
+      try {
+        items = JSON.parse(match[0]);
+      } catch (err2) {
+        console.error('Failed to parse JSON substring', err2);
+      }
+    } else {
+      console.error('Failed to parse LLM response', err);
+    }
   }
 
   const mapped = items.map((item) => ({
