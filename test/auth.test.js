@@ -10,8 +10,8 @@ describe('Authentication', () => {
   beforeEach(async () => {
     await _clearUsers();
   });
-  it('signs up a new user and stores languages', () => {
-    const user = signup('alice@example.com', 'secret', 'en', ['fr', 'es']);
+  it('signs up a new user and stores languages', async () => {
+    const user = await signup('alice@example.com', 'secret', 'en', ['fr', 'es']);
     assert.strictEqual(user.email, 'alice@example.com');
     assert.strictEqual(user.nativeLanguage, 'en');
     assert.deepStrictEqual(user.learningLanguages, ['fr', 'es']);
