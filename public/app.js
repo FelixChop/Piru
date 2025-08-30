@@ -1,4 +1,4 @@
-let userId = null;
+let userId = localStorage.getItem('userId');
 
 const nativeLanguages = [
   { code: 'fr', label: '🇫🇷 Français' },
@@ -68,7 +68,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     if (data.nativeLanguage) {
       localStorage.setItem('nativeLanguage', data.nativeLanguage);
     }
-    window.location.href = 'stats.html';
+    initAuthenticatedState();
   } else {
     alert(data.error);
   }
@@ -130,4 +130,29 @@ async function loadWorks() {
     li.textContent = `${w.title || 'Untitled'} by ${w.author || 'Unknown'}`;
     list.appendChild(li);
   });
+}
+
+function initAuthenticatedState() {
+  document.getElementById('auth').classList.add('hidden');
+  document.getElementById('menu').classList.remove('hidden');
+  document.getElementById('works').classList.remove('hidden');
+  loadWorks();
+}
+
+document.getElementById('learn-button').addEventListener('click', () => {
+  window.location.href = 'flashcards.html';
+});
+
+document.getElementById('stats-button').addEventListener('click', () => {
+  window.location.href = 'stats.html';
+});
+
+document.getElementById('logout-button').addEventListener('click', () => {
+  localStorage.removeItem('userId');
+  localStorage.removeItem('nativeLanguage');
+  window.location.href = '/';
+});
+
+if (userId) {
+  initAuthenticatedState();
 }
