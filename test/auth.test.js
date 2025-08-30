@@ -17,6 +17,15 @@ describe('Authentication', () => {
     assert.deepStrictEqual(user.learningLanguages, ['fr', 'es']);
   });
 
+  it('allows all supported native languages', async () => {
+    const langs = ['en', 'fr', 'it', 'es', 'de'];
+    for (const lang of langs) {
+      const learning = lang === 'en' ? 'fr' : 'en';
+      const user = await signup(`${lang}@example.com`, 'secret', lang, [learning]);
+      assert.strictEqual(user.nativeLanguage, lang);
+    }
+  });
+
   it('prevents duplicate signups', async () => {
     await signup('bob@example.com', 'pass', 'fr', ['en']);
     await assert.rejects(() => signup('bob@example.com', 'pass', 'fr', ['en']));
