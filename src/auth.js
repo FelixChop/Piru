@@ -22,6 +22,9 @@ function signup(email, password, nativeLanguage, learningLanguages = []) {
   if (users.has(email)) {
     throw new Error('User already exists');
   }
+  if (nativeLanguage !== 'fr') {
+    throw new Error('Native language not available');
+  }
   const id = crypto.randomUUID();
   const passwordHash = hashPassword(password);
   const user = {
