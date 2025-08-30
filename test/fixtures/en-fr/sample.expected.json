@@ -1,0 +1,37 @@
+[
+  {
+    "word": "lust",
+    "lemma": "lust",
+    "definition": "désir sexuel intense, ou envie violente",
+    "citation": "*Nuns go by as quiet as lust*",
+    "to_learn": true
+  },
+  {
+    "word": "Buick (1939 Buick)",
+    "lemma": "Buick",
+    "definition": "marque américaine d’automobiles, ici une référence culturelle à une voiture des années 1930",
+    "citation": "*sits in a 1939 Buick eating bread and butter*",
+    "to_learn": false
+  },
+  {
+    "word": "to roll down (the window)",
+    "lemma": "to roll down",
+    "definition": "baisser la vitre d’une voiture",
+    "citation": "*She rolls down the window*",
+    "to_learn": true
+  },
+  {
+    "word": "to poke out of (the eye)",
+    "lemma": "to poke out of",
+    "definition": "enfoncer ou piquer pour faire sortir quelque chose, ici utilisé de manière imagée",
+    "citation": "*wanting to poke the arrogance out of her eyes*",
+    "to_learn": true
+  },
+  {
+    "word": "to curl",
+    "lemma": "to curl",
+    "definition": "s’enrouler, se recourber ; ici utilisé pour décrire la bouche avec arrogance",
+    "citation": "*the pride of ownership that curls her chewing mouth*",
+    "to_learn": true
+  }
+]
