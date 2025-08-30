@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const { signup, login } = require('./auth');
-const { addWork, listWorks, extractVocabulary } = require('./works');
+const { addWork, listWorks } = require('./works');
+const { extractVocabularyWithLLM } = require('./chatgpt');
 const { getOverview } = require('./stats');
 const { addWords, getNextWord, reviewWord } = require('./vocab');
 
@@ -63,14 +64,18 @@ app.get('/works', (req, res) => {
 });
 
 // Vocabulary endpoints
-app.post('/vocab/extract', (req, res) => {
+app.post('/vocab/extract', async (req, res) => {
   const { userId, text } = req.body;
   if (!userId || !text) {
     return res.status(400).json({ error: 'Missing userId or text' });
   }
-  const vocab = extractVocabulary(text);
-  const added = addWords(userId, vocab);
-  res.status(201).json(added);
+  try {
+    const vocab = await extractVocabularyWithLLM(text);
+    const added = addWords(userId, vocab);
+    res.status(201).json(added);
+  } catch (err) {
+    res.status(500).json({ error: 'Extraction failed' });
+  }
 });
 
 app.get('/vocab/next', (req, res) => {
