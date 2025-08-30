@@ -119,11 +119,8 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   const data = await res.json();
   if (res.ok) {
     userId = data.id;
-    i18next.changeLanguage(data.nativeLanguage);
-    updateContent();
-    document.getElementById('auth').classList.add('hidden');
-    document.getElementById('works').classList.remove('hidden');
-    loadWorks();
+    localStorage.setItem('userId', userId);
+    window.location.href = 'stats.html';
   } else {
     alert(data.error);
   }

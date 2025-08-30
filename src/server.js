@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const { signup, login } = require('./auth');
 const { addWork, listWorks } = require('./works');
+const { getOverview } = require('./stats');
 
 const app = express();
 app.use(express.json());
@@ -55,6 +56,16 @@ app.get('/works', (req, res) => {
   }
   const works = listWorks(userId);
   res.json(works);
+});
+
+// Stats endpoints
+app.get('/stats/overview', (req, res) => {
+  const { userId } = req.query;
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId' });
+  }
+  const overview = getOverview(userId);
+  res.json(overview);
 });
 
 if (require.main === module) {
