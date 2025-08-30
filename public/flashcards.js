@@ -1,3 +1,36 @@
+const resources = {
+  en: {
+    translation: {
+      vocab_review: 'Vocabulary Review',
+      paste_text: 'Paste text here',
+      extract_vocabulary: 'Extract Vocabulary',
+      show_definition: 'Show Definition',
+      again: 'Again',
+      good: 'Good'
+    }
+  },
+  fr: {
+    translation: {
+      vocab_review: 'Révision du vocabulaire',
+      paste_text: 'Collez le texte ici',
+      extract_vocabulary: 'Extraire le vocabulaire',
+      show_definition: 'Afficher la définition',
+      again: 'Encore',
+      good: 'Bon'
+    }
+  }
+};
+
+function updateContent() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = i18next.t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = i18next.t(el.dataset.i18nPlaceholder);
+  });
+  document.documentElement.lang = i18next.language;
+}
+
 let currentWord = null;
 
 async function extractVocabulary() {

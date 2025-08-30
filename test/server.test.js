@@ -1,4 +1,4 @@
-const { describe, it, beforeEach } = require('node:test');
+const { describe, it, before, beforeEach } = require('node:test');
 const assert = require('assert');
 const request = require('supertest');
 
@@ -17,31 +17,37 @@ global.fetch = async () => ({
   }),
 });
 
-const app = require('../src/server');
+const { init } = require('../src/db');
+let app;
 const { _clearUsers } = require('../src/auth');
+
+before(async () => {
+  await init();
+  app = require('../src/server');
+});
 const { _clearWorks } = require('../src/works');
 const { _clear: _clearVocab } = require('../src/vocab');
 
 describe('Auth API', () => {
-  beforeEach(() => {
-    _clearUsers();
+  beforeEach(async () => {
+    await _clearUsers();
   });
 
   it('signs up a user', async () => {
     const res = await request(app)
       .post('/auth/signup')
-      .send({ email: 'api@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: ['en'] });
+      .send({ email: 'api@example.com', password: 'secret', nativeLanguage: 'en', learningLanguages: ['fr'] });
     assert.strictEqual(res.status, 201);
     assert.ok(res.body.id);
     assert.strictEqual(res.body.email, 'api@example.com');
-    assert.strictEqual(res.body.nativeLanguage, 'fr');
-    assert.deepStrictEqual(res.body.learningLanguages, ['en']);
+    assert.strictEqual(res.body.nativeLanguage, 'en');
+    assert.deepStrictEqual(res.body.learningLanguages, ['fr']);
   });
 
-  it('rejects signup with non-French native language', async () => {
+  it('rejects signup with unsupported native language', async () => {
     const res = await request(app)
       .post('/auth/signup')
-      .send({ email: 'nofr@example.com', password: 'secret', nativeLanguage: 'en', learningLanguages: [] });
+      .send({ email: 'nofr@example.com', password: 'secret', nativeLanguage: 'jp', learningLanguages: ['en'] });
     assert.strictEqual(res.status, 400);
   });
 

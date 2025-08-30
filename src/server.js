@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { signup, login } = require('./auth');
+const { init } = require('./db');
 const { addWork, listWorks } = require('./works');
 const { extractVocabularyWithLLM } = require('./chatgpt');
 const { getOverview } = require('./stats');
@@ -14,30 +15,29 @@ app.use(
   express.static(path.join(__dirname, '..', 'node_modules', 'i18next', 'dist'))
 );
 
-if (process.env.NODE_ENV === 'staging') {
-  try {
-    signup('staging@example.com', 'staging123', 'fr', ['en']);
-    // eslint-disable-next-line no-console
-    console.log('Staging user ready: staging@example.com / staging123');
-  } catch (err) {
-    // ignore if user already exists
+init().then(() => {
+  if (process.env.NODE_ENV === 'staging') {
+    signup('staging@example.com', 'staging123', 'fr', ['en'])
+      // eslint-disable-next-line no-console
+      .then(() => console.log('Staging user ready: staging@example.com / staging123'))
+      .catch(() => {});
   }
-}
+});
 
-app.post('/auth/signup', (req, res) => {
+app.post('/auth/signup', async (req, res) => {
   const { email, password, nativeLanguage, learningLanguages } = req.body;
   try {
-    const user = signup(email, password, nativeLanguage, learningLanguages);
+    const user = await signup(email, password, nativeLanguage, learningLanguages);
     res.status(201).json(user);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-app.post('/auth/login', (req, res) => {
+app.post('/auth/login', async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = login(email, password);
+    const user = await login(email, password);
     res.json(user);
   } catch (err) {
     res.status(401).json({ error: err.message });

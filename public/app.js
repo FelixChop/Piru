@@ -65,6 +65,9 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   if (res.ok) {
     userId = data.id;
     localStorage.setItem('userId', userId);
+    if (data.nativeLanguage) {
+      localStorage.setItem('nativeLanguage', data.nativeLanguage);
+    }
     window.location.href = 'stats.html';
   } else {
     alert(data.error);
