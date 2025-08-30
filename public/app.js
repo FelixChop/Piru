@@ -1,4 +1,5 @@
 let userId = localStorage.getItem('userId');
+const storedNativeLanguage = localStorage.getItem('nativeLanguage');
 
 const nativeLanguages = [
   { code: 'en', label: '🇬🇧 English' },
@@ -36,7 +37,7 @@ learningLanguages.forEach(({ code, label }) => {
 nativeSelect.value = '';
 learningSelect.value = '';
 
-const defaultLang = nativeSelect.value || 'en';
+const defaultLang = storedNativeLanguage || 'en';
 initI18n(defaultLang);
 
 document.getElementById('signup-native').addEventListener('change', (e) => {
@@ -60,6 +61,8 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     localStorage.setItem('userId', userId);
     if (data.nativeLanguage) {
       localStorage.setItem('nativeLanguage', data.nativeLanguage);
+      i18next.changeLanguage(data.nativeLanguage);
+      updateContent();
     }
     initAuthenticatedState();
   } else {
