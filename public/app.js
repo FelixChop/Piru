@@ -104,7 +104,13 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   const email = document.getElementById('signup-email').value;
   const password = document.getElementById('signup-password').value;
   const nativeLanguage = document.getElementById('signup-native').value;
-  const learningLanguages = Array.from(document.getElementById('signup-learning').selectedOptions).map(o => o.value);
+  const learningLanguages = Array.from(document.getElementById('signup-learning').selectedOptions)
+    .map(o => o.value)
+    .filter(Boolean);
+  if (learningLanguages.length === 0) {
+    alert(i18next.t('select_language'));
+    return;
+  }
   const res = await fetch('/auth/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
