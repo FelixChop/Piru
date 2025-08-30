@@ -10,7 +10,7 @@ const resources = {
       email: 'Email',
       password: 'Password',
       native_language: 'Native language',
-      learning_languages: 'Learning languages',
+      learning_language: 'Learning language',
       select_language: 'Select language',
       your_works: 'Your Works',
       title: 'Title',
@@ -30,7 +30,7 @@ const resources = {
       email: 'Email',
       password: 'Mot de passe',
       native_language: 'Langue maternelle',
-      learning_languages: 'Langues apprises',
+      learning_language: 'Langue apprise',
       select_language: 'Choisir une langue',
       your_works: 'Vos œuvres',
       title: 'Titre',
@@ -48,6 +48,14 @@ const nativeLanguages = [
   { code: 'en', label: '🇬🇧 English' }
 ];
 
+const learningLanguages = [
+  { code: 'en', label: '🇬🇧 English' },
+  { code: 'es', label: '🇪🇸 Español' },
+  { code: 'fr', label: '🇫🇷 Français' },
+  { code: 'de', label: '🇩🇪 Deutsch' },
+  { code: 'it', label: '🇮🇹 Italiano' }
+];
+
 const nativeSelect = document.getElementById('signup-native');
 const signupButton = document.querySelector('#signup-form button[type="submit"]');
 const languageError = document.getElementById('signup-language-error');
@@ -58,8 +66,17 @@ nativeLanguages.forEach(({ code, label }) => {
   nativeSelect.appendChild(option);
 });
 
+const learningSelect = document.getElementById('signup-learning');
+learningLanguages.forEach(({ code, label }) => {
+  const option = document.createElement('option');
+  option.value = code;
+  option.textContent = label;
+  learningSelect.appendChild(option);
+});
+
 // Ensure the placeholder option remains selected by default
 nativeSelect.value = '';
+learningSelect.value = '';
 signupButton.disabled = true;
 
 const defaultLang = nativeSelect.value || 'en';
@@ -117,17 +134,15 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   const email = document.getElementById('signup-email').value;
   const password = document.getElementById('signup-password').value;
   const nativeLanguage = document.getElementById('signup-native').value;
-  const learningLanguages = Array.from(document.getElementById('signup-learning').selectedOptions)
-    .map(o => o.value)
-    .filter(Boolean);
-  if (learningLanguages.length === 0) {
+  const learningLanguage = document.getElementById('signup-learning').value;
+  if (!learningLanguage) {
     alert(i18next.t('select_language'));
     return;
   }
   const res = await fetch('/auth/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, nativeLanguage, learningLanguages })
+    body: JSON.stringify({ email, password, nativeLanguage, learningLanguages: [learningLanguage] })
   });
   const data = await res.json();
   if (res.ok) {
