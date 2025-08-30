@@ -18,4 +18,4 @@ async function loadStats() {
   }
 }
 
-loadStats();
+initI18n().then(loadStats);

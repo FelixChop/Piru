@@ -60,4 +60,4 @@ document.querySelectorAll('#review-buttons button').forEach((btn) => {
   btn.addEventListener('click', () => review(Number(btn.dataset.quality)));
 });
 
-loadNext();
+initI18n().then(loadNext);
