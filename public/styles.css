@@ -22,6 +22,7 @@ header {
   text-align: center;
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(34, 31, 31, 0.1);
+  position: relative;
 }
 
 header h1 {
@@ -100,4 +101,29 @@ button:hover {
   font-size: 2rem;
   margin-bottom: 1rem;
   font-family: 'Gotham Black', 'Gotham', sans-serif;
+}
+
+#menu {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.burger-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+#menu-options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(34, 31, 31, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
 }

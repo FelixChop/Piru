@@ -10,16 +10,24 @@
   <header>
     <a href="/"><img src="parrot_grey_no_title.png" alt="Piru logo" class="logo" /></a>
     <h1><a href="/" class="home-link" data-i18n="site_name">Piru</a></h1>
+    <nav id="menu" class="hidden">
+      <button id="menu-toggle" class="burger-button" aria-label="Menu">&#9776;</button>
+      <div id="menu-options" class="hidden">
+        <button id="learn-button" data-i18n="learn">Learn</button>
+        <button id="stats-button" data-i18n="view_stats">View Stats</button>
+        <button id="logout-button" data-i18n="logout">Logout</button>
+      </div>
+    </nav>
   </header>
   <main>
     <h2 data-i18n="statistics"></h2>
     <p><span data-i18n="total_words_encountered"></span> <span id="total-words">0</span></p>
     <p><span data-i18n="mastered_words"></span> <span id="mastered-words">0</span></p>
     <p><a href="flashcards.html" data-i18n="review_vocabulary"></a></p>
-    <button id="logout-button" class="hidden" data-i18n="logout"></button>
   </main>
   <script src="/lib/i18next/umd/i18next.min.js"></script>
   <script src="i18n.js"></script>
   <script src="stats.js"></script>
+  <script src="menu.js"></script>
 </body>
 </html>
