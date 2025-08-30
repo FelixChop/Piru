@@ -19,6 +19,10 @@ describe('Authentication', () => {
     assert.throws(() => signup('bob@example.com', 'pass', 'fr', ['en']));
   });
 
+  it('rejects non-French native languages', () => {
+    assert.throws(() => signup('eve@example.com', 'pwd', 'en', []));
+  });
+
   it('logs in an existing user', () => {
     signup('carol@example.com', 'pwd', 'fr', ['en']);
     const user = login('carol@example.com', 'pwd');

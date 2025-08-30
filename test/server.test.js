@@ -21,6 +21,13 @@ describe('Auth API', () => {
     assert.deepStrictEqual(res.body.learningLanguages, ['en']);
   });
 
+  it('rejects signup with non-French native language', async () => {
+    const res = await request(app)
+      .post('/auth/signup')
+      .send({ email: 'nofr@example.com', password: 'secret', nativeLanguage: 'en', learningLanguages: [] });
+    assert.strictEqual(res.status, 400);
+  });
+
   it('prevents duplicate signup', async () => {
     await request(app)
       .post('/auth/signup')
