@@ -42,7 +42,8 @@ document.querySelectorAll('#review-buttons button').forEach((btn) => {
   btn.addEventListener('click', () => review(Number(btn.dataset.quality)));
 });
 
-initI18n().then(() => {
+const defaultLang = localStorage.getItem('nativeLanguage') || 'en';
+initI18n(defaultLang).then(() => {
   updateContent();
   loadNext();
 });
