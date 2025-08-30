@@ -54,6 +54,9 @@ nativeLanguages.forEach(({ code, label }) => {
   nativeSelect.appendChild(option);
 });
 
+// Ensure the placeholder option remains selected by default
+nativeSelect.value = '';
+
 const defaultLang = nativeSelect.value || 'en';
 i18next.init({ lng: defaultLang, resources }).then(() => {
   updateContent();
