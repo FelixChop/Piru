@@ -6,8 +6,11 @@ const { getOverview } = require('./stats');
 
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '..', 'public')));
-app.use('/lib/i18next', express.static(path.join(__dirname, '..', 'node_modules', 'i18next', 'dist')));
+app.use(express.static(path.resolve(__dirname, '..', 'public')));
+app.use(
+  '/lib/i18next',
+  express.static(path.join(__dirname, '..', 'node_modules', 'i18next', 'dist'))
+);
 
 if (process.env.NODE_ENV === 'staging') {
   try {
