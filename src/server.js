@@ -11,7 +11,7 @@ app.use('/lib/i18next', express.static(path.join(__dirname, '..', 'node_modules'
 
 if (process.env.NODE_ENV === 'staging') {
   try {
-    signup('staging@example.com', 'staging123', 'en', ['fr']);
+    signup('staging@example.com', 'staging123', 'fr', ['en']);
     // eslint-disable-next-line no-console
     console.log('Staging user ready: staging@example.com / staging123');
   } catch (err) {
