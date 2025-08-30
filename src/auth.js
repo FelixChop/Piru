@@ -16,6 +16,9 @@ function hashPassword(password) {
  * @returns {{id:string,email:string,nativeLanguage:string,learningLanguages:string[]}}
  */
 function signup(email, password, nativeLanguage, learningLanguages = []) {
+  if (!Array.isArray(learningLanguages) || learningLanguages.length === 0) {
+    throw new Error('At least one learning language is required');
+  }
   if (users.has(email)) {
     throw new Error('User already exists');
   }

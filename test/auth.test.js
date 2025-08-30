@@ -15,8 +15,8 @@ describe('Authentication', () => {
   });
 
   it('prevents duplicate signups', () => {
-    signup('bob@example.com', 'pass', 'fr', []);
-    assert.throws(() => signup('bob@example.com', 'pass', 'fr', []));
+    signup('bob@example.com', 'pass', 'fr', ['en']);
+    assert.throws(() => signup('bob@example.com', 'pass', 'fr', ['en']));
   });
 
   it('rejects non-French native languages', () => {
@@ -30,7 +30,11 @@ describe('Authentication', () => {
   });
 
   it('rejects invalid credentials', () => {
-    signup('dave@example.com', 'pwd', 'fr', []);
+    signup('dave@example.com', 'pwd', 'fr', ['en']);
     assert.throws(() => login('dave@example.com', 'wrong'));
+  });
+
+  it('requires at least one learning language', () => {
+    assert.throws(() => signup('eve@example.com', 'pwd', 'fr', []));
   });
 });

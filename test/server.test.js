@@ -31,17 +31,17 @@ describe('Auth API', () => {
   it('prevents duplicate signup', async () => {
     await request(app)
       .post('/auth/signup')
-      .send({ email: 'dupe@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: [] });
+      .send({ email: 'dupe@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: ['en'] });
     const res = await request(app)
       .post('/auth/signup')
-      .send({ email: 'dupe@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: [] });
+      .send({ email: 'dupe@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: ['en'] });
     assert.strictEqual(res.status, 400);
   });
 
   it('logs in existing user', async () => {
     await request(app)
       .post('/auth/signup')
-      .send({ email: 'login@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: [] });
+      .send({ email: 'login@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: ['en'] });
     const res = await request(app)
       .post('/auth/login')
       .send({ email: 'login@example.com', password: 'secret' });
@@ -52,11 +52,18 @@ describe('Auth API', () => {
   it('rejects invalid login', async () => {
     await request(app)
       .post('/auth/signup')
-      .send({ email: 'badlogin@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: [] });
+      .send({ email: 'badlogin@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: ['en'] });
     const res = await request(app)
       .post('/auth/login')
       .send({ email: 'badlogin@example.com', password: 'wrong' });
     assert.strictEqual(res.status, 401);
+  });
+  
+  it('requires at least one learning language', async () => {
+    const res = await request(app)
+      .post('/auth/signup')
+      .send({ email: 'nolanguage@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: [] });
+    assert.strictEqual(res.status, 400);
   });
 });
 
