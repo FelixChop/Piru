@@ -23,8 +23,7 @@ Ta réponse doit être en **format JSON strict**, avec les clés suivantes :
 Si aucun mot n’est difficile, tu renvoies un JSON vide : `[]`.
 
 ---
-
-### Exemple 1 (trop facile → rien à relever)
+### Exemple 1 (pas de vocabulaire difficile)
 
 **Input**
 
@@ -56,35 +55,35 @@ Si aucun mot n’est difficile, tu renvoies un JSON vide : `[]`.
     "word": "lust",
     "lemma": "lust",
     "definition": "désir sexuel intense, ou envie violente",
-    "citation": "*Nuns go by as quiet as lust*",
+    "citation": "*Nuns go by as quiet as lust, and drunken men and sober eyes sing in the lobby of the Greek hotel.*",
     "to_learn": true
   },
   {
     "word": "Buick (1939 Buick)",
     "lemma": "Buick",
     "definition": "marque américaine d’automobiles, ici une référence culturelle à une voiture des années 1930",
-    "citation": "*sits in a 1939 Buick eating bread and butter*",
+    "citation": "*Rosemary Villanucci, our next-door friend who lives above her father’s cafe, sits in a 1939 Buick eating bread and butter.*",
     "to_learn": false
   },
   {
     "word": "to roll down (the window)",
     "lemma": "to roll down",
     "definition": "baisser la vitre d’une voiture",
-    "citation": "*She rolls down the window*",
+    "citation": "*She rolls down the window to tell my sister Frieda and me that we can’t come in.*",
     "to_learn": true
   },
   {
     "word": "to poke out of (the eye)",
     "lemma": "to poke out of",
     "definition": "enfoncer ou piquer pour faire sortir quelque chose, ici utilisé de manière imagée",
-    "citation": "*wanting to poke the arrogance out of her eyes*",
+    "citation": "*We stare at her, wanting her bread, but more than that wanting to poke the arrogance out of her eyes and smash the pride of ownership that curls her chewing mouth.*",
     "to_learn": true
   },
   {
     "word": "to curl",
     "lemma": "to curl",
     "definition": "s’enrouler, se recourber ; ici utilisé pour décrire la bouche avec arrogance",
-    "citation": "*the pride of ownership that curls her chewing mouth*",
+    "citation": "*We stare at her, wanting her bread, but more than that wanting to poke the arrogance out of her eyes and smash the pride of ownership that curls her chewing mouth.*",
     "to_learn": true
   }
 ]
@@ -104,12 +103,12 @@ Si aucun mot n’est difficile, tu renvoies un JSON vide : `[]`.
 
 ```json
 [
-  {"word": "peopled by", "lemma": "to people", "definition": "peupler (rare en anglais moderne)", "citation": "*peopled by roaches and mice*", "to_learn": true},
-  {"word": "roaches", "lemma": "roach", "definition": "cafards", "citation": "*peopled by roaches and mice*", "to_learn": true},
-  {"word": "contempt", "lemma": "contempt", "definition": "mépris", "citation": "*Our illness is treated with contempt*", "to_learn": true},
-  {"word": "foul", "lemma": "foul", "definition": "répugnant, infect", "citation": "*foul Black Draught*", "to_learn": true},
-  {"word": "Black Draught", "lemma": "Black Draught", "definition": "remède laxatif populaire au XIXe–XXe siècle", "citation": "*foul Black Draught*", "to_learn": false},
-  {"word": "to blunt", "lemma": "to blunt", "definition": "émousser, affaiblir", "citation": "*castor oil that blunts our minds*", "to_learn": true}
+  {"word": "peopled by", "lemma": "to people", "definition": "peupler (rare en anglais moderne)", "citation": "*The others are braced in darkness, peopled by roaches and mice.*", "to_learn": true},
+  {"word": "roaches", "lemma": "roach", "definition": "cafards", "citation": "*The others are braced in darkness, peopled by roaches and mice.*", "to_learn": true},
+  {"word": "contempt", "lemma": "contempt", "definition": "mépris", "citation": "*Our illness is treated with contempt, foul Black Draught, and castor oil that blunts our minds.*", "to_learn": true},
+  {"word": "foul", "lemma": "foul", "definition": "répugnant, infect", "citation": "*Our illness is treated with contempt, foul Black Draught, and castor oil that blunts our minds.*", "to_learn": true},
+  {"word": "Black Draught", "lemma": "Black Draught", "definition": "remède laxatif populaire au XIXe–XXe siècle", "citation": "*Our illness is treated with contempt, foul Black Draught, and castor oil that blunts our minds.*", "to_learn": false},
+  {"word": "to blunt", "lemma": "to blunt", "definition": "émousser, affaiblir", "citation": "*Our illness is treated with contempt, foul Black Draught, and castor oil that blunts our minds.*", "to_learn": true}
 ]
 ```
 
@@ -127,14 +126,14 @@ Si aucun mot n’est difficile, tu renvoies un JSON vide : `[]`.
 
 ```json
 [
-  {"word": "stockings", "lemma": "stocking", "definition": "bas (vêtement)", "citation": "*new brown stockings*", "to_learn": true},
-  {"word": "cod-liver oil", "lemma": "cod-liver oil", "definition": "huile de foie de morue", "citation": "*cod-liver oil*", "to_learn": true},
-  {"word": "edgy", "lemma": "edgy", "definition": "nerveux, tendu", "citation": "*tired, edgy voices*", "to_learn": true},
-  {"word": "burlap (sack)", "lemma": "burlap", "definition": "toile grossière utilisée pour faire des sacs", "citation": "*fill burlap sacks*", "to_learn": true},
-  {"word": "to lie about", "lemma": "to lie about", "definition": "traîner, être éparpillé", "citation": "*coal lying about*", "to_learn": true},
-  {"word": "carloads", "lemma": "carload", "definition": "contenu d’un wagon", "citation": "*great carloads of slag*", "to_learn": true},
-  {"word": "slag", "lemma": "slag", "definition": "scories de métal", "citation": "*carloads of slag*", "to_learn": true},
-  {"word": "to skirt", "lemma": "to skirt", "definition": "longer, border", "citation": "*ravine that skirts the steel mill*", "to_learn": true}
+  {"word": "stockings", "lemma": "stocking", "definition": "bas (vêtement)", "citation": "*School has started, and Frieda and I get new brown stockings and cod-liver oil.*", "to_learn": true},
+  {"word": "cod-liver oil", "lemma": "cod-liver oil", "definition": "huile de foie de morue", "citation": "*School has started, and Frieda and I get new brown stockings and cod-liver oil.*", "to_learn": true},
+  {"word": "edgy", "lemma": "edgy", "definition": "nerveux, tendu", "citation": "*Grown-ups talk in tired, edgy voices about Zick’s Coal Company and take us along in the evening to the railroad tracks where we fill burlap sacks with the tiny pieces of coal lying about.*", "to_learn": true},
+  {"word": "burlap (sack)", "lemma": "burlap", "definition": "toile grossière utilisée pour faire des sacs", "citation": "*Grown-ups talk in tired, edgy voices about Zick’s Coal Company and take us along in the evening to the railroad tracks where we fill burlap sacks with the tiny pieces of coal lying about.*", "to_learn": true},
+  {"word": "to lie about", "lemma": "to lie about", "definition": "traîner, être éparpillé", "citation": "*Grown-ups talk in tired, edgy voices about Zick’s Coal Company and take us along in the evening to the railroad tracks where we fill burlap sacks with the tiny pieces of coal lying about.*", "to_learn": true},
+  {"word": "carloads", "lemma": "carload", "definition": "contenu d’un wagon", "citation": "*Later we walk home, glancing back to see the great carloads of slag being dumped, red hot and smoking, into the ravine that skirts the steel mill.*", "to_learn": true},
+  {"word": "slag", "lemma": "slag", "definition": "scories de métal", "citation": "*Later we walk home, glancing back to see the great carloads of slag being dumped, red hot and smoking, into the ravine that skirts the steel mill.*", "to_learn": true},
+  {"word": "to skirt", "lemma": "to skirt", "definition": "longer, border", "citation": "*Later we walk home, glancing back to see the great carloads of slag being dumped, red hot and smoking, into the ravine that skirts the steel mill.*", "to_learn": true}
 ]
 ```
 
@@ -152,9 +151,9 @@ Si aucun mot n’est difficile, tu renvoies un JSON vide : `[]`.
 
 ```json
 [
-  {"word": "phlegm", "lemma": "phlegm", "definition": "mucosité, glaire", "citation": "*packed tight with phlegm*", "to_learn": true},
-  {"word": "rags", "lemma": "rag", "definition": "chiffons", "citation": "*Get some rags*", "to_learn": true},
-  {"word": "to stuff", "lemma": "to stuff", "definition": "bourrer, remplir", "citation": "*stuff that window*", "to_learn": true}
+  {"word": "phlegm", "lemma": "phlegm", "definition": "mucosité, glaire", "citation": "*When, on a day after a trip to collect coal, I cough once, loudly, through bronchial tubes already packed tight with phlegm, my mother frowns.*", "to_learn": true},
+  {"word": "rags", "lemma": "rag", "definition": "chiffons", "citation": "*Frieda? Get some rags and stuff that window.*", "to_learn": true},
+  {"word": "to stuff", "lemma": "to stuff", "definition": "bourrer, remplir", "citation": "*Frieda? Get some rags and stuff that window.*", "to_learn": true}
 ]
 ```
 
@@ -172,10 +171,10 @@ Si aucun mot n’est difficile, tu renvoies un JSON vide : `[]`.
 
 ```json
 [
-  {"word": "Alaga syrup", "lemma": "Alaga syrup", "definition": "sirop sucré populaire dans le sud des États-Unis", "citation": "*Love, thick and dark as Alaga syrup*", "to_learn": false},
-  {"word": "musty", "lemma": "musty", "definition": "moisi, qui sent le renfermé", "citation": "*sweet, musty*", "to_learn": true},
-  {"word": "wintergreen", "lemma": "wintergreen", "definition": "plante aromatique au goût mentholé", "citation": "*edge of wintergreen*", "to_learn": true},
-  {"word": "windowpanes", "lemma": "windowpane", "definition": "carreau de fenêtre", "citation": "*frosted windowpanes*", "to_learn": true}
+  {"word": "Alaga syrup", "lemma": "Alaga syrup", "definition": "sirop sucré populaire dans le sud des États-Unis", "citation": "*Love, thick and dark as Alaga syrup, eased up into that cracked window.*", "to_learn": false},
+  {"word": "musty", "lemma": "musty", "definition": "moisi, qui sent le renfermé", "citation": "*I could smell it — taste it — sweet, musty, with an edge of wintergreen in its base — everywhere in that house.*", "to_learn": true},
+  {"word": "wintergreen", "lemma": "wintergreen", "definition": "plante aromatique au goût mentholé", "citation": "*I could smell it — taste it — sweet, musty, with an edge of wintergreen in its base — everywhere in that house.*", "to_learn": true},
+  {"word": "windowpanes", "lemma": "windowpane", "definition": "carreau de fenêtre", "citation": "*It stuck, along with my tongue, to the frosted windowpanes.*", "to_learn": true}
 ]
 ```
 
@@ -193,8 +192,8 @@ Si aucun mot n’est difficile, tu renvoies un JSON vide : `[]`.
 
 ```json
 [
-  {"word": "to put out", "lemma": "to put out", "definition": "déranger, mettre dehors (selon le contexte)", "citation": "*being put out*", "to_learn": true},
-  {"word": "outdoors (vs outside)", "lemma": "outdoors", "definition": "en plein air ; nuance différente de 'outside'", "citation": "*being put outdoors*", "to_learn": true}
+  {"word": "to put out", "lemma": "to put out", "definition": "déranger, mettre dehors (selon le contexte)", "citation": "*There is a difference between being put out and being put outdoors.*", "to_learn": true},
+  {"word": "outdoors (vs outside)", "lemma": "outdoors", "definition": "en plein air ; nuance différente de 'outside'", "citation": "*There is a difference between being put out and being put outdoors.*", "to_learn": true}
 ]
 ```
 
@@ -212,12 +211,12 @@ Si aucun mot n’est difficile, tu renvoies un JSON vide : `[]`.
 
 ```json
 [
-  {"word": "drunken stupor", "lemma": "stupor", "definition": "état d’hébétude dû à l’alcool", "citation": "*had sunk himself into a drunken stupor*", "to_learn": true},
-  {"word": "to stagger about", "lemma": "to stagger", "definition": "tituber, chanceler", "citation": "*He staggered about the house*", "to_learn": true},
-  {"word": "to reek (of)", "lemma": "to reek", "definition": "puer fortement", "citation": "*his body reeking of whiskey*", "to_learn": true},
-  {"word": "to sprawl", "lemma": "to sprawl", "definition": "s’affaler, s’étaler", "citation": "*sprawled on the floor*", "to_learn": true},
-  {"word": "gingerly", "lemma": "gingerly", "definition": "avec précaution", "citation": "*stepped over him gingerly*", "to_learn": true},
-  {"word": "rags", "lemma": "rag", "definition": "chiffons", "citation": "*a bundle of rags*", "to_learn": true}
+  {"word": "drunken stupor", "lemma": "stupor", "definition": "état d’hébétude dû à l’alcool", "citation": "*Cholly, Mrs. Breedlove’s husband, had sunk himself into a drunken stupor.*", "to_learn": true},
+  {"word": "to stagger about", "lemma": "to stagger", "definition": "tituber, chanceler", "citation": "*He staggered about the house, cursing, his body reeking of whiskey and sweat.*", "to_learn": true},
+  {"word": "to reek (of)", "lemma": "to reek", "definition": "puer fortement", "citation": "*He staggered about the house, cursing, his body reeking of whiskey and sweat.*", "to_learn": true},
+  {"word": "to sprawl", "lemma": "to sprawl", "definition": "s’affaler, s’étaler", "citation": "*When he collapsed finally, sprawled on the floor, Pecola and her mother stepped over him gingerly, as though he were a bundle of rags thrown in the way.*", "to_learn": true},
+  {"word": "gingerly", "lemma": "gingerly", "definition": "avec précaution", "citation": "*When he collapsed finally, sprawled on the floor, Pecola and her mother stepped over him gingerly, as though he were a bundle of rags thrown in the way.*", "to_learn": true},
+  {"word": "rags", "lemma": "rag", "definition": "chiffons", "citation": "*When he collapsed finally, sprawled on the floor, Pecola and her mother stepped over him gingerly, as though he were a bundle of rags thrown in the way.*", "to_learn": true}
 ]
 ```
 
