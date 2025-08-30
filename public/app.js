@@ -17,7 +17,8 @@ const resources = {
       author: 'Author',
       content: 'Content',
       add_work: 'Add Work',
-      account_created: 'Account created. You can now log in.'
+      account_created: 'Account created. You can now log in.',
+      language_unavailable: 'Language not available'
     }
   },
   fr: {
@@ -36,7 +37,8 @@ const resources = {
       author: 'Auteur',
       content: 'Contenu',
       add_work: 'Ajouter une œuvre',
-      account_created: 'Compte créé. Vous pouvez maintenant vous connecter.'
+      account_created: 'Compte créé. Vous pouvez maintenant vous connecter.',
+      language_unavailable: "Cette langue n'est pas disponible"
     }
   }
 };
@@ -47,6 +49,8 @@ const nativeLanguages = [
 ];
 
 const nativeSelect = document.getElementById('signup-native');
+const signupButton = document.querySelector('#signup-form button[type="submit"]');
+const languageError = document.getElementById('signup-language-error');
 nativeLanguages.forEach(({ code, label }) => {
   const option = document.createElement('option');
   option.value = code;
@@ -56,6 +60,7 @@ nativeLanguages.forEach(({ code, label }) => {
 
 // Ensure the placeholder option remains selected by default
 nativeSelect.value = '';
+signupButton.disabled = true;
 
 const defaultLang = nativeSelect.value || 'en';
 i18next.init({ lng: defaultLang, resources }).then(() => {
@@ -73,8 +78,16 @@ function updateContent() {
 }
 
 document.getElementById('signup-native').addEventListener('change', (e) => {
-  i18next.changeLanguage(e.target.value);
+  const lang = e.target.value;
+  i18next.changeLanguage(lang);
   updateContent();
+  if (lang !== 'fr') {
+    signupButton.disabled = true;
+    languageError.classList.remove('hidden');
+  } else {
+    signupButton.disabled = false;
+    languageError.classList.add('hidden');
+  }
 });
 
 document.getElementById('login-form').addEventListener('submit', async (e) => {
