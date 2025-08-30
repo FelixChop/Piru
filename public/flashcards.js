@@ -16,6 +16,13 @@ async function loadNext() {
     document.getElementById('definition').classList.add('hidden');
     document.getElementById('review-buttons').classList.add('hidden');
     document.getElementById('show-btn').classList.remove('hidden');
+  } else if (res.status === 204) {
+    currentWord = null;
+    document.getElementById('word').textContent = i18next.t('no_words');
+    document.getElementById('flashcard-section').classList.remove('hidden');
+    document.getElementById('definition').classList.add('hidden');
+    document.getElementById('review-buttons').classList.add('hidden');
+    document.getElementById('show-btn').classList.add('hidden');
   } else {
     window.location.href = '/';
   }

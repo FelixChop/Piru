@@ -28,7 +28,8 @@ const i18nResources = {
       vocabulary_review: 'Vocabulary Review',
       show_definition: 'Show Definition',
       again: 'Again',
-      good: 'Good'
+      good: 'Good',
+      no_words: 'No words to review'
     }
   },
   fr: {
@@ -59,7 +60,8 @@ const i18nResources = {
       vocabulary_review: 'Révision du vocabulaire',
       show_definition: 'Afficher la définition',
       again: 'Encore',
-      good: 'Bien'
+      good: 'Bien',
+      no_words: 'Aucun mot à réviser'
     }
   },
   es: {
@@ -90,7 +92,8 @@ const i18nResources = {
       vocabulary_review: 'Revisión de vocabulario',
       show_definition: 'Mostrar definición',
       again: 'De nuevo',
-      good: 'Bien'
+      good: 'Bien',
+      no_words: 'No hay palabras para repasar'
     }
   },
   it: {
@@ -121,7 +124,8 @@ const i18nResources = {
       vocabulary_review: 'Revisione del vocabolario',
       show_definition: 'Mostra definizione',
       again: 'Di nuovo',
-      good: 'Bene'
+      good: 'Bene',
+      no_words: 'Nessuna parola da ripassare'
     }
   },
   de: {
@@ -152,7 +156,8 @@ const i18nResources = {
       vocabulary_review: 'Vokabelwiederholung',
       show_definition: 'Definition anzeigen',
       again: 'Nochmals',
-      good: 'Gut'
+      good: 'Gut',
+      no_words: 'Keine Wörter zu wiederholen'
     }
   }
 };
