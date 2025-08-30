@@ -2,6 +2,9 @@ const crypto = require('crypto');
 
 const { db, clear } = require('./db');
 
+// Supported native languages
+const SUPPORTED_LANGUAGES = new Set(['en', 'fr', 'it', 'es', 'de']);
+
 function hashPassword(password) {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
@@ -18,8 +21,8 @@ function signup(email, password, nativeLanguage, learningLanguages = []) {
   if (!Array.isArray(learningLanguages) || learningLanguages.length === 0) {
     return Promise.reject(new Error('At least one learning language is required'));
   }
-  if (nativeLanguage !== 'fr') {
-    return Promise.reject(new Error('Native language not available'));
+  if (!SUPPORTED_LANGUAGES.has(nativeLanguage)) {
+    throw new Error('Native language not available');
   }
   const id = crypto.randomUUID();
   const passwordHash = hashPassword(password);

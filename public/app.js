@@ -10,7 +10,7 @@ const resources = {
       email: 'Email',
       password: 'Password',
       native_language: 'Native language',
-      learning_language: 'Learning language',
+      learning_language: 'Language to learn',
       select_language: 'Select language',
       your_works: 'Your Works',
       title: 'Title',
@@ -30,7 +30,7 @@ const resources = {
       email: 'Email',
       password: 'Mot de passe',
       native_language: 'Langue maternelle',
-      learning_language: 'Langue apprise',
+      learning_language: 'Langue à apprendre',
       select_language: 'Choisir une langue',
       your_works: 'Vos œuvres',
       title: 'Titre',
@@ -120,6 +120,9 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   if (res.ok) {
     userId = data.id;
     localStorage.setItem('userId', userId);
+    if (data.nativeLanguage) {
+      localStorage.setItem('nativeLanguage', data.nativeLanguage);
+    }
     window.location.href = 'stats.html';
   } else {
     alert(data.error);

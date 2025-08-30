@@ -10,12 +10,11 @@ describe('Authentication', () => {
   beforeEach(async () => {
     await _clearUsers();
   });
-
-  it('signs up a new user and stores languages', async () => {
-    const user = await signup('alice@example.com', 'secret', 'fr', ['en', 'es']);
+  it('signs up a new user and stores languages', () => {
+    const user = signup('alice@example.com', 'secret', 'en', ['fr', 'es']);
     assert.strictEqual(user.email, 'alice@example.com');
-    assert.strictEqual(user.nativeLanguage, 'fr');
-    assert.deepStrictEqual(user.learningLanguages, ['en', 'es']);
+    assert.strictEqual(user.nativeLanguage, 'en');
+    assert.deepStrictEqual(user.learningLanguages, ['fr', 'es']);
   });
 
   it('prevents duplicate signups', async () => {
@@ -23,8 +22,8 @@ describe('Authentication', () => {
     await assert.rejects(() => signup('bob@example.com', 'pass', 'fr', ['en']));
   });
 
-  it('rejects non-French native languages', async () => {
-    await assert.rejects(() => signup('eve@example.com', 'pwd', 'en', []));
+  it('rejects unsupported native languages', () => {
+    assert.throws(() => signup('eve@example.com', 'pwd', 'jp', ['en']));
   });
 
   it('logs in an existing user', async () => {
