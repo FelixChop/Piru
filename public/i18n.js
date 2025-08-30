@@ -1,4 +1,5 @@
-const resources = {
+(function() {
+const i18nResources = {
   en: {
     translation: {
       site_name: 'Piru',
@@ -166,8 +167,12 @@ function updateContent() {
   document.documentElement.lang = i18next.language;
 }
 
-function initI18n(defaultLang = 'en') {
-  return i18next.init({ lng: defaultLang, resources }).then(() => {
+function initI18n(defaultLang = 'en', resourcesData = i18nResources) {
+  return i18next.init({ lng: defaultLang, resources: resourcesData }).then(() => {
     updateContent();
   });
 }
+
+window.updateContent = updateContent;
+window.initI18n = initI18n;
+})();
