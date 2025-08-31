@@ -43,17 +43,24 @@ async function extractVocabularyWithLLM(text, outPath) {
         json_schema: {
           name: 'vocabulary_list',
           schema: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                word: { type: 'string' },
-                definition: { type: 'string' },
-                citation: { type: 'string' },
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    word: { type: 'string' },
+                    definition: { type: 'string' },
+                    citation: { type: 'string' },
+                  },
+                  required: ['word', 'definition', 'citation'],
+                  additionalProperties: false,
+                },
               },
-              required: ['word', 'definition', 'citation'],
-              additionalProperties: false,
             },
+            required: ['items'],
+            additionalProperties: false,
           },
         },
       },
@@ -67,21 +74,30 @@ async function extractVocabularyWithLLM(text, outPath) {
   }
 
   let items = [];
+  const rawContent = data.choices?.[0]?.message?.content?.trim() || '{}';
+  let parsed;
   try {
-    const content = data.choices?.[0]?.message?.content?.trim() || '[]';
-    items = JSON.parse(content);
+    parsed = JSON.parse(rawContent);
   } catch (err) {
     const match =
-      data.choices?.[0]?.message?.content?.match(/\[[\s\S]*\]/);
+      data.choices?.[0]?.message?.content?.match(/\{[\s\S]*\}/);
     if (match) {
       try {
-        items = JSON.parse(match[0]);
+        parsed = JSON.parse(match[0]);
       } catch (err2) {
         console.error('Failed to parse JSON substring', err2);
       }
     } else {
       console.error('Failed to parse LLM response', err);
     }
+  }
+
+  if (Array.isArray(parsed)) {
+    items = parsed;
+  } else if (parsed && Array.isArray(parsed.items)) {
+    items = parsed.items;
+  } else if (parsed) {
+    items = [parsed];
   }
 
   if (!Array.isArray(items)) {
