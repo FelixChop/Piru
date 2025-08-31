@@ -1,15 +1,30 @@
 (function() {
-  function setupMenu() {
+  function loadMenu() {
     const menu = document.getElementById('menu');
-    const toggle = document.getElementById('menu-toggle');
-    const options = document.getElementById('menu-options');
-    if (!menu || !toggle || !options) return;
+    if (!menu) return;
+
+    fetch('/menu.html')
+      .then((res) => res.text())
+      .then((html) => {
+        menu.innerHTML = html;
+        if (typeof updateContent === 'function') {
+          updateContent();
+        }
+        setupMenu(menu);
+      })
+      .catch((err) => console.error('Failed to load menu:', err));
+  }
+
+  function setupMenu(menu) {
+    const toggle = menu.querySelector('#menu-toggle');
+    const options = menu.querySelector('#menu-options');
+    if (!toggle || !options) return;
 
     toggle.addEventListener('click', () => {
       options.classList.toggle('hidden');
     });
 
-    const logoutLink = document.getElementById('logout-link');
+    const logoutLink = menu.querySelector('#logout-link');
     if (logoutLink) {
       logoutLink.addEventListener('click', (e) => {
         e.preventDefault();
@@ -28,5 +43,6 @@
       menu.classList.remove('hidden');
     }
   }
-  document.addEventListener('DOMContentLoaded', setupMenu);
+
+  document.addEventListener('DOMContentLoaded', loadMenu);
 })();
