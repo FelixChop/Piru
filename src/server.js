@@ -152,6 +152,31 @@ app.post('/vocab/review', (req, res) => {
   }
 });
 
+// Lyrics endpoints
+app.get('/api/lyrics/search', async (req, res) => {
+  const { q } = req.query;
+  try {
+    const r = await fetch(
+      `https://api.lyrics.ovh/suggest/${encodeURIComponent(q)}`
+    );
+    res.json(await r.json());
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to search lyrics' });
+  }
+});
+
+app.get('/api/lyrics/text', async (req, res) => {
+  const { artist, title } = req.query;
+  try {
+    const r = await fetch(
+      `https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(title)}`
+    );
+    res.json(await r.json());
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch lyrics' });
+  }
+});
+
 // Stats endpoints
 app.get('/stats/overview', (req, res) => {
   const { userId } = req.query;
