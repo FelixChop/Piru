@@ -16,6 +16,7 @@
         localStorage.removeItem('userId');
         localStorage.removeItem('nativeLanguage');
         localStorage.removeItem('email');
+        localStorage.removeItem('isAdmin');
         window.location.href = '/';
       });
     }

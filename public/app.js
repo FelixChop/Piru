@@ -67,6 +67,9 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
       i18next.changeLanguage(data.nativeLanguage);
       updateContent();
     }
+    if (typeof data.isAdmin !== 'undefined') {
+      localStorage.setItem('isAdmin', data.isAdmin);
+    }
     initAuthenticatedState();
   } else {
     alert(data.error);
@@ -149,6 +152,13 @@ function initAuthenticatedState() {
     emailDiv.id = 'menu-email';
     emailDiv.textContent = email;
     options.prepend(emailDiv);
+  }
+  if (options && localStorage.getItem('isAdmin') === 'true' && !document.getElementById('admin-link')) {
+    const adminLink = document.createElement('a');
+    adminLink.id = 'admin-link';
+    adminLink.href = 'admin.html';
+    adminLink.textContent = 'Admin';
+    options.appendChild(adminLink);
   }
   loadWorks();
 }

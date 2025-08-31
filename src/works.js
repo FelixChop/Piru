@@ -31,8 +31,22 @@ function listWorks(userId) {
     .map(({ id, title, author, type, vocab }) => ({ id, title, author, type, vocab }));
 }
 
+function listAllWorks() {
+  return Array.from(works.values()).map(({ id, userId, title, author, vocab }) => ({
+    id,
+    userId,
+    title,
+    author,
+    vocab,
+  }));
+}
+
+function deleteWork(id) {
+  return works.delete(id);
+}
+
 function _clearWorks() {
   works.clear();
 }
 
-module.exports = { addWork, listWorks, _clearWorks };
+module.exports = { addWork, listWorks, listAllWorks, deleteWork, _clearWorks };
