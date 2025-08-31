@@ -59,6 +59,9 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   if (res.ok) {
     userId = data.id;
     localStorage.setItem('userId', userId);
+    if (data.email) {
+      localStorage.setItem('email', data.email);
+    }
     if (data.nativeLanguage) {
       localStorage.setItem('nativeLanguage', data.nativeLanguage);
       i18next.changeLanguage(data.nativeLanguage);
@@ -132,6 +135,14 @@ function initAuthenticatedState() {
   document.getElementById('auth').classList.add('hidden');
   document.getElementById('menu').classList.remove('hidden');
   document.getElementById('works').classList.remove('hidden');
+  const email = localStorage.getItem('email');
+  const options = document.getElementById('menu-options');
+  if (email && options && !document.getElementById('menu-email')) {
+    const emailDiv = document.createElement('div');
+    emailDiv.id = 'menu-email';
+    emailDiv.textContent = email;
+    options.prepend(emailDiv);
+  }
   loadWorks();
 }
 
