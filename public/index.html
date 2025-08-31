@@ -47,6 +47,22 @@
     </section>
     <section id="works" class="hidden">
       <h2 data-i18n="your_works">Your Works</h2>
+      <div id="book-search-section">
+        <h3 data-i18n="search_books">Search Books</h3>
+        <form id="book-search-form">
+          <input type="text" id="book-search-input" data-i18n-placeholder="search_books" placeholder="Search books" />
+          <button type="submit" data-i18n="search">Search</button>
+        </form>
+        <ul id="book-results"></ul>
+      </div>
+      <div id="movie-search-section">
+        <h3 data-i18n="search_movies_series">Search Films or Series</h3>
+        <form id="movie-search-form">
+          <input type="text" id="movie-search-input" data-i18n-placeholder="search_movies_series" placeholder="Search films or series" />
+          <button type="submit" data-i18n="search">Search</button>
+        </form>
+        <ul id="movie-results"></ul>
+      </div>
       <form id="work-form">
         <input type="text" id="work-title" data-i18n-placeholder="title" placeholder="Title" />
         <input type="text" id="work-author" data-i18n-placeholder="author" placeholder="Author" />
@@ -59,6 +75,7 @@
   <script src="/lib/i18next/umd/i18next.min.js"></script>
   <script src="i18n.js"></script>
   <script src="app.js"></script>
+  <script src="works.js"></script>
   <script src="menu.js"></script>
 </body>
 </html>
