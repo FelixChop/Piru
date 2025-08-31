@@ -3,16 +3,25 @@
 // Example: node scripts/extract-vocab-cli.js test/fixtures/en-fr/sample.txt
 
 const fs = require('fs');
-const { extractVocabulary } = require('../src/works');
+const { extractVocabularyWithLLM } = require('../src/chatgpt');
 
-if (process.argv.length < 3) {
-  console.error('Usage: node scripts/extract-vocab-cli.js <file>');
-  process.exit(1);
+async function main() {
+  if (process.argv.length < 3) {
+    console.error('Usage: node scripts/extract-vocab-cli.js <file>');
+    process.exit(1);
+  }
+
+  const file = process.argv[2];
+  const text = fs.readFileSync(file, 'utf8');
+  try {
+    const vocab = await extractVocabularyWithLLM(text);
+    for (const { word } of vocab) {
+      console.log(word);
+    }
+  } catch (err) {
+    console.error('Extraction failed', err.message);
+    process.exit(1);
+  }
 }
 
-const file = process.argv[2];
-const text = fs.readFileSync(file, 'utf8');
-const vocab = extractVocabulary(text);
-for (const { word } of vocab) {
-  console.log(word);
-}
+main();

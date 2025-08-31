@@ -1,21 +1,8 @@
 const crypto = require('crypto');
+const chatgpt = require('./chatgpt');
 
 // In-memory store for works and their vocabulary entries
 const works = new Map(); // workId -> work object
-
-function extractVocabulary(content) {
-  const tokens = (content.toLowerCase().match(/\b\w+\b/g) || []);
-  const unique = Array.from(new Set(tokens));
-  // Naive difficulty heuristic: words longer than 6 letters
-  const difficult = unique.filter((w) => w.length > 6);
-  return difficult.map((word) => ({
-    id: crypto.randomUUID(),
-    word,
-    definition: `Definition of ${word}`,
-    citations: [],
-    status: 'new',
-  }));
-}
 
 /**
  * Add a work for a user and extract vocabulary
@@ -25,9 +12,9 @@ function extractVocabulary(content) {
  * @param {string} content
  * @returns {{id:string,title:string,author:string,vocab:Object[]}}
  */
-function addWork(userId, title, author, content) {
+async function addWork(userId, title, author, content) {
   const id = crypto.randomUUID();
-  const vocab = extractVocabulary(content);
+  const vocab = await chatgpt.extractVocabularyWithLLM(content);
   const work = { id, userId, title, author, content, vocab };
   works.set(id, work);
   return { id, title, author, vocab };
@@ -48,4 +35,4 @@ function _clearWorks() {
   works.clear();
 }
 
-module.exports = { addWork, listWorks, _clearWorks, extractVocabulary };
+module.exports = { addWork, listWorks, _clearWorks };

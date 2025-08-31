@@ -45,13 +45,17 @@ app.post('/auth/login', async (req, res) => {
 });
 
 // Works endpoints
-app.post('/works', (req, res) => {
+app.post('/works', async (req, res) => {
   const { userId, title, author, content } = req.body;
   if (!userId || !content) {
     return res.status(400).json({ error: 'Missing userId or content' });
   }
-  const work = addWork(userId, title, author, content);
-  res.status(201).json(work);
+  try {
+    const work = await addWork(userId, title, author, content);
+    res.status(201).json(work);
+  } catch (err) {
+    res.status(500).json({ error: 'Extraction failed' });
+  }
 });
 
 app.get('/works', (req, res) => {
