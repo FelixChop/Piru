@@ -35,6 +35,14 @@ Initialize the local SQLite database (creates tables if they don't exist):
 npm run init-db
 ```
 
+### Vocabulary extraction CLI
+
+Extract difficult vocabulary from a text file using the application's logic:
+
+```bash
+npm run extract-vocab -- test/fixtures/en-fr/sample.txt
+```
+
 ### Staging environment
 
 Run a local staging server with a pre-created test account:
