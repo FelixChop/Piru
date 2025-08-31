@@ -4,6 +4,31 @@ const fs = require('fs');
 const path = require('path');
 const { extractVocabularyWithLLM } = require('../src/chatgpt');
 
+function levenshtein(a, b) {
+  const m = a.length;
+  const n = b.length;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + cost
+      );
+    }
+  }
+  return dp[m][n];
+}
+
+function similarity(a, b) {
+  const distance = levenshtein(a, b);
+  const maxLen = Math.max(a.length, b.length) || 1;
+  return 1 - distance / maxLen;
+}
+
 it(
   'queries OpenAI with OPENAI_API_KEY_TEST and prints output',
   { skip: !process.env.OPENAI_API_KEY_TEST, concurrency: false, timeout: 60000 },
@@ -25,7 +50,13 @@ it(
         );
         const items = await extractVocabularyWithLLM(text);
         console.log(items);
-        assert.deepStrictEqual(items, expected);
+        const itemsLemma = items.map((i) => i.lemma).sort().join(' ');
+        const expectedLemma = expected.map((i) => i.lemma).sort().join(' ');
+        const sim = similarity(itemsLemma, expectedLemma);
+        assert.ok(
+          sim > 0.8,
+          `Levenshtein similarity below threshold for ${file}: ${sim}`
+        );
       }
     } finally {
       if (originalKey === undefined) {

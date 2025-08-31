@@ -1,0 +1,23 @@
+[
+  {
+    "word": "littered",
+    "lemma": "to litter",
+    "definition": "couvrir, joncher",
+    "citation": "After the storm, the streets were littered with detritus, but the neighborhood pulled together to clean up the mess in short order.",
+    "to_learn": true
+  },
+  {
+    "word": "pulled together",
+    "lemma": "to pull together",
+    "definition": "unir ses efforts",
+    "citation": "After the storm, the streets were littered with detritus, but the neighborhood pulled together to clean up the mess in short order.",
+    "to_learn": true
+  },
+  {
+    "word": "in short order",
+    "lemma": "in short order",
+    "definition": "rapidement",
+    "citation": "After the storm, the streets were littered with detritus, but the neighborhood pulled together to clean up the mess in short order.",
+    "to_learn": true
+  }
+]

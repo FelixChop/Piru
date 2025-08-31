@@ -1,0 +1,23 @@
+[
+  {
+    "word": "discourse",
+    "lemma": "discourse",
+    "definition": "discours formel",
+    "citation": "The professor's erudite discourse went over my head, so I decided to hit the books and catch up.",
+    "to_learn": true
+  },
+  {
+    "word": "went over my head",
+    "lemma": "to go over one's head",
+    "definition": "dépasser la compréhension de quelqu'un",
+    "citation": "The professor's erudite discourse went over my head, so I decided to hit the books and catch up.",
+    "to_learn": true
+  },
+  {
+    "word": "hit the books",
+    "lemma": "to hit the books",
+    "definition": "se mettre à étudier sérieusement",
+    "citation": "The professor's erudite discourse went over my head, so I decided to hit the books and catch up.",
+    "to_learn": true
+  }
+]

@@ -40,7 +40,7 @@ npm run init-db
 Extract difficult vocabulary from a text file using the application's logic:
 
 ```bash
-npm run extract-vocab -- test/fixtures/en-fr/sample.txt
+npm run extract-vocab -- test/fixtures/en-fr/sample-1.txt
 ```
 
 ### Staging environment

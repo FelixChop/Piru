@@ -1,0 +1,37 @@
+[
+  {
+    "word": "lust",
+    "lemma": "lust",
+    "definition": "désir sexuel intense, ou envie violente",
+    "citation": "Nuns go by as quiet as lust, and drunken men and sober eyes sing in the lobby of the Greek hotel.",
+    "to_learn": true
+  },
+  {
+    "word": "Buick",
+    "lemma": "Buick",
+    "definition": "marque américaine d’automobiles, ici une référence culturelle à une voiture des années 1930",
+    "citation": "Rosemary Villanucci, our next-door friend who lives above her father’s cafe, sits in a 1939 Buick eating bread and butter.",
+    "to_learn": false
+  },
+  {
+    "word": "rolls down",
+    "lemma": "to roll down",
+    "definition": "baisser la vitre d’une voiture",
+    "citation": "She rolls down the window to tell my sister Frieda and me that we can’t come in.",
+    "to_learn": true
+  },
+  {
+    "word": "poke",
+    "lemma": "to poke out of",
+    "definition": "enfoncer ou piquer pour faire sortir quelque chose, ici utilisé de manière imagée",
+    "citation": "We stare at her, wanting her bread, but more than that wanting to poke the arrogance out of her eyes and smash the pride of ownership that curls her chewing mouth.",
+    "to_learn": true
+  },
+  {
+    "word": "curls",
+    "lemma": "to curl",
+    "definition": "s’enrouler, se recourber ; ici utilisé pour décrire la bouche avec arrogance",
+    "citation": "We stare at her, wanting her bread, but more than that wanting to poke the arrogance out of her eyes and smash the pride of ownership that curls her chewing mouth.",
+    "to_learn": true
+  }
+]

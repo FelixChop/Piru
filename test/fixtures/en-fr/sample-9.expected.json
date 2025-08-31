@@ -1,0 +1,23 @@
+[
+  {
+    "word": "awry",
+    "lemma": "awry",
+    "definition": "de travers, qui tourne mal",
+    "citation": "When the scheme went awry, the culprit tried to save face by concocting a far-fetched alibi.",
+    "to_learn": true
+  },
+  {
+    "word": "culprit",
+    "lemma": "culprit",
+    "definition": "coupable",
+    "citation": "When the scheme went awry, the culprit tried to save face by concocting a far-fetched alibi.",
+    "to_learn": true
+  },
+  {
+    "word": "far-fetched",
+    "lemma": "far-fetched",
+    "definition": "tiré par les cheveux",
+    "citation": "When the scheme went awry, the culprit tried to save face by concocting a far-fetched alibi.",
+    "to_learn": true
+  }
+]
