@@ -66,14 +66,6 @@ async function extractVocabularyWithLLM(text, outPath) {
     }
   }
 
-  const mapped = items.map((item) => ({
-    id: crypto.randomUUID(),
-    word: item.word,
-    definition: item.definition,
-    citations: [item.citation],
-    status: 'new',
-  }));
-
   try {
     const outputPath =
       outPath ||
@@ -81,12 +73,12 @@ async function extractVocabularyWithLLM(text, outPath) {
         os.tmpdir(),
         `difficult-words-${crypto.randomUUID()}.json`
       );
-    fs.writeFileSync(outputPath, JSON.stringify(mapped, null, 2), 'utf8');
+    fs.writeFileSync(outputPath, JSON.stringify(items, null, 2), 'utf8');
   } catch (err) {
     console.error('Failed to write difficult words file', err);
   }
 
-  return mapped;
+  return items;
 }
 
 module.exports = { extractVocabularyWithLLM };

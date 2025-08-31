@@ -15,9 +15,7 @@ async function main() {
   const text = fs.readFileSync(file, 'utf8');
   try {
     const vocab = await extractVocabularyWithLLM(text);
-    for (const { word } of vocab) {
-      console.log(word);
-    }
+    console.log(vocab);
   } catch (err) {
     console.error('Extraction failed', err.message);
     process.exit(1);
