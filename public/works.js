@@ -84,9 +84,24 @@ document.getElementById('movie-search-form')?.addEventListener('submit', async (
 });
 
 async function searchLyrics(query) {
-  const res = await fetch(`https://api.lyrics.ovh/suggest/${encodeURIComponent(query)}`);
-  const data = await res.json();
-  return data.data || [];
+  try {
+    const res = await fetch(`https://api.lyrics.ovh/suggest/${encodeURIComponent(query)}`);
+    if (!res.ok) throw new Error('Network response was not ok');
+    const data = await res.json();
+    return data.data || [];
+  } catch (err) {
+    console.error('Failed to fetch lyrics:', err);
+    try {
+      await fetch('/errors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: err.message })
+      });
+    } catch (logErr) {
+      // optional: ignore logging errors
+    }
+    return err.message;
+  }
 }
 
 function renderLyricsResults(results) {
@@ -120,5 +135,9 @@ document.getElementById('lyrics-search-form')?.addEventListener('submit', async 
   const query = document.getElementById('lyrics-search-input').value.trim();
   if (!query) return;
   const results = await searchLyrics(query);
-  renderLyricsResults(results);
+  if (Array.isArray(results)) {
+    renderLyricsResults(results);
+  } else {
+    alert(i18next.t('lyrics_fetch_failed'));
+  }
 });
