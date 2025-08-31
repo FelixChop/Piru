@@ -9,23 +9,15 @@
       options.classList.toggle('hidden');
     });
 
-    document.getElementById('works-button').addEventListener('click', () => {
-      window.location.href = '/';
-    });
-
-    document.getElementById('learn-button').addEventListener('click', () => {
-      window.location.href = 'flashcards.html';
-    });
-
-    document.getElementById('stats-button').addEventListener('click', () => {
-      window.location.href = 'stats.html';
-    });
-
-    document.getElementById('logout-button').addEventListener('click', () => {
-      localStorage.removeItem('userId');
-      localStorage.removeItem('nativeLanguage');
-      window.location.href = '/';
-    });
+    const logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+      logoutLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('userId');
+        localStorage.removeItem('nativeLanguage');
+        window.location.href = '/';
+      });
+    }
 
     const userId = localStorage.getItem('userId');
     if (!userId) {
