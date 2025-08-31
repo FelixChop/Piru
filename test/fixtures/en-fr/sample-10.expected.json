@@ -1,0 +1,16 @@
+[
+  {
+    "word": "magnum opus",
+    "lemma": "magnum opus",
+    "definition": "chef-d'œuvre",
+    "citation": "The artist's magnum opus was lauded for its visceral imagery, leaving critics at a loss for words.",
+    "to_learn": true
+  },
+  {
+    "word": "at a loss for words",
+    "lemma": "at a loss for words",
+    "definition": "sans voix",
+    "citation": "The artist's magnum opus was lauded for its visceral imagery, leaving critics at a loss for words.",
+    "to_learn": true
+  }
+]

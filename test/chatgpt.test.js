@@ -49,7 +49,7 @@ describe('extractVocabularyWithLLM', { concurrency: false }, () => {
       `difficult-words-${crypto.randomUUID()}.json`
     );
     const sampleText = fs.readFileSync(
-      path.join(__dirname, 'fixtures', 'en-fr', 'sample.txt'),
+      path.join(__dirname, 'fixtures', 'en-fr', 'sample-1.txt'),
       'utf8'
     );
     const { extractVocabularyWithLLM } = require('../src/chatgpt');

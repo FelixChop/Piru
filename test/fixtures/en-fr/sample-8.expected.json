@@ -1,0 +1,23 @@
+[
+  {
+    "word": "hermit",
+    "lemma": "hermit",
+    "definition": "ermite",
+    "citation": "The hermit lived in austere conditions, but claimed that simplicity was the spice of life.",
+    "to_learn": true
+  },
+  {
+    "word": "austere",
+    "lemma": "austere",
+    "definition": "simple, austère",
+    "citation": "The hermit lived in austere conditions, but claimed that simplicity was the spice of life.",
+    "to_learn": true
+  },
+  {
+    "word": "spice of life",
+    "lemma": "spice of life",
+    "definition": "ce qui rend la vie intéressante",
+    "citation": "The hermit lived in austere conditions, but claimed that simplicity was the spice of life.",
+    "to_learn": true
+  }
+]
