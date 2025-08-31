@@ -71,19 +71,22 @@
         </form>
         <ul id="lyrics-results" class="search-results"></ul>
       </div>
-      <form id="work-form">
-        <input type="text" id="work-title" data-i18n-placeholder="title" placeholder="Title" />
-        <input type="text" id="work-author" data-i18n-placeholder="author" placeholder="Author" />
-        <label for="work-type" data-i18n="type">Type</label>
-        <select id="work-type">
-          <option value="book" data-i18n="book">Book</option>
-          <option value="movie" data-i18n="movie">Movie</option>
-          <option value="series" data-i18n="series">Series</option>
-          <option value="song" data-i18n="song">Song</option>
-        </select>
-        <textarea id="work-content" data-i18n-placeholder="content" placeholder="Content" required></textarea>
-        <button type="submit" data-i18n="add_work">Add Work</button>
-      </form>
+      <div id="manual-add-section" class="search-container">
+        <h3 data-i18n="manual_add">Manual Add</h3>
+        <form id="work-form">
+          <input type="text" id="work-title" data-i18n-placeholder="title" placeholder="Title" />
+          <input type="text" id="work-author" data-i18n-placeholder="author" placeholder="Author" />
+          <label for="work-type" data-i18n="type">Type</label>
+          <select id="work-type">
+            <option value="book" data-i18n="book">Book</option>
+            <option value="movie" data-i18n="movie">Movie</option>
+            <option value="series" data-i18n="series">Series</option>
+            <option value="song" data-i18n="song">Song</option>
+          </select>
+          <textarea id="work-content" data-i18n-placeholder="content" placeholder="Content" required></textarea>
+          <button type="submit" data-i18n="add_work">Add Work</button>
+        </form>
+      </div>
       <table id="work-table">
         <thead>
           <tr>
