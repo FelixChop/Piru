@@ -98,15 +98,16 @@ describe('Works API', () => {
   it('creates a work', async () => {
     const res = await request(app)
       .post('/works')
-      .send({ userId: 'user1', title: 'Book', author: 'Author', content: 'An extraordinary narrative with enigmatic characters.' });
+      .send({ userId: 'user1', title: 'Book', author: 'Author', content: 'An extraordinary narrative with enigmatic characters.', type: 'book' });
     assert.strictEqual(res.status, 201);
     assert.strictEqual(res.body.title, 'Book');
+    assert.strictEqual(res.body.type, 'book');
   });
 
   it('lists works for a user', async () => {
     await request(app)
       .post('/works')
-      .send({ userId: 'user42', title: 'Story', author: 'A', content: 'mysterious adventures occur here' });
+      .send({ userId: 'user42', title: 'Story', author: 'A', content: 'mysterious adventures occur here', type: 'book' });
     const res = await request(app)
       .get('/works')
       .query({ userId: 'user42' });

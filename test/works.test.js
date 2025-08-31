@@ -25,13 +25,13 @@ describe('Works management', () => {
   it('adds a work', async () => {
     const content =
       'This passage contains formidable terminology and simple words.';
-    const work = await addWork('user1', 'Sample', 'Author', content);
+    const work = await addWork('user1', 'Sample', 'Author', content, 'book');
     assert.strictEqual(work.title, 'Sample');
   });
 
   it('lists works for a specific user', async () => {
-    await addWork('user1', 'Work1', 'A', 'extraordinary concepts abound');
-    await addWork('user2', 'Work2', 'B', 'irrelevant context');
+    await addWork('user1', 'Work1', 'A', 'extraordinary concepts abound', 'book');
+    await addWork('user2', 'Work2', 'B', 'irrelevant context', 'book');
     const works = listWorks('user1');
     assert.strictEqual(works.length, 1);
     assert.strictEqual(works[0].title, 'Work1');
