@@ -1,4 +1,5 @@
 const { sm2 } = require('./sm2');
+const crypto = require('crypto');
 
 // In-memory vocabulary store: userId -> Map(wordId -> word data)
 const vocab = new Map();
@@ -13,6 +14,7 @@ function addWords(userId, words) {
   words.forEach((w) => {
     const entry = {
       ...w,
+      id: w.id || crypto.randomUUID(),
       interval: 0,
       repetitions: 0,
       easiness: 2.5,
