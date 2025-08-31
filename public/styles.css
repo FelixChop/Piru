@@ -143,6 +143,7 @@ button:hover {
   text-decoration: none;
   display: flex;
   align-items: center;
+  line-height: 1;
 }
 
 #menu-options a:hover {
