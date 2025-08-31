@@ -38,7 +38,25 @@ async function extractVocabularyWithLLM(text, outPath) {
         },
         { role: 'user', content: userPrompt },
       ],
-      response_format: { type: 'json_object' },
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'vocabulary_list',
+          schema: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                word: { type: 'string' },
+                definition: { type: 'string' },
+                citation: { type: 'string' },
+              },
+              required: ['word', 'definition', 'citation'],
+              additionalProperties: false,
+            },
+          },
+        },
+      },
     }),
   });
 
@@ -64,6 +82,10 @@ async function extractVocabularyWithLLM(text, outPath) {
     } else {
       console.error('Failed to parse LLM response', err);
     }
+  }
+
+  if (!Array.isArray(items)) {
+    items = [items];
   }
 
   try {
