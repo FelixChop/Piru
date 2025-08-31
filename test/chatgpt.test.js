@@ -63,6 +63,33 @@ describe('extractVocabularyWithLLM', { concurrency: false }, () => {
     assert.strictEqual(fileItems[0].word, 'mockword');
   });
 
+  it('wraps single object responses into an array', async () => {
+    global.fetch = async () => ({
+      json: async () => ({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({
+                word: 'solo',
+                definition: 'one',
+                citation: 'mock',
+              }),
+            },
+          },
+        ],
+      }),
+    });
+
+    outputPath = path.join(
+      __dirname,
+      `difficult-words-${crypto.randomUUID()}.json`
+    );
+
+    const { extractVocabularyWithLLM } = require('../src/chatgpt');
+    await extractVocabularyWithLLM('sample', outputPath);
+
+  });
+
   it('throws if prompt file read fails', () => {
     fs.readFileSync = (p, ...args) => {
       if (p === promptPath) {
