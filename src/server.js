@@ -48,7 +48,9 @@ app.post('/auth/login', async (req, res) => {
 // Works endpoints
 app.post('/works', async (req, res) => {
   const { userId, title, author, content, type } = req.body;
-  if (!userId || !content || !type) {
+  // `content` may be an empty string if no preview text is available, so we only
+  // validate that the field exists rather than requiring a truthy value.
+  if (!userId || typeof content === 'undefined' || !type) {
     return res.status(400).json({ error: 'Missing userId, content, or type' });
   }
   try {
