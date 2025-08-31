@@ -68,7 +68,7 @@ describe('Admin API', () => {
     const adminId = adminRes.body.id;
     await request(app)
       .post('/works')
-      .send({ userId: 'u1', title: 'Book', author: 'A', content: 'An extraordinary narrative.' });
+      .send({ userId: 'u1', title: 'Book', author: 'A', content: 'An extraordinary narrative.', type: 'book' });
     const res = await request(app)
       .get('/admin/works')
       .query({ userId: adminId });
