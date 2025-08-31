@@ -40,7 +40,8 @@ const i18nResources = {
       show_definition: 'Show Definition',
       again: 'Again',
       good: 'Good',
-      no_words: 'No words to review'
+      no_words: 'No words to review',
+      lyrics_fetch_failed: 'Failed to fetch lyrics'
     }
   },
   fr: {
@@ -83,7 +84,8 @@ const i18nResources = {
       show_definition: 'Afficher la définition',
       again: 'Encore',
       good: 'Bien',
-      no_words: 'Aucun mot à réviser'
+      no_words: 'Aucun mot à réviser',
+      lyrics_fetch_failed: 'Échec de récupération des paroles'
     }
   },
   es: {
@@ -126,7 +128,8 @@ const i18nResources = {
       show_definition: 'Mostrar definición',
       again: 'De nuevo',
       good: 'Bien',
-      no_words: 'No hay palabras para repasar'
+      no_words: 'No hay palabras para repasar',
+      lyrics_fetch_failed: 'No se pudieron obtener las letras'
     }
   },
   it: {
@@ -169,7 +172,8 @@ const i18nResources = {
       show_definition: 'Mostra definizione',
       again: 'Di nuovo',
       good: 'Bene',
-      no_words: 'Nessuna parola da ripassare'
+      no_words: 'Nessuna parola da ripassare',
+      lyrics_fetch_failed: 'Impossibile recuperare i testi'
     }
   },
   de: {
@@ -212,7 +216,8 @@ const i18nResources = {
       show_definition: 'Definition anzeigen',
       again: 'Nochmals',
       good: 'Gut',
-      no_words: 'Keine Wörter zu wiederholen'
+      no_words: 'Keine Wörter zu wiederholen',
+      lyrics_fetch_failed: 'Liedtext konnte nicht geladen werden'
     }
   }
 };
