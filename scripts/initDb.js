@@ -12,7 +12,9 @@ const { init, close } = require('../src/db');
 
 init()
   .then(() => {
-    console.log('Database tables ensured.');
+    if (process.env.NODE_ENV !== 'test') {
+      console.log('Database tables ensured.');
+    }
     return close();
   })
   .catch((err) => {

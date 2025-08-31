@@ -49,10 +49,13 @@ it(
           )
         );
         const items = await extractVocabularyWithLLM(text);
-        console.log(items);
         const itemsLemma = items.map((i) => i.lemma).sort().join(' ');
         const expectedLemma = expected.map((i) => i.lemma).sort().join(' ');
         const sim = similarity(itemsLemma, expectedLemma);
+        if (sim <= 0.8) {
+          console.error('Actual:', items);
+          console.error('Expected:', expected);
+        }
         assert.ok(
           sim > 0.8,
           `Levenshtein similarity below threshold for ${file}: ${sim}`
