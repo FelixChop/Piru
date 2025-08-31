@@ -33,9 +33,11 @@ describe('extractVocabularyWithLLM', { concurrency: false }, () => {
           choices: [
             {
               message: {
-                content: JSON.stringify([
-                  { word: 'mockword', definition: 'mock def', citation: 'mock cit' },
-                ]),
+                content: JSON.stringify({
+                  items: [
+                    { word: 'mockword', definition: 'mock def', citation: 'mock cit' },
+                  ],
+                }),
               },
             },
           ],
