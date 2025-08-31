@@ -12,12 +12,12 @@ const works = new Map(); // workId -> work object
  * @param {string} content
  * @returns {{id:string,title:string,author:string,vocab:Object[]}}
  */
-async function addWork(userId, title, author, content) {
+async function addWork(userId, title, author, content, type) {
   const id = crypto.randomUUID();
   const vocab = await chatgpt.extractVocabularyWithLLM(content);
-  const work = { id, userId, title, author, content, vocab };
+  const work = { id, userId, title, author, content, type, vocab };
   works.set(id, work);
-  return { id, title, author, vocab };
+  return { id, title, author, type, vocab };
 }
 
 /**
@@ -28,7 +28,7 @@ async function addWork(userId, title, author, content) {
 function listWorks(userId) {
   return Array.from(works.values())
     .filter((w) => w.userId === userId)
-    .map(({ id, title, author, vocab }) => ({ id, title, author, vocab }));
+    .map(({ id, title, author, type, vocab }) => ({ id, title, author, type, vocab }));
 }
 
 function _clearWorks() {

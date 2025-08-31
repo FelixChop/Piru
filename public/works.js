@@ -11,11 +11,10 @@ function renderBookResults(results) {
   list.innerHTML = '';
   results.forEach(book => {
     const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.textContent = i18next.t('add');
     const title = book.title || 'Untitled';
     const author = (book.author_name && book.author_name[0]) || 'Unknown';
-    li.textContent = `${title} by ${author} `;
-    const btn = document.createElement('button');
-    btn.textContent = i18next.t('add_work');
     btn.addEventListener('click', async () => {
       const content = Array.isArray(book.first_sentence)
         ? book.first_sentence[0]
@@ -23,13 +22,14 @@ function renderBookResults(results) {
       const res = await fetch('/works', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, title, author, content })
+        body: JSON.stringify({ userId, title, author, content, type: 'book' })
       });
       if (res.ok) {
         loadWorks();
       }
     });
     li.appendChild(btn);
+    li.appendChild(document.createTextNode(`${title} by ${author}`));
     list.appendChild(li);
   });
 }
@@ -53,9 +53,9 @@ function renderMovieResults(results) {
   list.innerHTML = '';
   results.forEach(movie => {
     const li = document.createElement('li');
-    li.textContent = `${movie.Title} (${movie.Year}) `;
     const btn = document.createElement('button');
-    btn.textContent = i18next.t('add_work');
+    btn.textContent = i18next.t('add');
+    const type = movie.Type === 'series' ? 'series' : 'movie';
     btn.addEventListener('click', async () => {
       const detailRes = await fetch(`https://www.omdbapi.com/?apikey=thewdb&i=${movie.imdbID}&plot=full`);
       const detail = await detailRes.json();
@@ -63,13 +63,14 @@ function renderMovieResults(results) {
       const res = await fetch('/works', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, title: detail.Title, author: '', content })
+        body: JSON.stringify({ userId, title: detail.Title, author: '', content, type })
       });
       if (res.ok) {
         loadWorks();
       }
     });
     li.appendChild(btn);
+    li.appendChild(document.createTextNode(`${movie.Title} (${movie.Year})`));
     list.appendChild(li);
   });
 }
@@ -93,9 +94,8 @@ function renderLyricsResults(results) {
   list.innerHTML = '';
   results.forEach(song => {
     const li = document.createElement('li');
-    li.textContent = `${song.title} - ${song.artist.name} `;
     const btn = document.createElement('button');
-    btn.textContent = i18next.t('add_work');
+    btn.textContent = i18next.t('add');
     btn.addEventListener('click', async () => {
       const lyricRes = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(song.artist.name)}/${encodeURIComponent(song.title)}`);
       const lyricData = await lyricRes.json();
@@ -103,13 +103,14 @@ function renderLyricsResults(results) {
       const res = await fetch('/works', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, title: song.title, author: song.artist.name, content })
+        body: JSON.stringify({ userId, title: song.title, author: song.artist.name, content, type: 'song' })
       });
       if (res.ok) {
         loadWorks();
       }
     });
     li.appendChild(btn);
+    li.appendChild(document.createTextNode(`${song.title} - ${song.artist.name}`));
     list.appendChild(li);
   });
 }

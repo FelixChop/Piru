@@ -104,11 +104,12 @@ document.getElementById('work-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const title = document.getElementById('work-title').value;
   const author = document.getElementById('work-author').value;
+  const type = document.getElementById('work-type').value;
   const content = document.getElementById('work-content').value;
   const res = await fetch('/works', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, title, author, content })
+    body: JSON.stringify({ userId, title, author, content, type })
   });
   const data = await res.json();
   if (res.ok) {
@@ -125,9 +126,15 @@ async function loadWorks() {
   const list = document.getElementById('work-list');
   list.innerHTML = '';
   works.forEach(w => {
-    const li = document.createElement('li');
-    li.textContent = `${w.title || 'Untitled'} by ${w.author || 'Unknown'}`;
-    list.appendChild(li);
+    const tr = document.createElement('tr');
+    const titleTd = document.createElement('td');
+    titleTd.textContent = w.title || 'Untitled';
+    const authorTd = document.createElement('td');
+    authorTd.textContent = w.author || 'Unknown';
+    const typeTd = document.createElement('td');
+    typeTd.textContent = i18next.t(w.type);
+    tr.append(titleTd, authorTd, typeTd);
+    list.appendChild(tr);
   });
 }
 
