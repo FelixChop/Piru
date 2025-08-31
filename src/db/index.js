@@ -12,8 +12,22 @@ function init() {
   const schema = fs.readFileSync(schemaPath, 'utf8');
   return new Promise((resolve, reject) => {
     db.exec(schema, (err) => {
-      if (err) reject(err);
-      else resolve();
+      if (err) return reject(err);
+      db.all("PRAGMA table_info(users);", (err, rows) => {
+        if (err) return reject(err);
+        const hasIsAdmin = rows.some((row) => row.name === 'is_admin');
+        if (!hasIsAdmin) {
+          db.run(
+            'ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0',
+            (err) => {
+              if (err) return reject(err);
+              resolve();
+            }
+          );
+        } else {
+          resolve();
+        }
+      });
     });
   });
 }
