@@ -112,16 +112,31 @@ function renderLyricsResults(results) {
     const btn = document.createElement('button');
     btn.textContent = i18next.t('add');
     btn.addEventListener('click', async () => {
-      const lyricRes = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(song.artist.name)}/${encodeURIComponent(song.title)}`);
-      const lyricData = await lyricRes.json();
-      const content = lyricData.lyrics || '';
-      const res = await fetch('/works', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, title: song.title, author: song.artist.name, content, type: 'song' })
-      });
-      if (res.ok) {
-        loadWorks();
+      try {
+        const lyricRes = await fetch(
+          `/api/lyrics/text?artist=${encodeURIComponent(song.artist.name)}&title=${encodeURIComponent(song.title)}`
+        );
+        if (!lyricRes.ok) throw new Error('Lyrics fetch failed');
+        const lyricData = await lyricRes.json();
+        const content = lyricData.lyrics || '';
+        const res = await fetch('/works', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId,
+            title: song.title,
+            author: song.artist.name,
+            content,
+            type: 'song'
+          })
+        });
+        if (res.ok) {
+          loadWorks();
+        } else {
+          throw new Error('Add failed');
+        }
+      } catch (err) {
+        alert('Failed to add song');
       }
     });
     li.appendChild(btn);
