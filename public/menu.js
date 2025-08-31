@@ -9,6 +9,10 @@
       options.classList.toggle('hidden');
     });
 
+    document.getElementById('works-button').addEventListener('click', () => {
+      window.location.href = '/';
+    });
+
     document.getElementById('learn-button').addEventListener('click', () => {
       window.location.href = 'flashcards.html';
     });
