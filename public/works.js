@@ -81,3 +81,43 @@ document.getElementById('movie-search-form')?.addEventListener('submit', async (
   const results = await searchMovies(query);
   renderMovieResults(results);
 });
+
+async function searchLyrics(query) {
+  const res = await fetch(`https://api.lyrics.ovh/suggest/${encodeURIComponent(query)}`);
+  const data = await res.json();
+  return data.data || [];
+}
+
+function renderLyricsResults(results) {
+  const list = document.getElementById('lyrics-results');
+  list.innerHTML = '';
+  results.forEach(song => {
+    const li = document.createElement('li');
+    li.textContent = `${song.title} - ${song.artist.name} `;
+    const btn = document.createElement('button');
+    btn.textContent = i18next.t('add_work');
+    btn.addEventListener('click', async () => {
+      const lyricRes = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(song.artist.name)}/${encodeURIComponent(song.title)}`);
+      const lyricData = await lyricRes.json();
+      const content = lyricData.lyrics || '';
+      const res = await fetch('/works', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, title: song.title, author: song.artist.name, content })
+      });
+      if (res.ok) {
+        loadWorks();
+      }
+    });
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+}
+
+document.getElementById('lyrics-search-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const query = document.getElementById('lyrics-search-input').value.trim();
+  if (!query) return;
+  const results = await searchLyrics(query);
+  renderLyricsResults(results);
+});
