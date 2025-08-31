@@ -15,9 +15,16 @@ function hashPassword(password) {
  * @param {string} password
  * @param {string} nativeLanguage
  * @param {string[]} learningLanguages
- * @returns {{id:string,email:string,nativeLanguage:string,learningLanguages:string[]}}
+ * @param {boolean} [isAdmin=false]
+ * @returns {{id:string,email:string,nativeLanguage:string,learningLanguages:string[],isAdmin:boolean}}
  */
-function signup(email, password, nativeLanguage, learningLanguages = []) {
+function signup(
+  email,
+  password,
+  nativeLanguage,
+  learningLanguages = [],
+  isAdmin = false
+) {
   if (!Array.isArray(learningLanguages) || learningLanguages.length === 0) {
     return Promise.reject(new Error('At least one learning language is required'));
   }
@@ -29,8 +36,8 @@ function signup(email, password, nativeLanguage, learningLanguages = []) {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
       db.run(
-        'INSERT INTO users (id, email, password_hash, native_language) VALUES (?,?,?,?)',
-        [id, email, passwordHash, nativeLanguage],
+        'INSERT INTO users (id, email, password_hash, native_language, is_admin) VALUES (?,?,?,?,?)',
+        [id, email, passwordHash, nativeLanguage, isAdmin ? 1 : 0],
         (err) => {
           if (err) {
             if (err.message.includes('UNIQUE')) {
@@ -46,7 +53,13 @@ function signup(email, password, nativeLanguage, learningLanguages = []) {
           }
           stmt.finalize((err2) => {
             if (err2) return reject(err2);
-            resolve({ id, email, nativeLanguage, learningLanguages: [...learningLanguages] });
+            resolve({
+              id,
+              email,
+              nativeLanguage,
+              learningLanguages: [...learningLanguages],
+              isAdmin: !!isAdmin,
+            });
           });
         }
       );
@@ -58,7 +71,7 @@ function signup(email, password, nativeLanguage, learningLanguages = []) {
  * Log in an existing user.
  * @param {string} email
  * @param {string} password
- * @returns {{id:string,email:string,nativeLanguage:string,learningLanguages:string[]}}
+ * @returns {{id:string,email:string,nativeLanguage:string,learningLanguages:string[],isAdmin:boolean}}
  */
 function login(email, password) {
   return new Promise((resolve, reject) => {
@@ -80,6 +93,7 @@ function login(email, password) {
             email: row.email,
             nativeLanguage: row.native_language,
             learningLanguages,
+            isAdmin: !!row.is_admin,
           });
         }
       );

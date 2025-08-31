@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path');
 const { signup, login } = require('./auth');
 const { init } = require('./db');
-const { addWork, listWorks } = require('./works');
+const { addWork, listWorks, listAllWorks, deleteWork } = require('./works');
+const { isAdmin, listUsers, deleteUser } = require('./admin');
 const { extractVocabularyWithLLM } = require('./chatgpt');
 const { getOverview } = require('./stats');
 const { addWords, getNextWord, reviewWord } = require('./vocab');
@@ -25,9 +26,9 @@ init().then(() => {
 });
 
 app.post('/auth/signup', async (req, res) => {
-  const { email, password, nativeLanguage, learningLanguages } = req.body;
+  const { email, password, nativeLanguage, learningLanguages, isAdmin } = req.body;
   try {
-    const user = await signup(email, password, nativeLanguage, learningLanguages);
+    const user = await signup(email, password, nativeLanguage, learningLanguages, isAdmin);
     res.status(201).json(user);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -65,6 +66,52 @@ app.get('/works', (req, res) => {
   }
   const works = listWorks(userId);
   res.json(works);
+});
+
+// Admin endpoints
+app.get('/admin/users', async (req, res) => {
+  const { userId } = req.query;
+  try {
+    if (!(await isAdmin(userId))) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    const users = await listUsers();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to list users' });
+  }
+});
+
+app.delete('/admin/users/:id', async (req, res) => {
+  const { userId } = req.query;
+  try {
+    if (!(await isAdmin(userId))) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    await deleteUser(req.params.id);
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete user' });
+  }
+});
+
+app.get('/admin/works', async (req, res) => {
+  const { userId } = req.query;
+  if (!(await isAdmin(userId))) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  const works = listAllWorks();
+  res.json(works);
+});
+
+app.delete('/admin/works/:id', async (req, res) => {
+  const { userId } = req.query;
+  if (!(await isAdmin(userId))) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  const ok = deleteWork(req.params.id);
+  if (!ok) return res.status(404).json({ error: 'Not found' });
+  res.status(204).end();
 });
 
 // Vocabulary endpoints
