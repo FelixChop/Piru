@@ -35,7 +35,7 @@ const i18nResources = {
   fr: {
     translation: {
       site_name: 'Piru',
-      tagline: 'Consommez des médias en langues étrangères.',
+      tagline: 'Consomme des médias en langues étrangères.',
       login: 'Connexion',
       sign_up: 'Inscription',
       email: 'Email',
