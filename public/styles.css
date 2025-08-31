@@ -112,9 +112,10 @@ button:hover {
 }
 
 #menu {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+  margin-left: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .burger-button {
@@ -140,6 +141,8 @@ button:hover {
   padding: 0.5rem 1rem;
   color: var(--color-dark);
   text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 
 #menu-options a:hover {
