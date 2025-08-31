@@ -16,6 +16,7 @@ async function loadNext() {
     document.getElementById('definition').classList.add('hidden');
     document.getElementById('review-buttons').classList.add('hidden');
     document.getElementById('show-btn').classList.remove('hidden');
+    document.getElementById('add-work-btn').classList.add('hidden');
   } else if (res.status === 204) {
     currentWord = null;
     document.getElementById('word').textContent = i18next.t('no_words');
@@ -23,6 +24,7 @@ async function loadNext() {
     document.getElementById('definition').classList.add('hidden');
     document.getElementById('review-buttons').classList.add('hidden');
     document.getElementById('show-btn').classList.add('hidden');
+    document.getElementById('add-work-btn').classList.remove('hidden');
   } else {
     window.location.href = '/';
   }
@@ -47,6 +49,9 @@ async function review(quality) {
 document.getElementById('show-btn').addEventListener('click', showDefinition);
 document.querySelectorAll('#review-buttons button').forEach((btn) => {
   btn.addEventListener('click', () => review(Number(btn.dataset.quality)));
+});
+document.getElementById('add-work-btn').addEventListener('click', () => {
+  window.location.href = '/';
 });
 
 const defaultLang = localStorage.getItem('nativeLanguage') || 'en';
