@@ -22,7 +22,7 @@ header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0.5rem;
   box-shadow: 0 2px 4px rgba(34, 31, 31, 0.1);
   position: relative;
 }
@@ -39,6 +39,7 @@ header p {
 .site-text {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
 .home-link,
@@ -48,7 +49,7 @@ header p {
 }
 
 .logo {
-  width: 80px;
+  width: 60px;
   height: auto;
 }
 
