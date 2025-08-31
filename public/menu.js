@@ -15,6 +15,7 @@
         e.preventDefault();
         localStorage.removeItem('userId');
         localStorage.removeItem('nativeLanguage');
+        localStorage.removeItem('email');
         window.location.href = '/';
       });
     }

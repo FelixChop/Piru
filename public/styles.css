@@ -146,6 +146,19 @@ button:hover {
   line-height: 1;
 }
 
+#menu-email {
+  padding: 0.65rem 1rem 0.35rem 1rem;
+  color: var(--color-dark);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+#menu-email::before {
+  content: '👤';
+  margin-right: 0.5rem;
+}
+
 #menu-options a:hover {
   background-color: var(--color-blue);
   color: var(--color-light);
@@ -153,4 +166,19 @@ button:hover {
 
 #menu-options.hidden {
   display: none;
+}
+
+#works-link::before {
+  content: '📚';
+  margin-right: 0.5rem;
+}
+
+#learn-link::before {
+  content: '🧠';
+  margin-right: 0.5rem;
+}
+
+#stats-link::before {
+  content: '📈';
+  margin-right: 0.5rem;
 }
