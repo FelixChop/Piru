@@ -36,10 +36,22 @@ function renderBookResults(results) {
 
 document.getElementById('book-search-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const query = document.getElementById('book-search-input').value.trim();
+  const input = document.getElementById('book-search-input');
+  const button = e.target.querySelector('button[type="submit"]');
+  const spinner = document.getElementById('book-search-spinner');
+  const query = input.value.trim();
   if (!query) return;
-  const results = await searchBooks(query);
-  renderBookResults(results);
+  button.disabled = true;
+  input.disabled = true;
+  spinner.classList.remove('hidden');
+  try {
+    const results = await searchBooks(query);
+    renderBookResults(results);
+  } finally {
+    button.disabled = false;
+    input.disabled = false;
+    spinner.classList.add('hidden');
+  }
 });
 
 async function searchMovies(query) {
@@ -77,10 +89,22 @@ function renderMovieResults(results) {
 
 document.getElementById('movie-search-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const query = document.getElementById('movie-search-input').value.trim();
+  const input = document.getElementById('movie-search-input');
+  const button = e.target.querySelector('button[type="submit"]');
+  const spinner = document.getElementById('movie-search-spinner');
+  const query = input.value.trim();
   if (!query) return;
-  const results = await searchMovies(query);
-  renderMovieResults(results);
+  button.disabled = true;
+  input.disabled = true;
+  spinner.classList.remove('hidden');
+  try {
+    const results = await searchMovies(query);
+    renderMovieResults(results);
+  } finally {
+    button.disabled = false;
+    input.disabled = false;
+    spinner.classList.add('hidden');
+  }
 });
 
 async function searchLyrics(query) {
@@ -147,12 +171,24 @@ function renderLyricsResults(results) {
 
 document.getElementById('lyrics-search-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const query = document.getElementById('lyrics-search-input').value.trim();
+  const input = document.getElementById('lyrics-search-input');
+  const button = e.target.querySelector('button[type="submit"]');
+  const spinner = document.getElementById('lyrics-search-spinner');
+  const query = input.value.trim();
   if (!query) return;
-  const results = await searchLyrics(query);
-  if (Array.isArray(results)) {
-    renderLyricsResults(results);
-  } else {
-    alert(i18next.t('lyrics_fetch_failed'));
+  button.disabled = true;
+  input.disabled = true;
+  spinner.classList.remove('hidden');
+  try {
+    const results = await searchLyrics(query);
+    if (Array.isArray(results)) {
+      renderLyricsResults(results);
+    } else {
+      alert(i18next.t('lyrics_fetch_failed'));
+    }
+  } finally {
+    button.disabled = false;
+    input.disabled = false;
+    spinner.classList.add('hidden');
   }
 });
