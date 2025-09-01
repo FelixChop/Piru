@@ -233,3 +233,14 @@ button:disabled {
   padding: 0.5rem;
   text-align: left;
 }
+
+#add-work-menu {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+#add-work-menu button.active {
+  background-color: var(--color-blue);
+  color: var(--color-light);
+}
