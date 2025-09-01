@@ -91,6 +91,12 @@ button:hover {
   color: var(--color-light);
 }
 
+button:disabled {
+  background-color: var(--color-gray);
+  color: var(--color-light);
+  cursor: not-allowed;
+}
+
 .hidden {
   display: none;
 }
