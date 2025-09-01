@@ -38,60 +38,71 @@
       </form>
     </section>
     <section id="works" class="hidden">
-      <h2 data-i18n="your_works">Your Works</h2>
-      <div id="book-search-section" class="search-container">
-        <h3 data-i18n="search_books">Search a Book</h3>
-        <form id="book-search-form">
-          <input type="text" id="book-search-input" data-i18n-placeholder="search_books" placeholder="Search a book" />
-          <button type="submit" data-i18n="search">Search</button>
-          <span id="book-search-spinner" class="spinner hidden"></span>
-        </form>
-        <ul id="book-results" class="search-results"></ul>
+      <div id="my-works-container">
+        <h2 data-i18n="my_works">My Works</h2>
+        <table id="work-table">
+          <thead>
+            <tr>
+              <th data-i18n="title">Title</th>
+              <th data-i18n="author">Author</th>
+              <th data-i18n="type">Type</th>
+            </tr>
+          </thead>
+          <tbody id="work-list"></tbody>
+        </table>
       </div>
-      <div id="movie-search-section" class="search-container">
-        <h3 data-i18n="search_movies_series">Search a Film or TV Series</h3>
-        <form id="movie-search-form">
-          <input type="text" id="movie-search-input" data-i18n-placeholder="search_movies_series" placeholder="Search a film or TV series" />
-          <button type="submit" data-i18n="search">Search</button>
-          <span id="movie-search-spinner" class="spinner hidden"></span>
-        </form>
-        <ul id="movie-results" class="search-results"></ul>
+      <div id="add-work-container">
+        <h2 data-i18n="add_new_work">Add New Work</h2>
+        <nav id="add-work-menu">
+          <button data-target="book-search-section" class="active" data-i18n="book">Book</button>
+          <button data-target="movie-search-section" data-i18n="movie_series">Movie / Series</button>
+          <button data-target="lyrics-search-section" data-i18n="song">Song</button>
+          <button data-target="manual-add-section" data-i18n="custom">Custom</button>
+        </nav>
+        <div id="book-search-section" class="search-container">
+          <h3 data-i18n="search_books">Search a Book</h3>
+          <form id="book-search-form">
+            <input type="text" id="book-search-input" data-i18n-placeholder="search_books" placeholder="Search a book" />
+            <button type="submit" data-i18n="search">Search</button>
+            <span id="book-search-spinner" class="spinner hidden"></span>
+          </form>
+          <ul id="book-results" class="search-results"></ul>
+        </div>
+        <div id="movie-search-section" class="search-container hidden">
+          <h3 data-i18n="search_movies_series">Search a Film or TV Series</h3>
+          <form id="movie-search-form">
+            <input type="text" id="movie-search-input" data-i18n-placeholder="search_movies_series" placeholder="Search a film or TV series" />
+            <button type="submit" data-i18n="search">Search</button>
+            <span id="movie-search-spinner" class="spinner hidden"></span>
+          </form>
+          <ul id="movie-results" class="search-results"></ul>
+        </div>
+        <div id="lyrics-search-section" class="search-container hidden">
+          <h3 data-i18n="search_lyrics">Search a Song</h3>
+          <form id="lyrics-search-form">
+            <input type="text" id="lyrics-search-input" data-i18n-placeholder="search_lyrics" placeholder="Search a song" />
+            <button type="submit" data-i18n="search">Search</button>
+            <span id="lyrics-search-spinner" class="spinner hidden"></span>
+          </form>
+          <ul id="lyrics-results" class="search-results"></ul>
+        </div>
+        <div id="manual-add-section" class="search-container hidden">
+          <h3 data-i18n="manual_add">Manual Add</h3>
+          <form id="work-form">
+            <input type="text" id="work-title" data-i18n-placeholder="title" placeholder="Title" />
+            <input type="text" id="work-author" data-i18n-placeholder="author" placeholder="Author" />
+            <label for="work-type" data-i18n="type">Type</label>
+            <select id="work-type">
+              <option value="book" data-i18n="book">Book</option>
+              <option value="movie" data-i18n="movie">Movie</option>
+              <option value="series" data-i18n="series">Series</option>
+              <option value="song" data-i18n="song">Song</option>
+            </select>
+            <textarea id="work-content" data-i18n-placeholder="content" placeholder="Content" required></textarea>
+            <button type="submit" data-i18n="add_work">Add Work</button>
+          </form>
+        </div>
       </div>
-      <div id="lyrics-search-section" class="search-container">
-        <h3 data-i18n="search_lyrics">Search a Song</h3>
-        <form id="lyrics-search-form">
-          <input type="text" id="lyrics-search-input" data-i18n-placeholder="search_lyrics" placeholder="Search a song" />
-          <button type="submit" data-i18n="search">Search</button>
-          <span id="lyrics-search-spinner" class="spinner hidden"></span>
-        </form>
-        <ul id="lyrics-results" class="search-results"></ul>
-      </div>
-      <div id="manual-add-section" class="search-container">
-        <h3 data-i18n="manual_add">Manual Add</h3>
-        <form id="work-form">
-          <input type="text" id="work-title" data-i18n-placeholder="title" placeholder="Title" />
-          <input type="text" id="work-author" data-i18n-placeholder="author" placeholder="Author" />
-          <label for="work-type" data-i18n="type">Type</label>
-          <select id="work-type">
-            <option value="book" data-i18n="book">Book</option>
-            <option value="movie" data-i18n="movie">Movie</option>
-            <option value="series" data-i18n="series">Series</option>
-            <option value="song" data-i18n="song">Song</option>
-          </select>
-          <textarea id="work-content" data-i18n-placeholder="content" placeholder="Content" required></textarea>
-          <button type="submit" data-i18n="add_work">Add Work</button>
-        </form>
-      </div>
-      <table id="work-table">
-        <thead>
-          <tr>
-            <th data-i18n="title">Title</th>
-            <th data-i18n="author">Author</th>
-            <th data-i18n="type">Type</th>
-          </tr>
-        </thead>
-        <tbody id="work-list"></tbody>
-      </table>
     </section>
   </main>
   <script src="/lib/i18next/umd/i18next.min.js"></script>

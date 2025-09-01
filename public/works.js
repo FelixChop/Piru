@@ -206,3 +206,15 @@ document.getElementById('lyrics-search-form')?.addEventListener('submit', async 
     spinner.classList.add('hidden');
   }
 });
+
+document.querySelectorAll('#add-work-menu button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#add-work-menu button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const target = btn.getAttribute('data-target');
+    document.querySelectorAll('#add-work-container .search-container').forEach(section => {
+      section.classList.add('hidden');
+    });
+    document.getElementById(target)?.classList.remove('hidden');
+  });
+});
