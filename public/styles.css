@@ -200,6 +200,21 @@ button:hover {
   margin-right: 0.5rem;
 }
 
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-gray);
+  border-top-color: var(--color-dark);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 #work-table {
   width: 100%;
   border-collapse: collapse;
