@@ -16,10 +16,12 @@ chatgpt.extractVocabularyWithLLM = async (content) => {
 };
 
 const { addWork, listWorks, _clearWorks } = require('../src/works');
+const { getNextWord, _clear: _clearVocab } = require('../src/vocab');
 
 describe('Works management', () => {
   beforeEach(() => {
     _clearWorks();
+    _clearVocab();
   });
 
   it('adds a work', async () => {
@@ -35,5 +37,43 @@ describe('Works management', () => {
     const works = listWorks('user1');
     assert.strictEqual(works.length, 1);
     assert.strictEqual(works[0].title, 'Work1');
+  });
+
+  it('extracts vocab from subtitles when adding a movie', async () => {
+    chatgpt.extractVocabularyWithLLM = async (text) => {
+      assert.ok(text.includes('Hedwig'));
+      return [
+        { id: crypto.randomUUID(), word: 'hedwig', definition: '', citation: '' },
+      ];
+    };
+    await addWork(
+      'movieUser',
+      'Harry Potter and the Chamber of Secrets',
+      '',
+      '',
+      'movie'
+    );
+    const next = getNextWord('movieUser');
+    assert.ok(next);
+    assert.strictEqual(next.word, 'hedwig');
+  });
+
+  it("handles 'Harry Potter and the Philosopher's Stone' for subtitle lookup", async () => {
+    chatgpt.extractVocabularyWithLLM = async (text) => {
+      assert.ok(text.includes('McGonagall'));
+      return [
+        { id: crypto.randomUUID(), word: 'mcgonagall', definition: '', citation: '' },
+      ];
+    };
+    await addWork(
+      'altUser',
+      "Harry Potter and the Philosopher's Stone (2001)",
+      '',
+      '',
+      'movie'
+    );
+    const next = getNextWord('altUser');
+    assert.ok(next);
+    assert.strictEqual(next.word, 'mcgonagall');
   });
 });
