@@ -16,6 +16,8 @@ function renderBookResults(results) {
     const title = book.title || 'Untitled';
     const author = (book.author_name && book.author_name[0]) || 'Unknown';
     btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.textContent = i18next.t('added');
       const content = Array.isArray(book.first_sentence)
         ? book.first_sentence[0]
         : book.first_sentence || '';
@@ -26,6 +28,9 @@ function renderBookResults(results) {
       });
       if (res.ok) {
         loadWorks();
+      } else {
+        btn.disabled = false;
+        btn.textContent = i18next.t('add');
       }
     });
     li.appendChild(btn);
@@ -57,6 +62,8 @@ function renderMovieResults(results) {
     btn.textContent = i18next.t('add');
     const type = movie.Type === 'series' ? 'series' : 'movie';
     btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.textContent = i18next.t('added');
       const detailRes = await fetch(`https://www.omdbapi.com/?apikey=thewdb&i=${movie.imdbID}&plot=full`);
       const detail = await detailRes.json();
       const content = detail.Plot || '';
@@ -67,6 +74,9 @@ function renderMovieResults(results) {
       });
       if (res.ok) {
         loadWorks();
+      } else {
+        btn.disabled = false;
+        btn.textContent = i18next.t('add');
       }
     });
     li.appendChild(btn);
@@ -112,6 +122,8 @@ function renderLyricsResults(results) {
     const btn = document.createElement('button');
     btn.textContent = i18next.t('add');
     btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.textContent = i18next.t('added');
       try {
         const lyricRes = await fetch(
           `/api/lyrics/text?artist=${encodeURIComponent(song.artist.name)}&title=${encodeURIComponent(song.title)}`
@@ -136,6 +148,8 @@ function renderLyricsResults(results) {
           throw new Error('Add failed');
         }
       } catch (err) {
+        btn.disabled = false;
+        btn.textContent = i18next.t('add');
         alert('Failed to add song');
       }
     });
