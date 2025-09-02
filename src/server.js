@@ -66,14 +66,14 @@ app.delete('/auth/account', async (req, res) => {
 
 // Works endpoints
 app.post('/works', async (req, res) => {
-  const { userId, title, author, content, type } = req.body;
+  const { userId, title, author, content, type, thumbnail } = req.body;
   // `content` may be an empty string if no preview text is available, so we only
   // validate that the field exists rather than requiring a truthy value.
   if (!userId || typeof content === 'undefined' || !type) {
     return res.status(400).json({ error: 'Missing userId, content, or type' });
   }
   try {
-    const work = await addWork(userId, title, author, content, type);
+    const work = await addWork(userId, title, author, content, type, thumbnail);
     res.status(201).json(work);
   } catch (err) {
     res.status(500).json({ error: 'Extraction failed' });
@@ -151,11 +151,11 @@ app.post('/vocab/extract', async (req, res) => {
 });
 
 app.get('/vocab/next', (req, res) => {
-  const { userId } = req.query;
+  const { userId, workId } = req.query;
   if (!userId) {
     return res.status(400).json({ error: 'Missing userId' });
   }
-  const word = getNextWord(userId);
+  const word = getNextWord(userId, workId);
   if (!word) return res.status(204).end();
   res.json(word);
 });

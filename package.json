@@ -4,7 +4,7 @@
   "description": "Consume media in foreign languages by translating only the difficult vocabulary and by learning it.",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test node scripts/initDb.js && node --test",
+    "test": "NODE_ENV=test node scripts/initDb.js && node --test --test-concurrency=1",
     "init-db": "node scripts/initDb.js",
     "init-db:staging": "NODE_ENV=staging node scripts/initDb.js",
     "start": "node src/server.js",

@@ -26,11 +26,13 @@ function addWords(userId, words) {
   return added;
 }
 
-function getNextWord(userId) {
+function getNextWord(userId, workId) {
   const store = vocab.get(userId);
   if (!store) return null;
   const now = Date.now();
-  const dueWords = Array.from(store.values()).filter((w) => w.due <= now);
+  const dueWords = Array.from(store.values()).filter(
+    (w) => w.due <= now && (!workId || w.workId === workId)
+  );
   if (dueWords.length === 0) return null;
   dueWords.sort((a, b) => a.due - b.due);
   return dueWords[0];

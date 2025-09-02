@@ -111,7 +111,7 @@ function getThumbnailForTitle(title) {
  * @param {string} content
  * @returns {{id:string,title:string,author:string,vocab:Object[]}}
  */
-async function addWork(userId, title, author, content, type) {
+async function addWork(userId, title, author, content, type, thumbnailUrl) {
   const id = crypto.randomUUID();
   let text = content;
   if (type === 'movie') {
@@ -121,13 +121,28 @@ async function addWork(userId, title, author, content, type) {
     }
   }
   const vocab = await chatgpt.extractVocabularyWithLLM(text);
-  const thumbnail = type === 'movie' ? getThumbnailForTitle(title) : null;
-  const work = { id, userId, title, author, content, type, vocab, thumbnail };
+  const vocabWithWork = Array.isArray(vocab)
+    ? vocab.map((v) => ({ ...v, workId: id }))
+    : [];
+  const thumbnail =
+    type === 'movie'
+      ? getThumbnailForTitle(title) || thumbnailUrl || null
+      : null;
+  const work = {
+    id,
+    userId,
+    title,
+    author,
+    content,
+    type,
+    vocab: vocabWithWork,
+    thumbnail,
+  };
   works.set(id, work);
-  if (Array.isArray(vocab) && vocab.length) {
-    addWords(userId, vocab);
+  if (vocabWithWork.length) {
+    addWords(userId, vocabWithWork);
   }
-  return { id, title, author, type, vocab, thumbnail };
+  return { id, title, author, type, vocab: vocabWithWork, thumbnail };
 }
 
 /**

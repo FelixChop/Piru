@@ -1,5 +1,7 @@
 (function() {
 let currentWord = null;
+const params = new URLSearchParams(window.location.search);
+const workId = params.get('workId');
 
 async function loadNext() {
   const userId = localStorage.getItem('userId');
@@ -7,7 +9,7 @@ async function loadNext() {
     window.location.href = '/';
     return;
   }
-  const res = await fetch(`/vocab/next?userId=${userId}`);
+  const res = await fetch(`/vocab/next?userId=${userId}${workId ? `&workId=${workId}` : ''}`);
   if (res.status === 200) {
     currentWord = await res.json();
     document.getElementById('word').textContent = currentWord.word;
