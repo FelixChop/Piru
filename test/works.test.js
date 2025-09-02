@@ -29,6 +29,8 @@ describe('Works management', () => {
       'This passage contains formidable terminology and simple words.';
     const work = await addWork('user1', 'Sample', 'Author', content, 'book');
     assert.strictEqual(work.title, 'Sample');
+    assert.ok(work.pages);
+    assert.strictEqual(work.pages.length, 1);
   });
 
   it('lists works for a specific user', async () => {
@@ -40,11 +42,13 @@ describe('Works management', () => {
   });
 
   it('extracts vocab from subtitles when adding a movie', async () => {
-    chatgpt.extractVocabularyWithLLM = async (text) => {
-      assert.ok(text.includes('Hedwig'));
-      return [
-        { id: crypto.randomUUID(), word: 'hedwig', definition: '', citation: '' },
-      ];
+    chatgpt.extractVocabularyWithLLM = async (chunk) => {
+      if (chunk.includes('Hedwig')) {
+        return [
+          { id: crypto.randomUUID(), word: 'hedwig', definition: '', citation: '' },
+        ];
+      }
+      return [];
     };
     await addWork(
       'movieUser',
@@ -59,11 +63,13 @@ describe('Works management', () => {
   });
 
   it("handles 'Harry Potter and the Philosopher's Stone' for subtitle lookup", async () => {
-    chatgpt.extractVocabularyWithLLM = async (text) => {
-      assert.ok(text.includes('McGonagall'));
-      return [
-        { id: crypto.randomUUID(), word: 'mcgonagall', definition: '', citation: '' },
-      ];
+    chatgpt.extractVocabularyWithLLM = async (chunk) => {
+      if (chunk.includes('McGonagall')) {
+        return [
+          { id: crypto.randomUUID(), word: 'mcgonagall', definition: '', citation: '' },
+        ];
+      }
+      return [];
     };
     await addWork(
       'altUser',
@@ -75,6 +81,37 @@ describe('Works management', () => {
     const next = getNextWord('altUser');
     assert.ok(next);
     assert.strictEqual(next.word, 'mcgonagall');
+  });
+
+  it('extracts vocab from local epub when adding a book', async () => {
+    chatgpt.extractVocabularyWithLLM = async (chunk) => {
+      if (chunk.includes('Breedlove')) {
+        return [
+          {
+            id: crypto.randomUUID(),
+            word: 'breedlove',
+            definition: '',
+            citations: [],
+            status: 'new',
+          },
+        ];
+      }
+      return [];
+    };
+    const work = await addWork(
+      'bookUser',
+      'The Bluest Eye',
+      'Morrison, Toni',
+      '',
+      'book'
+    );
+    const found = work.pages.some((p) =>
+      p.vocab.some((v) => v.word === 'breedlove')
+    );
+    assert.ok(found);
+    const next = getNextWord('bookUser');
+    assert.ok(next);
+    assert.strictEqual(next.word, 'breedlove');
   });
 
   it('filters vocabulary by work id', async () => {
