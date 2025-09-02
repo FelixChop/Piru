@@ -144,4 +144,43 @@ describe('Works management', () => {
     next = getNextWord('delUser');
     assert.strictEqual(next, null);
   });
+
+  it('aggregates citations for duplicate subtitle vocabulary', async () => {
+    chatgpt.extractVocabularyWithLLM = async (chunk) => {
+      const results = [];
+      if (chunk.includes('The quill is sharp.')) {
+        results.push({
+          id: crypto.randomUUID(),
+          word: 'quill',
+          definition: '',
+          citation: 'The quill is sharp.',
+        });
+      }
+      if (chunk.includes('Another quill is here.')) {
+        results.push({
+          id: crypto.randomUUID(),
+          word: 'quill',
+          definition: '',
+          citation: 'Another quill is here.',
+        });
+      }
+      if (chunk.includes('Yet another quill appears.')) {
+        results.push({
+          id: crypto.randomUUID(),
+          word: 'quill',
+          definition: '',
+          citation: 'Yet another quill appears.',
+        });
+      }
+      return results;
+    };
+    const work = await addWork('userQuill', 'Test Movie', '', '', 'movie');
+    const entry = work.vocab.find((v) => v.word === 'quill');
+    assert.ok(entry);
+    assert.deepStrictEqual(entry.citations, [
+      'The quill is sharp.',
+      'Another quill is here.',
+      'Yet another quill appears.',
+    ]);
+  });
 });
