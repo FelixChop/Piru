@@ -146,8 +146,18 @@ async function loadWorks() {
     caption.className = 'work-caption';
     caption.textContent = w.title || 'Untitled';
     item.appendChild(caption);
+    const learnBtn = document.createElement('button');
+    learnBtn.className = 'learn-btn';
+    learnBtn.textContent = i18next.t('learn');
+    learnBtn.addEventListener('click', () => {
+      window.location.href = `flashcards.html?workId=${encodeURIComponent(w.id)}`;
+    });
+    item.appendChild(learnBtn);
     carousel.appendChild(item);
   });
+  if (typeof updateContent === 'function') {
+    updateContent();
+  }
 }
 
 function initAuthenticatedState() {

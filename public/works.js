@@ -79,10 +79,11 @@ function renderMovieResults(results) {
       const detailRes = await fetch(`https://www.omdbapi.com/?apikey=thewdb&i=${movie.imdbID}&plot=full`);
       const detail = await detailRes.json();
       const content = detail.Plot || '';
+      const poster = detail.Poster && detail.Poster !== 'N/A' ? detail.Poster : undefined;
       const res = await fetch('/works', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, title: detail.Title, author: '', content, type })
+        body: JSON.stringify({ userId, title: detail.Title, author: '', content, type, thumbnail: poster })
       });
       if (res.ok) {
         loadWorks();

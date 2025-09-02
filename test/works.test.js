@@ -76,4 +76,25 @@ describe('Works management', () => {
     assert.ok(next);
     assert.strictEqual(next.word, 'mcgonagall');
   });
+
+  it('filters vocabulary by work id', async () => {
+    chatgpt.extractVocabularyWithLLM = async (content) => {
+      const tokens = content.toLowerCase().match(/\b\w+\b/g) || [];
+      const unique = Array.from(new Set(tokens));
+      return unique.map((word) => ({
+        id: crypto.randomUUID(),
+        word,
+        definition: '',
+        citations: [],
+        status: 'new',
+      }));
+    };
+    const w1 = await addWork('fUser', 'First', '', 'alpha beta', 'book');
+    const w2 = await addWork('fUser', 'Second', '', 'gamma delta', 'book');
+    const next1 = getNextWord('fUser', w1.id);
+    const next2 = getNextWord('fUser', w2.id);
+    assert.notStrictEqual(next1.id, next2.id);
+    assert.ok(['alpha', 'beta'].includes(next1.word));
+    assert.ok(['gamma', 'delta'].includes(next2.word));
+  });
 });

@@ -250,8 +250,9 @@ button:disabled {
 
 .work-item {
   flex: 0 0 auto;
-  width: 150px;
+  width: 75px;
   text-align: center;
+  position: relative;
 }
 
 .work-item img {
@@ -261,14 +262,28 @@ button:disabled {
 }
 
 .work-placeholder {
-  width: 150px;
-  height: 220px;
+  width: 75px;
+  height: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--color-gray);
   color: var(--color-light);
   border-radius: 4px;
+}
+
+.learn-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.work-item:hover .learn-btn {
+  display: block;
 }
 
 .work-caption {
