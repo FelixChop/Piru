@@ -123,6 +123,11 @@ button:disabled {
   margin-bottom: 1rem;
 }
 
+#citation-source {
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
 #menu {
   margin-left: auto;
   position: relative;
