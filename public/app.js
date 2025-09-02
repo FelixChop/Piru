@@ -126,35 +126,41 @@ document.getElementById('work-form').addEventListener('submit', async (e) => {
 async function loadWorks() {
   const res = await fetch(`/works?userId=${userId}`);
   const works = await res.json();
+  const container = document.getElementById('my-works-container');
   const carousel = document.getElementById('work-carousel');
   carousel.innerHTML = '';
-  works.forEach((w) => {
-    const item = document.createElement('div');
-    item.className = 'work-item';
-    if (w.thumbnail) {
-      const img = document.createElement('img');
-      img.src = w.thumbnail;
-      img.alt = w.title || 'thumbnail';
-      item.appendChild(img);
-    } else {
-      const placeholder = document.createElement('div');
-      placeholder.className = 'work-placeholder';
-      placeholder.textContent = i18next.t(w.type);
-      item.appendChild(placeholder);
-    }
-    const caption = document.createElement('div');
-    caption.className = 'work-caption';
-    caption.textContent = w.title || 'Untitled';
-    item.appendChild(caption);
-    const learnBtn = document.createElement('button');
-    learnBtn.className = 'learn-btn';
-    learnBtn.textContent = i18next.t('learn');
-    learnBtn.addEventListener('click', () => {
-      window.location.href = `flashcards.html?workId=${encodeURIComponent(w.id)}`;
+  if (works.length === 0) {
+    container.classList.add('hidden');
+  } else {
+    container.classList.remove('hidden');
+    works.forEach((w) => {
+      const item = document.createElement('div');
+      item.className = 'work-item';
+      if (w.thumbnail) {
+        const img = document.createElement('img');
+        img.src = w.thumbnail;
+        img.alt = w.title || 'thumbnail';
+        item.appendChild(img);
+      } else {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'work-placeholder';
+        placeholder.textContent = i18next.t(w.type);
+        item.appendChild(placeholder);
+      }
+      const caption = document.createElement('div');
+      caption.className = 'work-caption';
+      caption.textContent = w.title || 'Untitled';
+      item.appendChild(caption);
+      const learnBtn = document.createElement('button');
+      learnBtn.className = 'learn-btn';
+      learnBtn.textContent = i18next.t('learn');
+      learnBtn.addEventListener('click', () => {
+        window.location.href = `flashcards.html?workId=${encodeURIComponent(w.id)}`;
+      });
+      item.appendChild(learnBtn);
+      carousel.appendChild(item);
     });
-    item.appendChild(learnBtn);
-    carousel.appendChild(item);
-  });
+  }
   if (typeof updateContent === 'function') {
     updateContent();
   }
