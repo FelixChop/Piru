@@ -37,10 +37,12 @@ npm run init-db
 
 ### Vocabulary extraction CLI
 
-Extract difficult vocabulary from a text file using the application's logic:
+Extract difficult vocabulary from a text file or large subtitle. The CLI will
+split big files into chunks so it can handle full-length movies:
 
 ```bash
 npm run extract-vocab -- test/fixtures/en-fr/sample-1.txt
+npm run extract-vocab -- "data/subtitles/en/Harry.Potter.and.the.Philosophers.Stone.2001.720p.HDDVD.DTS.x264-ESiR.ENG.srt"
 ```
 
 ### Staging environment
