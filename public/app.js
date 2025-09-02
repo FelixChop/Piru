@@ -117,7 +117,7 @@ document.getElementById('work-form').addEventListener('submit', async (e) => {
   const author = document.getElementById('work-author').value;
   const type = document.getElementById('work-type').value;
   const content = document.getElementById('work-content').value;
-  const progress = startProgress();
+  const progress = startProgress(estimateRequestCount(content));
   try {
     const res = await fetch('/works', {
       method: 'POST',

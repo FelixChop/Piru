@@ -21,7 +21,7 @@ function renderBookResults(results) {
       const content = Array.isArray(book.first_sentence)
         ? book.first_sentence[0]
         : book.first_sentence || '';
-      const progress = startProgress();
+      const progress = startProgress(estimateRequestCount(content));
       try {
         const res = await fetch('/works', {
           method: 'POST',
@@ -85,7 +85,7 @@ function renderMovieResults(results) {
       const detail = await detailRes.json();
       const content = detail.Plot || '';
       const poster = detail.Poster && detail.Poster !== 'N/A' ? detail.Poster : undefined;
-      const progress = startProgress();
+      const progress = startProgress(estimateRequestCount(content));
       try {
         const res = await fetch('/works', {
           method: 'POST',
@@ -166,7 +166,7 @@ function renderLyricsResults(results) {
         if (!lyricRes.ok) throw new Error('Lyrics fetch failed');
         const lyricData = await lyricRes.json();
         const content = lyricData.lyrics || '';
-        const progress = startProgress();
+        const progress = startProgress(estimateRequestCount(content));
         try {
           const res = await fetch('/works', {
             method: 'POST',

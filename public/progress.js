@@ -1,11 +1,19 @@
-function startProgress() {
+const AVG_REQUEST_MS = 5000;
+const CHUNK_SIZE = 10000;
+
+function estimateRequestCount(text) {
+  if (!text) return 1;
+  return Math.max(1, Math.ceil(text.length / CHUNK_SIZE));
+}
+
+function startProgress(requests = 1) {
   const container = document.getElementById('analysis-progress');
   const bar = document.getElementById('progress-bar');
   const text = document.getElementById('progress-text');
   if (!container || !bar || !text) return null;
   container.classList.remove('hidden');
   bar.value = 0;
-  const ESTIMATED_MS = 10000; // 10 seconds default estimation
+  const ESTIMATED_MS = requests * AVG_REQUEST_MS;
   const start = Date.now();
   const interval = setInterval(() => {
     const elapsed = Date.now() - start;
