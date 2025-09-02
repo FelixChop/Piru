@@ -88,6 +88,21 @@ describe('Auth API', () => {
       .send({ email: 'nolanguage@example.com', password: 'secret', nativeLanguage: 'fr', learningLanguages: [] });
     assert.strictEqual(res.status, 400);
   });
+
+  it('deletes an account', async () => {
+    const signup = await request(app)
+      .post('/auth/signup')
+      .send({ email: 'delete@example.com', password: 'secret', nativeLanguage: 'en', learningLanguages: ['fr'] });
+    const userId = signup.body.id;
+    const delRes = await request(app)
+      .delete('/auth/account')
+      .query({ userId });
+    assert.strictEqual(delRes.status, 204);
+    const loginRes = await request(app)
+      .post('/auth/login')
+      .send({ email: 'delete@example.com', password: 'secret' });
+    assert.strictEqual(loginRes.status, 401);
+  });
 });
 
 describe('Works API', () => {
