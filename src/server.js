@@ -95,6 +95,16 @@ app.get('/works', (req, res) => {
   res.json(works);
 });
 
+app.delete('/works/:id', (req, res) => {
+  const { userId } = req.query;
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId' });
+  }
+  const ok = deleteWork(req.params.id, userId);
+  if (!ok) return res.status(404).json({ error: 'Not found' });
+  res.status(204).end();
+});
+
 // Admin endpoints
 app.get('/admin/users', async (req, res) => {
   const { userId } = req.query;
