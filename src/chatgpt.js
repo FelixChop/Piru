@@ -14,14 +14,19 @@ const promptTemplate = fs.readFileSync(
   'utf8'
 );
 
-async function extractVocabularyWithLLM(text, outPath) {
+async function extractVocabularyWithLLM(text, outPath, meta = {}) {
   if (!text || !text.trim()) return [];
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     throw new Error('Missing OpenAI API key');
   }
 
-  const userPrompt = promptTemplate.replace('"""TEXT"""', text);
+  const title = meta.title || '';
+  const author = meta.author || '';
+  const userPrompt = promptTemplate
+    .replace('"""TITLE"""', title)
+    .replace('"""AUTHOR"""', author)
+    .replace('"""TEXT"""', text);
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',

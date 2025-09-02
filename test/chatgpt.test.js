@@ -53,11 +53,18 @@ describe('extractVocabularyWithLLM', { concurrency: false }, () => {
       'utf8'
     );
     const { extractVocabularyWithLLM } = require('../src/chatgpt');
-    const items = await extractVocabularyWithLLM(sampleText, outputPath);
+    const items = await extractVocabularyWithLLM(sampleText, outputPath, {
+      title: 'Sample Title',
+      author: 'Sample Author',
+    });
     assert.strictEqual(items.length, 1);
     assert.strictEqual(items[0].word, 'mockword');
     const promptTemplate = fs.readFileSync(promptPath, 'utf8');
-    const expected = promptTemplate.replace('"""TEXT"""', sampleText).trim();
+    const expected = promptTemplate
+      .replace('"""TITLE"""', 'Sample Title')
+      .replace('"""AUTHOR"""', 'Sample Author')
+      .replace('"""TEXT"""', sampleText)
+      .trim();
     assert.strictEqual(captured.messages[1].content.trim(), expected);
     assert.ok(fs.existsSync(outputPath));
     const fileItems = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
