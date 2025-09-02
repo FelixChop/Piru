@@ -216,6 +216,15 @@ button:disabled {
   animation: spin 1s linear infinite;
 }
 
+#analysis-progress {
+  margin: 1rem 0;
+}
+
+#progress-bar {
+  width: 100%;
+  height: 1rem;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
