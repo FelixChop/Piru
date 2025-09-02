@@ -118,6 +118,11 @@ button:disabled {
   font-family: 'Gotham Black', 'Gotham', sans-serif;
 }
 
+#citation {
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
 #menu {
   margin-left: auto;
   position: relative;

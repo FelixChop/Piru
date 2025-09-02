@@ -13,6 +13,8 @@ async function loadNext() {
   if (res.status === 200) {
     currentWord = await res.json();
     document.getElementById('word').textContent = currentWord.word;
+    document.getElementById('citation').textContent = currentWord.citation || '';
+    document.getElementById('citation').classList.remove('hidden');
     document.getElementById('definition').textContent = currentWord.definition;
     document.getElementById('flashcard-section').classList.remove('hidden');
     document.getElementById('definition').classList.add('hidden');
@@ -22,6 +24,8 @@ async function loadNext() {
   } else if (res.status === 204) {
     currentWord = null;
     document.getElementById('word').textContent = i18next.t('no_words');
+    document.getElementById('citation').textContent = '';
+    document.getElementById('citation').classList.add('hidden');
     document.getElementById('flashcard-section').classList.remove('hidden');
     document.getElementById('definition').classList.add('hidden');
     document.getElementById('review-buttons').classList.add('hidden');
