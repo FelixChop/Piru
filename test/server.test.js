@@ -103,6 +103,13 @@ describe('Auth API', () => {
       .send({ email: 'delete@example.com', password: 'secret' });
     assert.strictEqual(loginRes.status, 401);
   });
+
+  it('returns 404 when deleting a non-existent account', async () => {
+    const res = await request(app)
+      .delete('/auth/account')
+      .query({ userId: 'missing-user' });
+    assert.strictEqual(res.status, 404);
+  });
 });
 
 describe('Works API', () => {
