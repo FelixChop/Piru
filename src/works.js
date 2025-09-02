@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const JSZip = require('jszip');
 const chatgpt = require('./chatgpt');
-const { addWords } = require('./vocab');
+const { addWords, deleteWorkVocab } = require('./vocab');
 
 // In-memory store for works and their vocabulary entries
 const works = new Map(); // workId -> work object
@@ -276,8 +276,13 @@ function listAllWorks() {
   );
 }
 
-function deleteWork(id) {
-  return works.delete(id);
+function deleteWork(id, userId) {
+  const work = works.get(id);
+  if (!work) return false;
+  if (userId && work.userId !== userId) return false;
+  works.delete(id);
+  deleteWorkVocab(work.userId, id);
+  return true;
 }
 
 function deleteUserWorks(userId) {

@@ -115,6 +115,7 @@ describe('Auth API', () => {
 describe('Works API', () => {
   beforeEach(() => {
     _clearWorks();
+    _clearVocab();
   });
 
   it('creates a work', async () => {
@@ -136,6 +137,28 @@ describe('Works API', () => {
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.body.length, 1);
     assert.strictEqual(res.body[0].title, 'Story');
+  });
+
+  it('deletes a work and its vocabulary', async () => {
+    await request(app)
+      .post('/works')
+      .send({ userId: 'apiDel', title: 'T', author: 'A', content: 'alpha beta', type: 'book' });
+    const list = await request(app)
+      .get('/works')
+      .query({ userId: 'apiDel' });
+    const workId = list.body[0].id;
+    let next = await request(app)
+      .get('/vocab/next')
+      .query({ userId: 'apiDel', workId });
+    assert.strictEqual(next.status, 200);
+    const delRes = await request(app)
+      .delete(`/works/${workId}`)
+      .query({ userId: 'apiDel' });
+    assert.strictEqual(delRes.status, 204);
+    next = await request(app)
+      .get('/vocab/next')
+      .query({ userId: 'apiDel', workId });
+    assert.strictEqual(next.status, 204);
   });
 });
 

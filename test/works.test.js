@@ -15,7 +15,7 @@ chatgpt.extractVocabularyWithLLM = async (content) => {
   }));
 };
 
-const { addWork, listWorks, _clearWorks } = require('../src/works');
+const { addWork, listWorks, deleteWork, _clearWorks } = require('../src/works');
 const { getNextWord, _clear: _clearVocab } = require('../src/vocab');
 
 describe('Works management', () => {
@@ -133,5 +133,15 @@ describe('Works management', () => {
     assert.notStrictEqual(next1.id, next2.id);
     assert.ok(['alpha', 'beta'].includes(next1.word));
     assert.ok(['gamma', 'delta'].includes(next2.word));
+  });
+
+  it('deletes a work and its vocabulary', async () => {
+    const work = await addWork('delUser', 'Temp', '', 'alpha beta', 'book');
+    let next = getNextWord('delUser');
+    assert.ok(next);
+    const removed = deleteWork(work.id);
+    assert.strictEqual(removed, true);
+    next = getNextWord('delUser');
+    assert.strictEqual(next, null);
   });
 });

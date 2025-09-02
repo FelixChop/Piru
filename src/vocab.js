@@ -55,6 +55,16 @@ function reviewWord(userId, wordId, quality) {
   return word;
 }
 
+function deleteWorkVocab(userId, workId) {
+  const store = vocab.get(userId);
+  if (!store) return;
+  for (const [id, word] of store.entries()) {
+    if (word.workId === workId) {
+      store.delete(id);
+    }
+  }
+}
+
 function deleteUserVocab(userId) {
   vocab.delete(userId);
 }
@@ -63,4 +73,11 @@ function _clear() {
   vocab.clear();
 }
 
-module.exports = { addWords, getNextWord, reviewWord, deleteUserVocab, _clear };
+module.exports = {
+  addWords,
+  getNextWord,
+  reviewWord,
+  deleteWorkVocab,
+  deleteUserVocab,
+  _clear,
+};

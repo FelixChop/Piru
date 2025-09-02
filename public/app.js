@@ -191,8 +191,21 @@ async function loadWorks() {
         window.location.href = `flashcards.html?workId=${encodeURIComponent(w.id)}`;
       });
       item.appendChild(learnBtn);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.textContent = i18next.t('delete');
+      deleteBtn.addEventListener('click', async () => {
+        if (!confirm(i18next.t('confirm_delete_work'))) return;
+        const res = await fetch(`/works/${encodeURIComponent(w.id)}?userId=${userId}`, {
+          method: 'DELETE',
+        });
+        if (res.ok) {
+          loadWorks();
+        }
+      });
+      item.appendChild(deleteBtn);
       carousel.appendChild(item);
-// >>>>>>> main
     });
   }
   if (typeof updateContent === 'function') {
