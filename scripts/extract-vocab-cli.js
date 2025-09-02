@@ -5,6 +5,8 @@
 const fs = require('fs');
 const { extractVocabularyWithLLM } = require('../src/chatgpt');
 
+const CHUNK_SIZE = 10_000; // characters per chunk
+
 async function main() {
   if (process.argv.length < 3) {
     console.error('Usage: node scripts/extract-vocab-cli.js <file>');
@@ -13,9 +15,27 @@ async function main() {
 
   const file = process.argv[2];
   const text = fs.readFileSync(file, 'utf8');
+
+  const chunks = [];
+  for (let i = 0; i < text.length; i += CHUNK_SIZE) {
+    chunks.push(text.slice(i, i + CHUNK_SIZE));
+  }
+
+  const vocabMap = new Map();
+
   try {
-    const vocab = await extractVocabularyWithLLM(text);
-    console.log(vocab);
+    for (let i = 0; i < chunks.length; i++) {
+      const chunk = chunks[i];
+      console.error(`Processing chunk ${i + 1}/${chunks.length}`);
+      const items = await extractVocabularyWithLLM(chunk);
+      for (const item of items) {
+        if (item && item.word && !vocabMap.has(item.word)) {
+          vocabMap.set(item.word, item);
+        }
+      }
+    }
+    const vocab = Array.from(vocabMap.values());
+    console.log(JSON.stringify(vocab, null, 2));
   } catch (err) {
     console.error('Extraction failed', err.message);
     process.exit(1);
