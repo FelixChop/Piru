@@ -55,9 +55,15 @@ app.delete('/auth/account', async (req, res) => {
     return res.status(400).json({ error: 'Missing userId' });
   }
   try {
-    await deleteUser(userId);
+    // Remove any user-specific data before deleting the actual user record.
+    // This prevents potential foreign key constraint errors and keeps the
+    // in-memory stores in sync with the database.
     deleteUserWorks(userId);
     deleteUserVocab(userId);
+    const deleted = await deleteUser(userId);
+    if (!deleted) {
+      return res.status(404).json({ error: 'User not found' });
+    }
     res.status(204).end();
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete account' });
