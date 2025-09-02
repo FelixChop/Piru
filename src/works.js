@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const JSZip = require('jszip');
 const chatgpt = require('./chatgpt');
 const { addWords } = require('./vocab');
 
@@ -11,6 +12,7 @@ const works = new Map(); // workId -> work object
 let subtitleMap;
 // Lazy-loaded mapping from normalized movie title -> thumbnail filename
 let thumbnailMap;
+let bookMap;
 
 function normalizeTitle(title) {
   return title
@@ -18,6 +20,16 @@ function normalizeTitle(title) {
     .replace(/\(\d{4}\)/g, '')
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
+}
+
+function normalizeAuthor(author) {
+  return author
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .split(' ')
+    .filter(Boolean)
+    .sort()
+    .join(' ');
 }
 
 const TITLE_ALIASES = new Map([
@@ -71,6 +83,25 @@ function loadThumbnailMap() {
   return thumbnailMap;
 }
 
+function loadBookMap() {
+  if (bookMap) return bookMap;
+  bookMap = new Map();
+  try {
+    const csvPath = path.join(__dirname, '..', 'data', 'books', 'mapping.csv');
+    const csv = fs.readFileSync(csvPath, 'utf8');
+    const lines = csv.split(/\r?\n/).slice(1);
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      const parts = line.split(/","/).map((s) => s.replace(/^"|"$/g, ''));
+      const key = `${normalizeAuthor(parts[0])}|${normalizeTitle(parts[1])}`;
+      bookMap.set(key, parts[2]);
+    }
+  } catch (err) {
+    // mapping file missing or unreadable
+  }
+  return bookMap;
+}
+
 function getSubtitleTextForTitle(title) {
   const map = loadSubtitleMap();
   let normalized = normalizeTitle(title);
@@ -103,6 +134,50 @@ function getThumbnailForTitle(title) {
   return `/thumbnails/${encodeURIComponent(file)}`;
 }
 
+async function extractPagesFromEpub(filePath) {
+  const data = fs.readFileSync(filePath);
+  const zip = await JSZip.loadAsync(data);
+  const files = Object.keys(zip.files)
+    .filter((f) => /\.(x?html)$/i.test(f))
+    .sort();
+  const pages = [];
+  for (const filename of files) {
+    const content = await zip.files[filename].async('string');
+    const text = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    pages.push(text);
+  }
+  return pages;
+}
+
+async function getBookPages(title, author) {
+  const map = loadBookMap();
+  const key = `${normalizeAuthor(author)}|${normalizeTitle(title)}`;
+  const filename = map.get(key);
+  if (!filename) return null;
+  const filePath = path.join(__dirname, '..', 'data', 'books', 'en', filename);
+  try {
+    return await extractPagesFromEpub(filePath);
+  } catch (err) {
+    return null;
+  }
+}
+
+async function extractVocabulary(text) {
+  const CHUNK_SIZE = 10_000;
+  const vocabMap = new Map();
+  if (!text) return [];
+  for (let i = 0; i < text.length; i += CHUNK_SIZE) {
+    const chunk = text.slice(i, i + CHUNK_SIZE);
+    const items = await chatgpt.extractVocabularyWithLLM(chunk);
+    for (const item of items || []) {
+      if (item && item.word && !vocabMap.has(item.word)) {
+        vocabMap.set(item.word, item);
+      }
+    }
+  }
+  return Array.from(vocabMap.values());
+}
+
 /**
  * Add a work for a user and extract vocabulary
  * @param {string} userId
@@ -113,17 +188,28 @@ function getThumbnailForTitle(title) {
  */
 async function addWork(userId, title, author, content, type, thumbnailUrl) {
   const id = crypto.randomUUID();
-  let text = content;
+  let pages = [{ page: 1, text: content }];
   if (type === 'movie') {
     const subtitle = getSubtitleTextForTitle(title);
     if (subtitle) {
-      text = subtitle;
+      pages = [{ page: 1, text: subtitle }];
+    }
+  } else if (type === 'book') {
+    const bookPages = await getBookPages(title, author);
+    if (bookPages && bookPages.length) {
+      pages = bookPages.map((text, idx) => ({ page: idx + 1, text }));
     }
   }
-  const vocab = await chatgpt.extractVocabularyWithLLM(text);
-  const vocabWithWork = Array.isArray(vocab)
-    ? vocab.map((v) => ({ ...v, workId: id }))
-    : [];
+  const vocabPages = [];
+  let allVocab = [];
+  for (const { page, text } of pages) {
+    const vocab = await extractVocabulary(text);
+    const withWork = Array.isArray(vocab)
+      ? vocab.map((v) => ({ ...v, workId: id, page }))
+      : [];
+    vocabPages.push({ page, vocab: withWork });
+    allVocab = allVocab.concat(withWork);
+  }
   const thumbnail =
     type === 'movie'
       ? getThumbnailForTitle(title) || thumbnailUrl || null
@@ -135,14 +221,15 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
     author,
     content,
     type,
-    vocab: vocabWithWork,
+    pages: vocabPages,
+    vocab: allVocab,
     thumbnail,
   };
   works.set(id, work);
-  if (vocabWithWork.length) {
-    addWords(userId, vocabWithWork);
+  if (allVocab.length) {
+    addWords(userId, allVocab);
   }
-  return { id, title, author, type, vocab: vocabWithWork, thumbnail };
+  return { id, title, author, type, pages: vocabPages, vocab: allVocab, thumbnail };
 }
 
 /**
@@ -153,24 +240,26 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
 function listWorks(userId) {
   return Array.from(works.values())
     .filter((w) => w.userId === userId)
-    .map(({ id, title, author, type, vocab, thumbnail }) => ({
+    .map(({ id, title, author, type, vocab, pages, thumbnail }) => ({
       id,
       title,
       author,
       type,
       vocab,
+      pages,
       thumbnail,
     }));
 }
 
 function listAllWorks() {
   return Array.from(works.values()).map(
-    ({ id, userId, title, author, vocab, thumbnail }) => ({
+    ({ id, userId, title, author, vocab, pages, thumbnail }) => ({
       id,
       userId,
       title,
       author,
       vocab,
+      pages,
       thumbnail,
     })
   );
