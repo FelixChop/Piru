@@ -14,6 +14,14 @@ let subtitleMap;
 let thumbnailMap;
 let bookMap;
 
+const DEFAULT_THUMBNAILS = {
+  movie: '/default-thumbnails/movie.svg',
+  series: '/default-thumbnails/movie.svg',
+  book: '/default-thumbnails/book.svg',
+  song: '/default-thumbnails/song.svg',
+  custom: '/default-thumbnails/custom.svg',
+};
+
 function normalizeTitle(title) {
   return title
     .toLowerCase()
@@ -210,10 +218,13 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
     vocabPages.push({ page, vocab: withWork });
     allVocab = allVocab.concat(withWork);
   }
-  const thumbnail =
-    type === 'movie'
-      ? getThumbnailForTitle(title) || thumbnailUrl || null
-      : null;
+  let thumbnail;
+  if (type === 'movie' || type === 'series') {
+    thumbnail =
+      getThumbnailForTitle(title) || thumbnailUrl || DEFAULT_THUMBNAILS[type];
+  } else {
+    thumbnail = thumbnailUrl || DEFAULT_THUMBNAILS[type] || null;
+  }
   const work = {
     id,
     userId,

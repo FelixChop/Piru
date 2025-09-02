@@ -17,6 +17,14 @@ const learningLanguages = [
   { code: 'it', label: '🇮🇹 Italiano' }
 ];
 
+const DEFAULT_THUMBNAILS = {
+  movie: '/default-thumbnails/movie.svg',
+  series: '/default-thumbnails/movie.svg',
+  book: '/default-thumbnails/book.svg',
+  song: '/default-thumbnails/song.svg',
+  custom: '/default-thumbnails/custom.svg'
+};
+
 const nativeSelect = document.getElementById('signup-native');
 nativeLanguages.forEach(({ code, label }) => {
   const option = document.createElement('option');
@@ -137,10 +145,10 @@ async function loadWorks() {
       img.alt = w.title || 'thumbnail';
       item.appendChild(img);
     } else {
-      const placeholder = document.createElement('div');
-      placeholder.className = 'work-placeholder';
-      placeholder.textContent = i18next.t(w.type);
-      item.appendChild(placeholder);
+      const img = document.createElement('img');
+      img.src = DEFAULT_THUMBNAILS[w.type] || DEFAULT_THUMBNAILS.custom;
+      img.alt = w.title || 'thumbnail';
+      item.appendChild(img);
     }
     const caption = document.createElement('div');
     caption.className = 'work-caption';
