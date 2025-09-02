@@ -171,20 +171,74 @@ async function getBookPages(title, author) {
 }
 
 async function extractVocabulary(text, meta = {}) {
-  const CHUNK_SIZE = 10_000;
   const vocabMap = new Map();
   if (!text) return [];
-  for (let i = 0; i < text.length; i += CHUNK_SIZE) {
-    const chunk = text.slice(i, i + CHUNK_SIZE);
-    const items = await chatgpt.extractVocabularyWithLLM(
-      chunk,
-      undefined,
-      meta
-    );
+
+  function mergeItems(items) {
     for (const item of items || []) {
-      if (item && item.word && !vocabMap.has(item.word)) {
-        vocabMap.set(item.word, item);
+      if (!item || !item.word) continue;
+      const word = item.word;
+      const incoming = Array.isArray(item.citations)
+        ? item.citations
+        : item.citation
+        ? [item.citation]
+        : [];
+      if (!vocabMap.has(word)) {
+        const citations = incoming.slice(0, 3);
+        const first = citations[0];
+        vocabMap.set(word, {
+          ...item,
+          citation: first ?? item.citation,
+          citations,
+        });
+      } else {
+        const existing = vocabMap.get(word);
+        existing.citations = existing.citations || [];
+        for (const cit of incoming) {
+          if (
+            cit &&
+            existing.citations.length < 3 &&
+            !existing.citations.includes(cit)
+          ) {
+            existing.citations.push(cit);
+          }
+        }
+        if (!existing.citation && existing.citations.length) {
+          existing.citation = existing.citations[0];
+        }
       }
+    }
+  }
+
+  if (meta.isSubtitle) {
+    const blocks = text.split(/\r?\n\r?\n/);
+    const subtitles = [];
+    for (const block of blocks) {
+      const lines = block.trim().split(/\r?\n/);
+      if (lines.length >= 3) {
+        const subtitleText = lines.slice(2).join(' ').trim();
+        if (subtitleText) subtitles.push(subtitleText);
+      }
+    }
+    for (let i = 0; i < subtitles.length; i += 3) {
+      const batch = subtitles.slice(i, i + 3).join(' ');
+      const items = await chatgpt.extractVocabularyWithLLM(
+        batch,
+        undefined,
+        meta
+      );
+      mergeItems(items);
+    }
+  } else {
+    const CHUNK_SIZE = 10_000;
+    for (let i = 0; i < text.length; i += CHUNK_SIZE) {
+      const chunk = text.slice(i, i + CHUNK_SIZE);
+      const items = await chatgpt.extractVocabularyWithLLM(
+        chunk,
+        undefined,
+        meta
+      );
+      mergeItems(items);
     }
   }
   return Array.from(vocabMap.values());
@@ -201,10 +255,12 @@ async function extractVocabulary(text, meta = {}) {
 async function addWork(userId, title, author, content, type, thumbnailUrl) {
   const id = crypto.randomUUID();
   let pages = [{ page: 1, text: content }];
+  let isSubtitle = false;
   if (type === 'movie') {
     const subtitle = getSubtitleTextForTitle(title);
     if (subtitle) {
       pages = [{ page: 1, text: subtitle }];
+      isSubtitle = true;
     }
   } else if (type === 'book') {
     const bookPages = await getBookPages(title, author);
@@ -215,7 +271,7 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
   const vocabPages = [];
   let allVocab = [];
   for (const { page, text } of pages) {
-    const vocab = await extractVocabulary(text, { title, author });
+    const vocab = await extractVocabulary(text, { title, author, isSubtitle });
     const withWork = Array.isArray(vocab)
       ? vocab.map((v) => ({ ...v, workId: id, page }))
       : [];
