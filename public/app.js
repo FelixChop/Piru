@@ -117,17 +117,22 @@ document.getElementById('work-form').addEventListener('submit', async (e) => {
   const author = document.getElementById('work-author').value;
   const type = document.getElementById('work-type').value;
   const content = document.getElementById('work-content').value;
-  const res = await fetch('/works', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, title, author, content, type })
-  });
-  const data = await res.json();
-  if (res.ok) {
-    document.getElementById('work-form').reset();
-    loadWorks();
-  } else {
-    alert(data.error);
+  const progress = startProgress();
+  try {
+    const res = await fetch('/works', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, title, author, content, type })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      document.getElementById('work-form').reset();
+      loadWorks();
+    } else {
+      alert(data.error);
+    }
+  } finally {
+    stopProgress(progress);
   }
 });
 

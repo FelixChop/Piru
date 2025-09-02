@@ -21,16 +21,21 @@ function renderBookResults(results) {
       const content = Array.isArray(book.first_sentence)
         ? book.first_sentence[0]
         : book.first_sentence || '';
-      const res = await fetch('/works', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, title, author, content, type: 'book' })
-      });
-      if (res.ok) {
-        loadWorks();
-      } else {
-        btn.disabled = false;
-        btn.textContent = i18next.t('add');
+      const progress = startProgress();
+      try {
+        const res = await fetch('/works', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, title, author, content, type: 'book' })
+        });
+        if (res.ok) {
+          loadWorks();
+        } else {
+          btn.disabled = false;
+          btn.textContent = i18next.t('add');
+        }
+      } finally {
+        stopProgress(progress);
       }
     });
     li.appendChild(btn);
@@ -80,16 +85,21 @@ function renderMovieResults(results) {
       const detail = await detailRes.json();
       const content = detail.Plot || '';
       const poster = detail.Poster && detail.Poster !== 'N/A' ? detail.Poster : undefined;
-      const res = await fetch('/works', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, title: detail.Title, author: '', content, type, thumbnail: poster })
-      });
-      if (res.ok) {
-        loadWorks();
-      } else {
-        btn.disabled = false;
-        btn.textContent = i18next.t('add');
+      const progress = startProgress();
+      try {
+        const res = await fetch('/works', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, title: detail.Title, author: '', content, type, thumbnail: poster })
+        });
+        if (res.ok) {
+          loadWorks();
+        } else {
+          btn.disabled = false;
+          btn.textContent = i18next.t('add');
+        }
+      } finally {
+        stopProgress(progress);
       }
     });
     li.appendChild(btn);
@@ -156,21 +166,26 @@ function renderLyricsResults(results) {
         if (!lyricRes.ok) throw new Error('Lyrics fetch failed');
         const lyricData = await lyricRes.json();
         const content = lyricData.lyrics || '';
-        const res = await fetch('/works', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId,
-            title: song.title,
-            author: song.artist.name,
-            content,
-            type: 'song'
-          })
-        });
-        if (res.ok) {
-          loadWorks();
-        } else {
-          throw new Error('Add failed');
+        const progress = startProgress();
+        try {
+          const res = await fetch('/works', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              title: song.title,
+              author: song.artist.name,
+              content,
+              type: 'song'
+            })
+          });
+          if (res.ok) {
+            loadWorks();
+          } else {
+            throw new Error('Add failed');
+          }
+        } finally {
+          stopProgress(progress);
         }
       } catch (err) {
         btn.disabled = false;

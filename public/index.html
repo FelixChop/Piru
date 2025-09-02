@@ -50,6 +50,10 @@
           <span data-target="lyrics-search-section" class="tab" data-i18n="song">Song</span>
           <span data-target="manual-add-section" class="tab" data-i18n="custom">Custom</span>
         </nav>
+        <div id="analysis-progress" class="hidden">
+          <progress id="progress-bar" value="0" max="100"></progress>
+          <span id="progress-text"></span>
+        </div>
         <div id="book-search-section" class="search-container">
           <h3 data-i18n="search_books">Search a Book</h3>
           <form id="book-search-form">
@@ -99,6 +103,7 @@
   </main>
   <script src="/lib/i18next/umd/i18next.min.js"></script>
   <script src="i18n.js"></script>
+  <script src="progress.js"></script>
   <script src="app.js"></script>
   <script src="works.js"></script>
   <script src="menu.js"></script>
