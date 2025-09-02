@@ -207,11 +207,11 @@ document.getElementById('lyrics-search-form')?.addEventListener('submit', async 
   }
 });
 
-document.querySelectorAll('#add-work-menu button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#add-work-menu button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const target = btn.getAttribute('data-target');
+document.querySelectorAll('#add-work-menu .tab').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('#add-work-menu .tab').forEach(t => t.classList.remove('active'));
+    item.classList.add('active');
+    const target = item.getAttribute('data-target');
     document.querySelectorAll('#add-work-container .search-container').forEach(section => {
       section.classList.add('hidden');
     });
