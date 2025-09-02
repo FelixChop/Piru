@@ -2,11 +2,11 @@ const express = require('express');
 const path = require('path');
 const { signup, login } = require('./auth');
 const { init } = require('./db');
-const { addWork, listWorks, listAllWorks, deleteWork } = require('./works');
+const { addWork, listWorks, listAllWorks, deleteWork, deleteUserWorks } = require('./works');
 const { isAdmin, listUsers, deleteUser } = require('./admin');
 const { extractVocabularyWithLLM } = require('./chatgpt');
 const { getOverview } = require('./stats');
-const { addWords, getNextWord, reviewWord } = require('./vocab');
+const { addWords, getNextWord, reviewWord, deleteUserVocab } = require('./vocab');
 
 const app = express();
 app.use(express.json());
@@ -46,6 +46,21 @@ app.post('/auth/login', async (req, res) => {
     res.json(user);
   } catch (err) {
     res.status(401).json({ error: err.message });
+  }
+});
+
+app.delete('/auth/account', async (req, res) => {
+  const { userId } = req.query;
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId' });
+  }
+  try {
+    await deleteUser(userId);
+    deleteUserWorks(userId);
+    deleteUserVocab(userId);
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete account' });
   }
 });
 

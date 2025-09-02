@@ -165,8 +165,16 @@ function deleteWork(id) {
   return works.delete(id);
 }
 
+function deleteUserWorks(userId) {
+  for (const [id, work] of works.entries()) {
+    if (work.userId === userId) {
+      works.delete(id);
+    }
+  }
+}
+
 function _clearWorks() {
   works.clear();
 }
 
-module.exports = { addWork, listWorks, listAllWorks, deleteWork, _clearWorks };
+module.exports = { addWork, listWorks, listAllWorks, deleteWork, deleteUserWorks, _clearWorks };
