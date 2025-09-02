@@ -174,28 +174,28 @@ async function loadWorks() {
     works.forEach((w) => {
       const item = document.createElement('div');
       item.className = 'work-item';
+
+      const thumb = document.createElement('div');
+      thumb.className = 'work-thumb';
       if (w.thumbnail) {
         const img = document.createElement('img');
         img.src = w.thumbnail;
         img.alt = w.title || 'thumbnail';
-        item.appendChild(img);
+        thumb.appendChild(img);
       } else {
         const placeholder = document.createElement('div');
         placeholder.className = 'work-placeholder';
         placeholder.textContent = i18next.t(w.type);
-        item.appendChild(placeholder);
+        thumb.appendChild(placeholder);
       }
-      const caption = document.createElement('div');
-      caption.className = 'work-caption';
-      caption.textContent = w.title || 'Untitled';
-      item.appendChild(caption);
+
       const learnBtn = document.createElement('button');
       learnBtn.className = 'learn-btn';
       learnBtn.textContent = i18next.t('learn');
       learnBtn.addEventListener('click', () => {
         window.location.href = `flashcards.html?workId=${encodeURIComponent(w.id)}`;
       });
-      item.appendChild(learnBtn);
+      thumb.appendChild(learnBtn);
 
       const deleteBtn = document.createElement('button');
       deleteBtn.className = 'delete-btn';
@@ -209,7 +209,15 @@ async function loadWorks() {
           loadWorks();
         }
       });
-      item.appendChild(deleteBtn);
+      thumb.appendChild(deleteBtn);
+
+      item.appendChild(thumb);
+
+      const caption = document.createElement('div');
+      caption.className = 'work-caption';
+      caption.textContent = w.title || 'Untitled';
+      item.appendChild(caption);
+
       carousel.appendChild(item);
     });
   }

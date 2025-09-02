@@ -273,7 +273,6 @@ button:disabled {
   flex: 0 0 auto;
   width: 75px;
   text-align: center;
-  position: relative;
 }
 
 .work-item img {
@@ -291,6 +290,10 @@ button:disabled {
   background-color: var(--color-gray);
   color: var(--color-light);
   border-radius: 4px;
+}
+
+.work-thumb {
+  position: relative;
 }
 
 .learn-btn,
@@ -311,11 +314,12 @@ button:disabled {
   top: 60%;
 }
 
-.work-item:hover .learn-btn,
-.work-item:hover .delete-btn {
+.work-thumb:hover .learn-btn,
+.work-thumb:hover .delete-btn {
   display: block;
 }
 
 .work-caption {
   margin-top: 0.5rem;
+  font-size: 0.8rem;
 }
