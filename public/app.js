@@ -17,6 +17,14 @@ const learningLanguages = [
   { code: 'it', label: '🇮🇹 Italiano' }
 ];
 
+const DEFAULT_THUMBNAILS = {
+  movie: '/default-thumbnails/movie.svg',
+  series: '/default-thumbnails/movie.svg',
+  book: '/default-thumbnails/book.svg',
+  song: '/default-thumbnails/song.svg',
+  custom: '/default-thumbnails/custom.svg'
+};
+
 const nativeSelect = document.getElementById('signup-native');
 nativeLanguages.forEach(({ code, label }) => {
   const option = document.createElement('option');
@@ -129,6 +137,31 @@ async function loadWorks() {
   const container = document.getElementById('my-works-container');
   const carousel = document.getElementById('work-carousel');
   carousel.innerHTML = '';
+// <<<<<<< codex/add-default-thumbnail-by-item-type
+//   works.forEach((w) => {
+//     const item = document.createElement('div');
+//     item.className = 'work-item';
+//     if (w.thumbnail) {
+//       const img = document.createElement('img');
+//       img.src = w.thumbnail;
+//       img.alt = w.title || 'thumbnail';
+//       item.appendChild(img);
+//     } else {
+//       const img = document.createElement('img');
+//       img.src = DEFAULT_THUMBNAILS[w.type] || DEFAULT_THUMBNAILS.custom;
+//       img.alt = w.title || 'thumbnail';
+//       item.appendChild(img);
+//     }
+//     const caption = document.createElement('div');
+//     caption.className = 'work-caption';
+//     caption.textContent = w.title || 'Untitled';
+//     item.appendChild(caption);
+//     const learnBtn = document.createElement('button');
+//     learnBtn.className = 'learn-btn';
+//     learnBtn.textContent = i18next.t('learn');
+//     learnBtn.addEventListener('click', () => {
+//       window.location.href = `flashcards.html?workId=${encodeURIComponent(w.id)}`;
+// =======
   if (works.length === 0) {
     container.classList.add('hidden');
   } else {
@@ -159,6 +192,7 @@ async function loadWorks() {
       });
       item.appendChild(learnBtn);
       carousel.appendChild(item);
+// >>>>>>> main
     });
   }
   if (typeof updateContent === 'function') {
