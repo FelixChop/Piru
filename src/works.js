@@ -170,13 +170,17 @@ async function getBookPages(title, author) {
   }
 }
 
-async function extractVocabulary(text) {
+async function extractVocabulary(text, meta = {}) {
   const CHUNK_SIZE = 10_000;
   const vocabMap = new Map();
   if (!text) return [];
   for (let i = 0; i < text.length; i += CHUNK_SIZE) {
     const chunk = text.slice(i, i + CHUNK_SIZE);
-    const items = await chatgpt.extractVocabularyWithLLM(chunk);
+    const items = await chatgpt.extractVocabularyWithLLM(
+      chunk,
+      undefined,
+      meta
+    );
     for (const item of items || []) {
       if (item && item.word && !vocabMap.has(item.word)) {
         vocabMap.set(item.word, item);
@@ -211,7 +215,7 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
   const vocabPages = [];
   let allVocab = [];
   for (const { page, text } of pages) {
-    const vocab = await extractVocabulary(text);
+    const vocab = await extractVocabulary(text, { title, author });
     const withWork = Array.isArray(vocab)
       ? vocab.map((v) => ({ ...v, workId: id, page }))
       : [];
