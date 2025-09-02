@@ -12,6 +12,10 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
 app.use(
+  '/thumbnails',
+  express.static(path.join(__dirname, '..', 'data', 'thumbnails'))
+);
+app.use(
   '/lib/i18next',
   express.static(path.join(__dirname, '..', 'node_modules', 'i18next', 'dist'))
 );

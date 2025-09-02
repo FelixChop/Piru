@@ -9,6 +9,8 @@ const works = new Map(); // workId -> work object
 
 // Lazy-loaded mapping from normalized movie title -> subtitle filename
 let subtitleMap;
+// Lazy-loaded mapping from normalized movie title -> thumbnail filename
+let thumbnailMap;
 
 function normalizeTitle(title) {
   return title
@@ -25,9 +27,10 @@ const TITLE_ALIASES = new Map([
   ],
 ]);
 
-function loadSubtitleMap() {
-  if (subtitleMap) return subtitleMap;
+function loadMaps() {
+  if (subtitleMap && thumbnailMap) return;
   subtitleMap = new Map();
+  thumbnailMap = new Map();
   try {
     const csvPath = path.join(
       __dirname,
@@ -40,22 +43,32 @@ function loadSubtitleMap() {
     const lines = csv.split(/\r?\n/).slice(1);
     for (const line of lines) {
       if (!line.trim()) continue;
-      const match = line.match(/^"(.+)","(.+)"$/);
-      if (match) {
-        const filename = match[1];
-        const movieTitle = normalizeTitle(match[2]);
-        subtitleMap.set(movieTitle, filename);
-      }
+      const parts = line.split(/","/).map((s) => s.replace(/^"|"$/g, ''));
+      const subtitle = parts[0];
+      const movieTitle = normalizeTitle(parts[1]);
+      subtitleMap.set(movieTitle, subtitle);
+      const thumb = parts[2];
+      if (thumb) thumbnailMap.set(movieTitle, thumb);
     }
-    // propagate aliases
     for (const [alias, canonical] of TITLE_ALIASES) {
-      const target = subtitleMap.get(canonical);
-      if (target) subtitleMap.set(alias, target);
+      const sub = subtitleMap.get(canonical);
+      if (sub) subtitleMap.set(alias, sub);
+      const thumb = thumbnailMap.get(canonical);
+      if (thumb) thumbnailMap.set(alias, thumb);
     }
   } catch (err) {
-    // mapping file missing or unreadable; leave map empty
+    // mapping file missing or unreadable
   }
+}
+
+function loadSubtitleMap() {
+  loadMaps();
   return subtitleMap;
+}
+
+function loadThumbnailMap() {
+  loadMaps();
+  return thumbnailMap;
 }
 
 function getSubtitleTextForTitle(title) {
@@ -79,6 +92,17 @@ function getSubtitleTextForTitle(title) {
   }
 }
 
+function getThumbnailForTitle(title) {
+  const subtitles = loadSubtitleMap();
+  const thumbs = loadThumbnailMap();
+  let normalized = normalizeTitle(title);
+  normalized = TITLE_ALIASES.get(normalized) || normalized;
+  if (!subtitles.has(normalized)) return null;
+  const file = thumbs.get(normalized);
+  if (!file) return null;
+  return `/thumbnails/${encodeURIComponent(file)}`;
+}
+
 /**
  * Add a work for a user and extract vocabulary
  * @param {string} userId
@@ -97,12 +121,13 @@ async function addWork(userId, title, author, content, type) {
     }
   }
   const vocab = await chatgpt.extractVocabularyWithLLM(text);
-  const work = { id, userId, title, author, content, type, vocab };
+  const thumbnail = type === 'movie' ? getThumbnailForTitle(title) : null;
+  const work = { id, userId, title, author, content, type, vocab, thumbnail };
   works.set(id, work);
   if (Array.isArray(vocab) && vocab.length) {
     addWords(userId, vocab);
   }
-  return { id, title, author, type, vocab };
+  return { id, title, author, type, vocab, thumbnail };
 }
 
 /**
@@ -113,17 +138,27 @@ async function addWork(userId, title, author, content, type) {
 function listWorks(userId) {
   return Array.from(works.values())
     .filter((w) => w.userId === userId)
-    .map(({ id, title, author, type, vocab }) => ({ id, title, author, type, vocab }));
+    .map(({ id, title, author, type, vocab, thumbnail }) => ({
+      id,
+      title,
+      author,
+      type,
+      vocab,
+      thumbnail,
+    }));
 }
 
 function listAllWorks() {
-  return Array.from(works.values()).map(({ id, userId, title, author, vocab }) => ({
-    id,
-    userId,
-    title,
-    author,
-    vocab,
-  }));
+  return Array.from(works.values()).map(
+    ({ id, userId, title, author, vocab, thumbnail }) => ({
+      id,
+      userId,
+      title,
+      author,
+      vocab,
+      thumbnail,
+    })
+  );
 }
 
 function deleteWork(id) {
