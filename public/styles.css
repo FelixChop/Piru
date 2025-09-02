@@ -224,12 +224,10 @@ button:disabled {
 
 #add-work-menu {
   display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
   margin: 1rem 0;
-  background-color: var(--color-yellow);
-  padding: 0.5rem;
+  border: 2px solid var(--color-yellow);
   border-radius: 4px;
+  overflow: hidden;
 }
 
 #add-work-menu .tab {
@@ -237,12 +235,12 @@ button:disabled {
   text-align: center;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  border-radius: 4px;
   background-color: var(--color-yellow-light);
+  border-right: 2px solid var(--color-yellow);
 }
 
-#add-work-menu .tab:hover {
-  text-decoration: underline;
+#add-work-menu .tab:last-child {
+  border-right: none;
 }
 
 #add-work-menu .tab.active {
