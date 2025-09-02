@@ -126,18 +126,27 @@ document.getElementById('work-form').addEventListener('submit', async (e) => {
 async function loadWorks() {
   const res = await fetch(`/works?userId=${userId}`);
   const works = await res.json();
-  const list = document.getElementById('work-list');
-  list.innerHTML = '';
-  works.forEach(w => {
-    const tr = document.createElement('tr');
-    const titleTd = document.createElement('td');
-    titleTd.textContent = w.title || 'Untitled';
-    const authorTd = document.createElement('td');
-    authorTd.textContent = w.author || 'Unknown';
-    const typeTd = document.createElement('td');
-    typeTd.textContent = i18next.t(w.type);
-    tr.append(titleTd, authorTd, typeTd);
-    list.appendChild(tr);
+  const carousel = document.getElementById('work-carousel');
+  carousel.innerHTML = '';
+  works.forEach((w) => {
+    const item = document.createElement('div');
+    item.className = 'work-item';
+    if (w.thumbnail) {
+      const img = document.createElement('img');
+      img.src = w.thumbnail;
+      img.alt = w.title || 'thumbnail';
+      item.appendChild(img);
+    } else {
+      const placeholder = document.createElement('div');
+      placeholder.className = 'work-placeholder';
+      placeholder.textContent = i18next.t(w.type);
+      item.appendChild(placeholder);
+    }
+    const caption = document.createElement('div');
+    caption.className = 'work-caption';
+    caption.textContent = w.title || 'Untitled';
+    item.appendChild(caption);
+    carousel.appendChild(item);
   });
 }
 

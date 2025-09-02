@@ -221,19 +221,6 @@ button:disabled {
   }
 }
 
-#work-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-#work-table th,
-#work-table td {
-  border: 1px solid var(--color-gray);
-  padding: 0.5rem;
-  text-align: left;
-}
-
 #add-work-menu {
   display: flex;
   gap: 0.5rem;
@@ -243,4 +230,38 @@ button:disabled {
 #add-work-menu button.active {
   background-color: var(--color-blue);
   color: var(--color-light);
+}
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.work-item {
+  flex: 0 0 auto;
+  width: 150px;
+  text-align: center;
+}
+
+.work-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.work-placeholder {
+  width: 150px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-gray);
+  color: var(--color-light);
+  border-radius: 4px;
+}
+
+.work-caption {
+  margin-top: 0.5rem;
 }
