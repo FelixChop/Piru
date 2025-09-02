@@ -225,9 +225,18 @@ button:disabled {
   display: flex;
   gap: 0.5rem;
   margin: 1rem 0;
+  background-color: var(--color-yellow);
+  padding: 0.5rem;
+  border-radius: 4px;
 }
 
-#add-work-menu button.active {
+#add-work-menu .tab {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#add-work-menu .tab.active {
   background-color: var(--color-blue);
   color: var(--color-light);
 }
