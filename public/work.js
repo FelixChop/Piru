@@ -16,6 +16,15 @@ async function loadWork() {
     return;
   }
   document.getElementById('work-title').textContent = work.title || '';
+  if (work.thumbnail) {
+    const img = document.getElementById('work-thumb');
+    img.src = work.thumbnail;
+    img.classList.remove('hidden');
+  }
+  const total = work.vocabCount || (work.vocab ? work.vocab.length : 0);
+  const learned = work.learnedCount || 0;
+  const percent = total ? Math.round((learned / total) * 100) : 0;
+  document.getElementById('vocab-stats').textContent = `${total} mots de vocabulaire – ${learned} appris (${percent}%)`;
 }
 
 document.getElementById('learn-btn').addEventListener('click', () => {

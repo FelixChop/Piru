@@ -136,6 +136,12 @@ document.getElementById('work-form').addEventListener('submit', async (e) => {
   }
 });
 
+function getDifficulty(count) {
+  if (count < 30) return { label: 'Facile', class: 'easy' };
+  if (count < 100) return { label: 'Intermédiaire', class: 'intermediate' };
+  return { label: 'Avancé', class: 'advanced' };
+}
+
 async function loadWorks() {
   const res = await fetch(`/works?userId=${userId}`);
   const works = await res.json();
@@ -177,6 +183,12 @@ async function loadWorks() {
     works.forEach((w) => {
       const item = document.createElement('div');
       item.className = 'work-item';
+
+      const stats = getDifficulty(w.vocabCount || (w.vocab ? w.vocab.length : 0));
+      const badge = document.createElement('div');
+      badge.className = `difficulty-badge badge-${stats.class}`;
+      badge.textContent = stats.label;
+      item.appendChild(badge);
 
       const thumb = document.createElement('div');
       thumb.className = 'work-thumb';
