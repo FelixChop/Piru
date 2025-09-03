@@ -169,13 +169,54 @@ button:hover:not(:disabled) {
   position: relative;
   display: flex;
   align-items: center;
+  z-index: 1000;
 }
 
 .burger-button {
   background: none;
   border: none;
-  font-size: 1.5rem;
   cursor: pointer;
+  width: 40px;
+  height: 30px;
+  position: relative;
+  padding: 0;
+  z-index: 1001;
+}
+
+.burger-button span {
+  display: block;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--color-dark);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.burger-button span:nth-child(1) {
+  top: 0;
+}
+
+.burger-button span:nth-child(2) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.burger-button span:nth-child(3) {
+  bottom: 0;
+}
+
+.burger-button.open span:nth-child(1) {
+  transform: translateY(13px) rotate(45deg);
+}
+
+.burger-button.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-button.open span:nth-child(3) {
+  transform: translateY(-13px) rotate(-45deg);
 }
 
 #menu-options {
@@ -188,6 +229,17 @@ button:hover:not(:disabled) {
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.5rem;
+  z-index: 1000;
+}
+
+@media (max-width: 600px) {
+  #menu-options {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
 }
 
 #menu-options a {
