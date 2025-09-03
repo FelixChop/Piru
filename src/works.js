@@ -368,4 +368,12 @@ function _clearWorks() {
   works.clear();
 }
 
-module.exports = { addWork, listWorks, listAllWorks, deleteWork, deleteUserWorks, _clearWorks };
+module.exports = {
+  extractVocabulary,
+  addWork,
+  listWorks,
+  listAllWorks,
+  deleteWork,
+  deleteUserWorks,
+  _clearWorks,
+};
