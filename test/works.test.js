@@ -183,4 +183,27 @@ describe('Works management', () => {
       'Yet another quill appears.',
     ]);
   });
+
+  it('merges vocabulary entries with different casing', async () => {
+    chatgpt.extractVocabularyWithLLM = async () => [
+      {
+        id: crypto.randomUUID(),
+        word: 'Serendipity',
+        definition: '',
+        citation: 'First cite',
+      },
+      {
+        id: crypto.randomUUID(),
+        word: 'serendipity',
+        definition: '',
+        citation: 'Second cite',
+      },
+    ];
+    const work = await addWork('caseUser', 'Case Work', '', 'irrelevant', 'book');
+    const entries = work.vocab.filter((v) => v.word.toLowerCase() === 'serendipity');
+    assert.strictEqual(entries.length, 1);
+    const entry = entries[0];
+    assert.strictEqual(entry.word, 'Serendipity');
+    assert.deepStrictEqual(entry.citations, ['First cite', 'Second cite']);
+  });
 });
