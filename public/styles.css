@@ -28,6 +28,7 @@ header {
   padding: 0.5rem;
   box-shadow: 0 2px 4px rgba(34, 31, 31, 0.1);
   position: relative;
+  z-index: 1;
 }
 
 header h1 {
@@ -63,6 +64,8 @@ main {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(34, 31, 31, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .page-title {
@@ -388,4 +391,18 @@ button:disabled {
 .badge-advanced {
   background-color: var(--color-pink);
   color: var(--color-light);
+}
+
+.confetti-background {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  border-radius: 2px;
+  opacity: 0.8;
 }
