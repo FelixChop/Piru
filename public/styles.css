@@ -63,6 +63,11 @@ main {
   box-shadow: 0 2px 8px rgba(34, 31, 31, 0.1);
 }
 
+.page-title {
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
 form {
   display: flex;
   flex-direction: column;
