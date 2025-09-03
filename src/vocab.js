@@ -55,6 +55,12 @@ function reviewWord(userId, wordId, quality) {
   return word;
 }
 
+function deleteWord(userId, wordId) {
+  const store = vocab.get(userId);
+  if (!store) return false;
+  return store.delete(wordId);
+}
+
 function deleteWorkVocab(userId, workId) {
   const store = vocab.get(userId);
   if (!store) return;
@@ -91,6 +97,7 @@ module.exports = {
   addWords,
   getNextWord,
   reviewWord,
+  deleteWord,
   deleteWorkVocab,
   deleteUserVocab,
   _clear,
