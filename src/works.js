@@ -177,22 +177,23 @@ async function extractVocabulary(text, meta = {}) {
   function mergeItems(items) {
     for (const item of items || []) {
       if (!item || !item.word) continue;
-      const word = item.word;
+      const key = item.word.toLowerCase();
       const incoming = Array.isArray(item.citations)
         ? item.citations
         : item.citation
         ? [item.citation]
         : [];
-      if (!vocabMap.has(word)) {
+      if (!vocabMap.has(key)) {
         const citations = incoming.slice(0, 3);
         const first = citations[0];
-        vocabMap.set(word, {
+        vocabMap.set(key, {
           ...item,
+          word: item.word, // preserve original casing
           citation: first ?? item.citation,
           citations,
         });
       } else {
-        const existing = vocabMap.get(word);
+        const existing = vocabMap.get(key);
         existing.citations = existing.citations || [];
         for (const cit of incoming) {
           if (
