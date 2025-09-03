@@ -6,7 +6,7 @@ const { addWork, listWorks, listAllWorks, deleteWork, deleteUserWorks } = requir
 const { isAdmin, listUsers, deleteUser } = require('./admin');
 const { extractVocabularyWithLLM } = require('./chatgpt');
 const { getOverview } = require('./stats');
-const { addWords, getNextWord, reviewWord, deleteUserVocab } = require('./vocab');
+const { addWords, getNextWord, reviewWord, deleteUserVocab, deleteWord } = require('./vocab');
 const { createChallenge, submitScore, getChallenge } = require('./challenges');
 
 const app = express();
@@ -188,6 +188,16 @@ app.post('/vocab/review', (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+});
+
+app.delete('/vocab/:id', (req, res) => {
+  const { userId } = req.query;
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId' });
+  }
+  const ok = deleteWord(userId, req.params.id);
+  if (!ok) return res.status(404).json({ error: 'Not found' });
+  res.status(204).end();
 });
 
 // Challenge endpoints

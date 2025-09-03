@@ -19,15 +19,16 @@
   <main>
     <section id="flashcard-section" class="hidden">
       <div id="flashcard-content">
-        <div id="word"></div>
-        <div id="citation" class="hidden"></div>
-        <div id="citation-source" class="hidden"></div>
-        <div id="definition" class="hidden"></div>
+      <div id="word"></div>
         <button id="show-btn" data-i18n="show_definition"></button>
+        <button id="delete-btn" data-i18n="delete_known"></button>
+        <div id="definition" class="hidden"></div>
         <div id="review-buttons" class="hidden">
-          <button data-quality="1" data-i18n="again"></button>
-          <button data-quality="4" data-i18n="good"></button>
+          <button data-quality="4" data-i18n="i_know"></button>
+          <button data-quality="1" data-i18n="i_dont_know"></button>
         </div>
+        <div id="citation"></div>
+        <div id="citation-source"></div>
         <button id="add-work-btn" class="hidden" data-i18n="add_work"></button>
         <button id="finish-challenge-btn" class="hidden" data-i18n="finish_challenge"></button>
         <div id="challenge-results" class="hidden">
