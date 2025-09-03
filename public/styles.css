@@ -110,6 +110,19 @@ button:disabled {
 #flashcard-section {
   text-align: center;
   margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+#flashcard-content {
+  flex: 1;
+}
+
+.flashcard-parrot {
+  width: 80px;
+  height: auto;
 }
 
 #word {
