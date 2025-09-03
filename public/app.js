@@ -141,6 +141,7 @@ async function loadWorks() {
   const works = await res.json();
   const container = document.getElementById('my-works-container');
   const carousel = document.getElementById('work-carousel');
+  const title = document.querySelector('#works h2[data-i18n="my_works"]');
   carousel.innerHTML = '';
 // <<<<<<< codex/add-default-thumbnail-by-item-type
 //   works.forEach((w) => {
@@ -169,8 +170,10 @@ async function loadWorks() {
 // =======
   if (works.length === 0) {
     container.classList.add('hidden');
+    if (title) title.classList.add('hidden');
   } else {
     container.classList.remove('hidden');
+    if (title) title.classList.remove('hidden');
     works.forEach((w) => {
       const item = document.createElement('div');
       item.className = 'work-item';
