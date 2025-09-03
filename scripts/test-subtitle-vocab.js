@@ -4,22 +4,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const chatgpt = require('../src/chatgpt');
 
-// Stub vocabulary extraction to avoid external API calls.
-// This mirrors the approach used in tests, extracting unique words.
-chatgpt.extractVocabularyWithLLM = async (content) => {
-  const tokens = content.toLowerCase().match(/\b\w+\b/g) || [];
-  const unique = Array.from(new Set(tokens));
-  return unique.map((word) => ({
-    id: crypto.randomUUID(),
-    word,
-    definition: '',
-    citations: [],
-    status: 'new',
-  }));
-};
+// This script now uses the real OpenAI API via chatgpt.extractVocabularyWithLLM.
+// Ensure the environment variable OPENAI_API_KEY is set before running it.
 
 async function extractFromSubtitle(filePath) {
   const text = fs.readFileSync(filePath, 'utf8');
@@ -46,6 +34,10 @@ async function extractFromSubtitle(filePath) {
 }
 
 async function main() {
+  if (!process.env.OPENAI_API_KEY) {
+    console.log('OPENAI_API_KEY not set, skipping vocabulary extraction test.');
+    return;
+  }
   const base = path.join(__dirname, '..', 'data', 'subtitles', 'en');
   const files = ['test-movie.srt', 'test-idioms.srt'];
   for (const file of files) {
@@ -56,8 +48,10 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error('Failed to extract vocabulary:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error('Failed to extract vocabulary:', err);
+    process.exit(1);
+  });
+}
 
