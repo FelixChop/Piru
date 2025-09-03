@@ -278,6 +278,7 @@ button:disabled {
   flex: 0 0 auto;
   width: 75px;
   text-align: center;
+  cursor: pointer;
 }
 
 .work-item img {

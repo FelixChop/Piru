@@ -3,6 +3,8 @@ let currentWord = null;
 let worksById = new Map();
 const params = new URLSearchParams(window.location.search);
 const workId = params.get('workId');
+const challengeId = params.get('challengeId');
+let score = 0;
 
 async function loadWorks() {
   const userId = localStorage.getItem('userId');
@@ -38,6 +40,9 @@ async function loadNext() {
     document.getElementById('show-btn').classList.remove('hidden');
     document.getElementById('show-citation-btn').classList.remove('hidden');
     document.getElementById('add-work-btn').classList.add('hidden');
+    if (challengeId) {
+      document.getElementById('finish-challenge-btn').classList.remove('hidden');
+    }
   } else if (res.status === 204) {
     currentWord = null;
     document.getElementById('word').textContent = i18next.t('no_words');
@@ -51,6 +56,9 @@ async function loadNext() {
     document.getElementById('show-btn').classList.add('hidden');
     document.getElementById('show-citation-btn').classList.add('hidden');
     document.getElementById('add-work-btn').classList.remove('hidden');
+    if (challengeId) {
+      document.getElementById('finish-challenge-btn').classList.remove('hidden');
+    }
   } else {
     window.location.href = '/';
   }
@@ -76,6 +84,9 @@ async function review(quality) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userId, wordId: currentWord.id, quality })
   });
+  if (challengeId && quality >= 4) {
+    score++;
+  }
   loadNext();
 }
 document.getElementById('show-btn').addEventListener('click', showDefinition);
@@ -88,6 +99,36 @@ document.querySelectorAll('#review-buttons button').forEach((btn) => {
 document.getElementById('add-work-btn').addEventListener('click', () => {
   window.location.href = '/';
 });
+
+async function finishChallenge() {
+  const userId = localStorage.getItem('userId');
+  const res = await fetch(`/challenges/${challengeId}/score`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId, score })
+  });
+  if (res.ok) {
+    const data = await fetch(`/challenges/${challengeId}`);
+    if (data.ok) {
+      const result = await data.json();
+      const me = result.scores.find((s) => s.userId === userId);
+      const other = result.scores.find((s) => s.userId !== userId);
+      document.getElementById('your-score').textContent = `${i18next.t('your_score')} ${me ? me.score : 0}`;
+      document.getElementById('opponent-score').textContent = `${i18next.t('opponent_score')} ${other && typeof other.score === 'number' ? other.score : '-'}`;
+      const winnerEl = document.getElementById('winner');
+      if (result.winner) {
+        winnerEl.textContent = i18next.t('winner') + ' ' + (result.winner === userId ? i18next.t('you') : i18next.t('friend'));
+      } else {
+        winnerEl.textContent = i18next.t('waiting_for_opponent');
+      }
+      document.getElementById('challenge-results').classList.remove('hidden');
+    }
+  }
+}
+
+if (challengeId) {
+  document.getElementById('finish-challenge-btn').addEventListener('click', finishChallenge);
+}
 
 const defaultLang = localStorage.getItem('nativeLanguage') || 'en';
 initI18n(defaultLang).then(() => {

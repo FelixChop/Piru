@@ -189,34 +189,16 @@ async function loadWorks() {
         thumb.appendChild(placeholder);
       }
 
-      const learnBtn = document.createElement('button');
-      learnBtn.className = 'learn-btn';
-      learnBtn.textContent = i18next.t('learn');
-      learnBtn.addEventListener('click', () => {
-        window.location.href = `flashcards.html?workId=${encodeURIComponent(w.id)}`;
-      });
-      thumb.appendChild(learnBtn);
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'delete-btn';
-      deleteBtn.textContent = i18next.t('delete');
-      deleteBtn.addEventListener('click', async () => {
-        if (!confirm(i18next.t('confirm_delete_work'))) return;
-        const res = await fetch(`/works/${encodeURIComponent(w.id)}?userId=${userId}`, {
-          method: 'DELETE',
-        });
-        if (res.ok) {
-          loadWorks();
-        }
-      });
-      thumb.appendChild(deleteBtn);
-
       item.appendChild(thumb);
 
       const caption = document.createElement('div');
       caption.className = 'work-caption';
       caption.textContent = w.title || 'Untitled';
       item.appendChild(caption);
+
+      item.addEventListener('click', () => {
+        window.location.href = `work.html?workId=${encodeURIComponent(w.id)}`;
+      });
 
       carousel.appendChild(item);
     });

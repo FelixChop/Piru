@@ -52,7 +52,16 @@ const i18nResources = {
       again: 'Again',
       good: 'Good',
       no_words: 'No words to review',
-      lyrics_fetch_failed: 'Failed to fetch lyrics'
+      lyrics_fetch_failed: 'Failed to fetch lyrics',
+      create_challenge: 'Create Challenge',
+      challenge_link: 'Challenge link',
+      finish_challenge: 'Finish Challenge',
+      your_score: 'Your score:',
+      opponent_score: "Friend's score:",
+      winner: 'Winner:',
+      waiting_for_opponent: 'Waiting for friend...',
+      you: 'You',
+      friend: 'Friend'
     }
   },
   fr: {
@@ -107,7 +116,16 @@ const i18nResources = {
       again: 'Encore',
       good: 'Bien',
       no_words: 'Aucun mot à réviser',
-      lyrics_fetch_failed: 'Échec de récupération des paroles'
+      lyrics_fetch_failed: 'Échec de récupération des paroles',
+      create_challenge: 'Créer un challenge',
+      challenge_link: 'Lien du challenge',
+      finish_challenge: 'Terminer le challenge',
+      your_score: 'Ton score :',
+      opponent_score: 'Score de ton ami :',
+      winner: 'Gagnant :',
+      waiting_for_opponent: 'En attente de ton ami...',
+      you: 'Toi',
+      friend: 'Ami'
     }
   },
   es: {
@@ -162,7 +180,16 @@ const i18nResources = {
       again: 'De nuevo',
       good: 'Bien',
       no_words: 'No hay palabras para repasar',
-      lyrics_fetch_failed: 'No se pudieron obtener las letras'
+      lyrics_fetch_failed: 'No se pudieron obtener las letras',
+      create_challenge: 'Crear desafío',
+      challenge_link: 'Enlace del desafío',
+      finish_challenge: 'Terminar desafío',
+      your_score: 'Tu puntuación:',
+      opponent_score: 'Puntuación de tu amigo:',
+      winner: 'Ganador:',
+      waiting_for_opponent: 'Esperando a tu amigo...',
+      you: 'Tú',
+      friend: 'Amigo'
     }
   },
   it: {
@@ -217,7 +244,16 @@ const i18nResources = {
       again: 'Di nuovo',
       good: 'Bene',
       no_words: 'Nessuna parola da ripassare',
-      lyrics_fetch_failed: 'Impossibile recuperare i testi'
+      lyrics_fetch_failed: 'Impossibile recuperare i testi',
+      create_challenge: 'Crea sfida',
+      challenge_link: 'Link della sfida',
+      finish_challenge: 'Termina sfida',
+      your_score: 'Il tuo punteggio:',
+      opponent_score: "Punteggio dell'amico:",
+      winner: 'Vincitore:',
+      waiting_for_opponent: "In attesa dell'amico...",
+      you: 'Tu',
+      friend: 'Amico'
     }
   },
   de: {
@@ -272,7 +308,16 @@ const i18nResources = {
       again: 'Nochmals',
       good: 'Gut',
       no_words: 'Keine Wörter zu wiederholen',
-      lyrics_fetch_failed: 'Liedtext konnte nicht geladen werden'
+      lyrics_fetch_failed: 'Liedtext konnte nicht geladen werden',
+      create_challenge: 'Challenge erstellen',
+      challenge_link: 'Challenge-Link',
+      finish_challenge: 'Challenge beenden',
+      your_score: 'Dein Punktestand:',
+      opponent_score: 'Punktestand deines Freundes:',
+      winner: 'Gewinner:',
+      waiting_for_opponent: 'Warte auf deinen Freund...',
+      you: 'Du',
+      friend: 'Freund'
     }
   }
 };

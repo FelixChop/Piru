@@ -7,6 +7,7 @@ const { isAdmin, listUsers, deleteUser } = require('./admin');
 const { extractVocabularyWithLLM } = require('./chatgpt');
 const { getOverview } = require('./stats');
 const { addWords, getNextWord, reviewWord, deleteUserVocab } = require('./vocab');
+const { createChallenge, submitScore, getChallenge } = require('./challenges');
 
 const app = express();
 app.use(express.json());
@@ -187,6 +188,32 @@ app.post('/vocab/review', (req, res) => {
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+});
+
+// Challenge endpoints
+app.post('/challenges', (req, res) => {
+  const { userId, workId } = req.body;
+  if (!userId || !workId) {
+    return res.status(400).json({ error: 'Missing userId or workId' });
+  }
+  const { id } = createChallenge(workId, userId);
+  res.status(201).json({ id });
+});
+
+app.post('/challenges/:id/score', (req, res) => {
+  const { userId, score } = req.body;
+  if (!userId || typeof score !== 'number') {
+    return res.status(400).json({ error: 'Missing userId or score' });
+  }
+  const challenge = submitScore(req.params.id, userId, score);
+  if (!challenge) return res.status(404).json({ error: 'Not found' });
+  res.json(challenge);
+});
+
+app.get('/challenges/:id', (req, res) => {
+  const challenge = getChallenge(req.params.id);
+  if (!challenge) return res.status(404).json({ error: 'Not found' });
+  res.json(challenge);
 });
 
 // Lyrics endpoints
