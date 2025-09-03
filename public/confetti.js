@@ -4,37 +4,25 @@
   document.body.appendChild(layer);
 
   const colors = ['#ff6b6b', '#ffd93d', '#50fa7b', '#61dafb'];
-  const CONFETTI_COUNT = 40;
+  const topPositions = [10, 20, 30, 40, 50, 60, 70, 80];
+  const leftPositions = [10, 30, 50, 70, 90];
 
-  for (let i = 0; i < CONFETTI_COUNT; i++) {
+  const positions = [];
+  topPositions.forEach((top) => {
+    leftPositions.forEach((left) => {
+      positions.push({ top: `${top}%`, left: `${left}%` });
+    });
+  });
+
+  positions.forEach((pos, index) => {
     const confetti = document.createElement('div');
     confetti.className = 'confetti';
-    const size = 6 + Math.random() * 6;
-    confetti.style.width = `${size}px`;
-    confetti.style.height = `${size * 0.6}px`;
-    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-
-    const side = Math.floor(Math.random() * 4);
-    switch (side) {
-      case 0: // left
-        confetti.style.left = '0';
-        confetti.style.top = `${Math.random() * 100}%`;
-        break;
-      case 1: // right
-        confetti.style.right = '0';
-        confetti.style.top = `${Math.random() * 100}%`;
-        break;
-      case 2: // top
-        confetti.style.top = '0';
-        confetti.style.left = `${Math.random() * 100}%`;
-        break;
-      case 3: // bottom
-        confetti.style.bottom = '0';
-        confetti.style.left = `${Math.random() * 100}%`;
-        break;
-    }
-
-    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+    confetti.style.width = '10px';
+    confetti.style.height = '6px';
+    confetti.style.backgroundColor = colors[index % colors.length];
+    confetti.style.top = pos.top;
+    confetti.style.left = pos.left;
+    confetti.style.transform = `rotate(${(index % 8) * 45}deg)`;
     layer.appendChild(confetti);
-  }
+  });
 })();
