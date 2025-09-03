@@ -8,7 +8,7 @@
 </head>
 <body>
   <header>
-    <a href="/"><img src="parrot_grey_no_title.png" alt="Piru logo" class="logo" /></a>
+    <a href="/"><img src="/images/parrot_grey_no_title.png" alt="Piru logo" class="logo" /></a>
     <div class="site-text">
       <h1><a href="/" class="home-link" data-i18n="site_name">Piru</a></h1>
       <p data-i18n="tagline">Consume media in foreign languages.</p>
@@ -18,23 +18,27 @@
   <main>
     <h2 data-i18n="vocabulary_review"></h2>
     <section id="flashcard-section" class="hidden">
-      <div id="word"></div>
-      <div id="citation" class="hidden"></div>
-      <div id="citation-source" class="hidden"></div>
-      <div id="definition" class="hidden"></div>
-      <button id="show-citation-btn" data-i18n="show_citation"></button>
-      <button id="show-btn" data-i18n="show_definition"></button>
-      <div id="review-buttons" class="hidden">
-        <button data-quality="1" data-i18n="again"></button>
-        <button data-quality="4" data-i18n="good"></button>
+      <img src="/images/parrot_knowing.png" alt="Parrot knowing" class="flashcard-parrot parrot-left" />
+      <div id="flashcard-content">
+        <div id="word"></div>
+        <div id="citation" class="hidden"></div>
+        <div id="citation-source" class="hidden"></div>
+        <div id="definition" class="hidden"></div>
+        <button id="show-citation-btn" data-i18n="show_citation"></button>
+        <button id="show-btn" data-i18n="show_definition"></button>
+        <div id="review-buttons" class="hidden">
+          <button data-quality="1" data-i18n="again"></button>
+          <button data-quality="4" data-i18n="good"></button>
+        </div>
+        <button id="add-work-btn" class="hidden" data-i18n="add_work"></button>
+        <button id="finish-challenge-btn" class="hidden" data-i18n="finish_challenge"></button>
+        <div id="challenge-results" class="hidden">
+          <p id="your-score"></p>
+          <p id="opponent-score"></p>
+          <p id="winner"></p>
+        </div>
       </div>
-      <button id="add-work-btn" class="hidden" data-i18n="add_work"></button>
-      <button id="finish-challenge-btn" class="hidden" data-i18n="finish_challenge"></button>
-      <div id="challenge-results" class="hidden">
-        <p id="your-score"></p>
-        <p id="opponent-score"></p>
-        <p id="winner"></p>
-      </div>
+      <img src="/images/parrot_eating.png" alt="Parrot eating" class="flashcard-parrot parrot-right" />
     </section>
   </main>
   <script src="/lib/i18next/umd/i18next.min.js"></script>
