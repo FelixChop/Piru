@@ -15,7 +15,13 @@ chatgpt.extractVocabularyWithLLM = async (content) => {
   }));
 };
 
-const { addWork, listWorks, deleteWork, _clearWorks } = require('../src/works');
+const {
+  addWork,
+  listWorks,
+  deleteWork,
+  _clearWorks,
+  extractVocabulary,
+} = require('../src/works');
 const { getNextWord, _clear: _clearVocab } = require('../src/vocab');
 
 describe('Works management', () => {
@@ -205,5 +211,26 @@ describe('Works management', () => {
     const entry = entries[0];
     assert.strictEqual(entry.word, 'Serendipity');
     assert.deepStrictEqual(entry.citations, ['First cite', 'Second cite']);
+  });
+
+  it('exports extractVocabulary for direct use with deduplication', async () => {
+    chatgpt.extractVocabularyWithLLM = async () => [
+      {
+        id: crypto.randomUUID(),
+        word: 'Alpha',
+        definition: '',
+        citation: 'First',
+      },
+      {
+        id: crypto.randomUUID(),
+        word: 'alpha',
+        definition: '',
+        citation: 'Second',
+      },
+    ];
+    const vocab = await extractVocabulary('irrelevant', {});
+    assert.strictEqual(vocab.length, 1);
+    assert.strictEqual(vocab[0].word, 'Alpha');
+    assert.deepStrictEqual(vocab[0].citations, ['First', 'Second']);
   });
 });
