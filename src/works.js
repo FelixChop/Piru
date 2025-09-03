@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const JSZip = require('jszip');
 const chatgpt = require('./chatgpt');
-const { addWords, deleteWorkVocab } = require('./vocab');
+const { addWords, deleteWorkVocab, getWorkStats } = require('./vocab');
 
 // In-memory store for works and their vocabulary entries
 const works = new Map(); // workId -> work object
@@ -311,28 +311,38 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
 function listWorks(userId) {
   return Array.from(works.values())
     .filter((w) => w.userId === userId)
-    .map(({ id, title, author, type, vocab, pages, thumbnail }) => ({
-      id,
-      title,
-      author,
-      type,
-      vocab,
-      pages,
-      thumbnail,
-    }));
+    .map(({ id, title, author, type, vocab, pages, thumbnail }) => {
+      const { learned } = getWorkStats(userId, id);
+      return {
+        id,
+        title,
+        author,
+        type,
+        vocab,
+        pages,
+        thumbnail,
+        vocabCount: vocab.length,
+        learnedCount: learned,
+      };
+    });
 }
 
 function listAllWorks() {
   return Array.from(works.values()).map(
-    ({ id, userId, title, author, vocab, pages, thumbnail }) => ({
-      id,
-      userId,
-      title,
-      author,
-      vocab,
-      pages,
-      thumbnail,
-    })
+    ({ id, userId, title, author, vocab, pages, thumbnail }) => {
+      const { learned } = getWorkStats(userId, id);
+      return {
+        id,
+        userId,
+        title,
+        author,
+        vocab,
+        pages,
+        thumbnail,
+        vocabCount: vocab.length,
+        learnedCount: learned,
+      };
+    }
   );
 }
 

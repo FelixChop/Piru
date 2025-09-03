@@ -73,6 +73,20 @@ function _clear() {
   vocab.clear();
 }
 
+function getWorkStats(userId, workId) {
+  const store = vocab.get(userId);
+  if (!store) return { total: 0, learned: 0 };
+  let total = 0;
+  let learned = 0;
+  for (const word of store.values()) {
+    if (word.workId === workId) {
+      total++;
+      if (word.repetitions > 0) learned++;
+    }
+  }
+  return { total, learned };
+}
+
 module.exports = {
   addWords,
   getNextWord,
@@ -80,4 +94,5 @@ module.exports = {
   deleteWorkVocab,
   deleteUserVocab,
   _clear,
+  getWorkStats,
 };

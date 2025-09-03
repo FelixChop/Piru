@@ -12,7 +12,7 @@
 
 body {
   font-family: 'Gotham', sans-serif;
-  background-color: var(--color-light);
+  background: linear-gradient(to bottom, var(--color-blue), var(--color-light));
   color: var(--color-dark);
   margin: 0;
   padding: 0;
@@ -346,4 +346,39 @@ button:disabled {
 .work-caption {
   margin-top: 0.5rem;
   font-size: 0.8rem;
+}
+
+#work-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#work-header img {
+  width: 80px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.difficulty-badge {
+  display: inline-block;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  margin-bottom: 0.25rem;
+}
+
+.badge-easy {
+  background-color: var(--color-yellow-light);
+  color: var(--color-dark);
+}
+
+.badge-intermediate {
+  background-color: var(--color-blue);
+  color: var(--color-light);
+}
+
+.badge-advanced {
+  background-color: var(--color-pink);
+  color: var(--color-light);
 }
