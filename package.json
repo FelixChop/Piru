@@ -9,7 +9,8 @@
     "init-db:staging": "NODE_ENV=staging node scripts/initDb.js",
     "start": "node src/server.js",
     "start:staging": "NODE_ENV=staging PORT=4000 node src/server.js",
-    "extract-vocab": "node scripts/extract-vocab-cli.js"
+    "extract-vocab": "node scripts/extract-vocab-cli.js",
+    "show-prompt": "node scripts/show-prompt.js"
   },
   "keywords": [],
   "author": "",
