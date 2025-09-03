@@ -106,7 +106,13 @@ async function review(quality) {
 async function removeWord() {
   const userId = localStorage.getItem('userId');
   if (!currentWord) return;
-  await fetch(`/vocab/${currentWord.id}?userId=${userId}`, { method: 'DELETE' });
+  if (!userId) {
+    window.location.href = '/';
+    return;
+  }
+  await fetch(`/vocab/${currentWord.id}?userId=${encodeURIComponent(userId)}`, {
+    method: 'DELETE',
+  });
   const filter = (w) => w.id !== currentWord.id;
   seenWords = seenWords.filter(filter);
   reviewQueue = reviewQueue.filter(filter);
