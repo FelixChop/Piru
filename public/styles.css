@@ -461,16 +461,3 @@ button:hover:not(:disabled) {
   color: var(--color-light);
 }
 
-.confetti-background {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.confetti {
-  position: absolute;
-  border-radius: 2px;
-  opacity: 0.8;
-}
