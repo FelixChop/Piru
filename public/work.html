@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piru - Work</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <a href="/"><img src="parrot_grey_no_title.png" alt="Piru logo" class="logo" /></a>
+    <div class="site-text">
+      <h1><a href="/" class="home-link" data-i18n="site_name">Piru</a></h1>
+      <p data-i18n="tagline">Consume media in foreign languages.</p>
+    </div>
+    <nav id="menu" class="hidden"></nav>
+  </header>
+  <main>
+    <h2 id="work-title"></h2>
+    <div id="work-actions">
+      <button id="learn-btn" data-i18n="learn"></button>
+      <button id="delete-btn" data-i18n="delete"></button>
+      <button id="challenge-btn" data-i18n="create_challenge"></button>
+    </div>
+    <div id="challenge-section" class="hidden">
+      <p data-i18n="challenge_link"></p>
+      <input id="challenge-link" readonly />
+    </div>
+  </main>
+  <script src="/lib/i18next/umd/i18next.min.js"></script>
+  <script src="i18n.js"></script>
+  <script src="work.js"></script>
+  <script src="menu.js"></script>
+</body>
+</html>
