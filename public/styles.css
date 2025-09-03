@@ -144,24 +144,26 @@ button:hover:not(:disabled) {
 
 #flashcard-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 #word {
   font-size: 2rem;
-  margin-bottom: 1rem;
   font-family: 'Gotham Black', 'Gotham', sans-serif;
 }
 
 #citation {
   font-style: italic;
-  margin-bottom: 1rem;
   text-align: left;
 }
 
 #citation-source {
   font-style: italic;
-  margin-bottom: 1rem;
   text-align: right;
+  color: #555;
 }
 
 #menu {
