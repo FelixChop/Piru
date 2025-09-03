@@ -252,10 +252,12 @@ button:disabled {
 #add-work-menu .tab {
   flex: 1;
   text-align: center;
-  padding: 0.5rem 1rem;
+  /* increase vertical size slightly */
+  padding: 0.75rem 1rem;
   cursor: pointer;
   background-color: var(--color-yellow-light);
   border-right: 2px solid var(--color-yellow);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 #add-work-menu .tab:last-child {
@@ -263,6 +265,12 @@ button:disabled {
 }
 
 #add-work-menu .tab.active {
+  background-color: var(--color-yellow);
+  color: var(--color-dark);
+}
+
+/* hover interaction for menu tabs */
+#add-work-menu .tab:hover {
   background-color: var(--color-yellow);
   color: var(--color-dark);
 }
