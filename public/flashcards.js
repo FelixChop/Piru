@@ -31,14 +31,13 @@ async function loadNext() {
     document.getElementById('citation-source').textContent = work
       ? `${work.title}${work.author ? ' — ' + work.author : ''}`
       : '';
-    document.getElementById('citation').classList.add('hidden');
-    document.getElementById('citation-source').classList.add('hidden');
+    document.getElementById('citation').classList.remove('hidden');
+    document.getElementById('citation-source').classList.remove('hidden');
     document.getElementById('definition').textContent = currentWord.definition;
     document.getElementById('flashcard-section').classList.remove('hidden');
     document.getElementById('definition').classList.add('hidden');
     document.getElementById('review-buttons').classList.add('hidden');
     document.getElementById('show-btn').classList.remove('hidden');
-    document.getElementById('show-citation-btn').classList.remove('hidden');
     document.getElementById('add-work-btn').classList.add('hidden');
     if (challengeId) {
       document.getElementById('finish-challenge-btn').classList.remove('hidden');
@@ -54,7 +53,6 @@ async function loadNext() {
     document.getElementById('definition').classList.add('hidden');
     document.getElementById('review-buttons').classList.add('hidden');
     document.getElementById('show-btn').classList.add('hidden');
-    document.getElementById('show-citation-btn').classList.add('hidden');
     document.getElementById('add-work-btn').classList.remove('hidden');
     if (challengeId) {
       document.getElementById('finish-challenge-btn').classList.remove('hidden');
@@ -68,12 +66,6 @@ function showDefinition() {
   document.getElementById('definition').classList.remove('hidden');
   document.getElementById('review-buttons').classList.remove('hidden');
   document.getElementById('show-btn').classList.add('hidden');
-}
-
-function showCitation() {
-  document.getElementById('citation').classList.remove('hidden');
-  document.getElementById('citation-source').classList.remove('hidden');
-  document.getElementById('show-citation-btn').classList.add('hidden');
 }
 
 async function review(quality) {
@@ -90,9 +82,6 @@ async function review(quality) {
   loadNext();
 }
 document.getElementById('show-btn').addEventListener('click', showDefinition);
-document
-  .getElementById('show-citation-btn')
-  .addEventListener('click', showCitation);
 document.querySelectorAll('#review-buttons button').forEach((btn) => {
   btn.addEventListener('click', () => review(Number(btn.dataset.quality)));
 });
