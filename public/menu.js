@@ -22,6 +22,9 @@
 
     toggle.addEventListener('click', () => {
       options.classList.toggle('hidden');
+      toggle.classList.toggle('open');
+      const expanded = !options.classList.contains('hidden');
+      toggle.setAttribute('aria-expanded', expanded);
     });
 
     const logoutLink = menu.querySelector('#logout-link');
