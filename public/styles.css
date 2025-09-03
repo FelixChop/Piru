@@ -13,6 +13,8 @@
 body {
   font-family: 'Gotham', sans-serif;
   background: linear-gradient(to bottom, var(--color-blue), var(--color-light));
+  background-repeat: no-repeat;
+  min-height: 100vh;
   color: var(--color-dark);
   margin: 0;
   padding: 0;
