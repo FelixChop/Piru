@@ -13,8 +13,27 @@
     confetti.style.width = `${size}px`;
     confetti.style.height = `${size * 0.6}px`;
     confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    confetti.style.top = `${Math.random() * 100}%`;
-    confetti.style.left = `${Math.random() * 100}%`;
+
+    const side = Math.floor(Math.random() * 4);
+    switch (side) {
+      case 0: // left
+        confetti.style.left = '0';
+        confetti.style.top = `${Math.random() * 100}%`;
+        break;
+      case 1: // right
+        confetti.style.right = '0';
+        confetti.style.top = `${Math.random() * 100}%`;
+        break;
+      case 2: // top
+        confetti.style.top = '0';
+        confetti.style.left = `${Math.random() * 100}%`;
+        break;
+      case 3: // bottom
+        confetti.style.bottom = '0';
+        confetti.style.left = `${Math.random() * 100}%`;
+        break;
+    }
+
     confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
     layer.appendChild(confetti);
   }
