@@ -3,7 +3,7 @@ const i18nResources = {
   en: {
     translation: {
       site_name: 'Piru',
-      tagline: 'Consume media in foreign languages.',
+      tagline: 'Learn foreign languages while having fun.',
       login: 'Login',
       sign_up: 'Sign Up',
       email: 'Email',
@@ -66,7 +66,7 @@ const i18nResources = {
   fr: {
     translation: {
       site_name: 'Piru',
-      tagline: 'Consomme des médias en langues étrangères.',
+      tagline: 'Apprenez les langues étrangères en vous divertissant.',
       login: 'Connexion',
       sign_up: 'Inscription',
       email: 'Email',
@@ -129,7 +129,7 @@ const i18nResources = {
   es: {
     translation: {
       site_name: 'Piru',
-      tagline: 'Consume medios en idiomas extranjeros.',
+      tagline: 'Aprende idiomas extranjeros divirtiéndote.',
       login: 'Iniciar sesión',
       sign_up: 'Registrarse',
       email: 'Correo electrónico',
@@ -192,7 +192,7 @@ const i18nResources = {
   it: {
     translation: {
       site_name: 'Piru',
-      tagline: 'Consuma media in lingue straniere.',
+      tagline: 'Impara le lingue straniere divertendoti.',
       login: 'Accesso',
       sign_up: 'Registrati',
       email: 'Email',
@@ -255,7 +255,7 @@ const i18nResources = {
   de: {
     translation: {
       site_name: 'Piru',
-      tagline: 'Konsumiere Medien in Fremdsprachen.',
+      tagline: 'Lerne Fremdsprachen und hab Spaß dabei.',
       login: 'Anmelden',
       sign_up: 'Registrieren',
       email: 'E-Mail',
