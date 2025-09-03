@@ -10,7 +10,8 @@
     "start": "node src/server.js",
     "start:staging": "NODE_ENV=staging PORT=4000 node src/server.js",
     "extract-vocab": "node scripts/extract-vocab-cli.js",
-    "show-prompt": "node scripts/show-prompt.js"
+    "show-prompt": "node scripts/show-prompt.js",
+    "test-subtitle-vocab": "node scripts/test-subtitle-vocab.js"
   },
   "keywords": [],
   "author": "",
