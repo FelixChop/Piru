@@ -148,6 +148,10 @@ async function loadWorks() {
   const container = document.getElementById('my-works-container');
   const carousel = document.getElementById('work-carousel');
   const title = document.querySelector('#works h2[data-i18n="my_works"]');
+  const addWorkContainer = document.getElementById('add-work-container');
+  const addWorkButton = document.getElementById('add-work-button');
+  if (addWorkContainer) addWorkContainer.classList.add('hidden');
+  if (addWorkButton) addWorkButton.classList.remove('hidden');
   carousel.innerHTML = '';
 // <<<<<<< codex/add-default-thumbnail-by-item-type
 //   works.forEach((w) => {
@@ -264,5 +268,12 @@ async function checkAuthState() {
     authSection.classList.remove('hidden');
   }
 }
+const addWorkButton = document.getElementById('add-work-button');
+addWorkButton?.addEventListener('click', () => {
+  document.getElementById('my-works-container')?.classList.add('hidden');
+  document.querySelector('#works h2[data-i18n="my_works"]')?.classList.add('hidden');
+  addWorkButton.classList.add('hidden');
+  document.getElementById('add-work-container')?.classList.remove('hidden');
+});
 
 checkAuthState();
