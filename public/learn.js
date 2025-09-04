@@ -46,7 +46,7 @@
   async function unlockGame(id) {
     if (cookies < 1) {
       alert(i18next.t('not_enough_cookies'));
-      return;
+      return false;
     }
     cookies -= 1;
     const userId = localStorage.getItem('userId');
@@ -66,6 +66,7 @@
       saveUnlocked(unlocked);
     }
     renderGames();
+    return true;
   }
 
   function renderGames() {
@@ -77,31 +78,35 @@
       const isUnlocked = game.unlocked || unlocked.includes(game.id);
       const div = document.createElement('div');
       div.className = 'game';
+      div.id = game.id;
+
       const span = document.createElement('span');
       span.setAttribute('data-i18n', game.nameKey);
       span.textContent = i18next.t(game.nameKey);
       div.appendChild(span);
+
+      let hoverText = '';
       if (isUnlocked) {
-        const link = document.createElement('a');
-        link.href = game.link;
-        link.className = 'btn-main';
-        link.setAttribute('data-i18n', 'play');
-        link.textContent = i18next.t('play');
-        if (game.link === '#') {
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Coming soon!');
-          });
-        }
-        div.appendChild(link);
+        hoverText = i18next.t('play');
       } else {
-        const btn = document.createElement('button');
-        btn.className = 'btn-main';
-        btn.setAttribute('data-i18n', 'unlock_for_cookie');
-        btn.textContent = i18next.t('unlock_for_cookie');
-        btn.addEventListener('click', () => unlockGame(game.id));
-        div.appendChild(btn);
+        hoverText = i18next.t('unlock_for_cookie');
+        div.classList.add('locked');
+        if (cookies < 1) {
+          div.classList.add('no-cookie');
+        }
       }
+      div.setAttribute('data-hover', hoverText);
+
+      div.addEventListener('click', async () => {
+        if (div.classList.contains('locked')) {
+          if (cookies < 1) return;
+          const ok = await unlockGame(game.id);
+          if (ok) window.location.href = game.link;
+        } else {
+          window.location.href = game.link;
+        }
+      });
+
       container.appendChild(div);
     });
     if (typeof updateContent === 'function') {
