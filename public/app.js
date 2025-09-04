@@ -223,7 +223,8 @@ async function loadWorks() {
   }
 }
 
-function initAuthenticatedState() {
+async function initAuthenticatedState() {
+  await (window.loadMenu?.());
   document.getElementById('auth').classList.add('hidden');
   document.getElementById('menu').classList.remove('hidden');
   document.getElementById('works').classList.remove('hidden');
