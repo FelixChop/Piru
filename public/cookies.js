@@ -4,7 +4,13 @@
   document.body.appendChild(layer);
 
   const cookieCount = 40;
-  const images = ['/images/cookie1.png', '/images/cookie2.png', '/images/cookie3.png'];
+  const images = [
+    '/images/cookie1.png',
+    '/images/cookie2.png',
+    '/images/cookie3.png',
+    '/images/cookie4.png',
+    '/images/cookie5.png',
+  ];
 
   const halton = (index, base) => {
     let result = 0;
