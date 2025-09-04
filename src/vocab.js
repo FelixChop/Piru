@@ -38,10 +38,13 @@ function getNextWord(userId, workId) {
   return dueWords[0];
 }
 
-function getRandomWords(userId, count) {
+function getRandomWords(userId, count, workId) {
   const store = vocab.get(userId);
   if (!store) return [];
-  const all = Array.from(store.values());
+  let all = Array.from(store.values());
+  if (workId) {
+    all = all.filter((w) => w.workId === workId);
+  }
   if (all.length === 0) return [];
   const shuffled = all.sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
