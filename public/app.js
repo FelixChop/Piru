@@ -246,17 +246,21 @@ function initAuthenticatedState() {
 }
 
 async function checkAuthState() {
-  // Avoid hitting the progress endpoint when the user is not logged in.
+  const authSection = document.getElementById('auth');
+  // Show the login form immediately if no email is stored.
   if (!localStorage.getItem('email')) {
+    authSection.classList.remove('hidden');
     return;
   }
   try {
     const res = await fetch('/progress');
     if (res.ok) {
       initAuthenticatedState();
+    } else {
+      authSection.classList.remove('hidden');
     }
   } catch (err) {
-    // ignore network errors
+    authSection.classList.remove('hidden');
   }
 }
 
