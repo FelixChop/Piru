@@ -176,6 +176,26 @@ button:hover:not(:disabled) {
   font-weight: bold;
 }
 
+#word.small-text {
+  font-size: 1.5rem;
+  font-weight: normal;
+}
+
+#definition.large-text {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+#question.small-text {
+  font-size: 1.5rem;
+}
+
+#options button.large-text,
+#result.large-text {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
 #citation {
   font-style: italic;
   text-align: left;
