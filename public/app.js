@@ -151,14 +151,14 @@ async function loadWorks() {
   const addWorkButton = document.getElementById('add-work-button');
   if (addWorkContainer) addWorkContainer.classList.add('hidden');
   if (addWorkButton) addWorkButton.classList.remove('hidden');
-  const title = document.getElementById('my-works-title');
+  const titleRow = document.getElementById('my-works-title-row');
   carousel.innerHTML = '';
   if (works.length === 0) {
     container.classList.add('hidden');
-    if (title) title.classList.add('hidden');
+    if (titleRow) titleRow.classList.add('hidden');
   } else {
     container.classList.remove('hidden');
-    if (title) title.classList.remove('hidden');
+    if (titleRow) titleRow.classList.remove('hidden');
     works.forEach((w) => {
       const item = document.createElement('div');
       item.className = 'work-item';
@@ -246,7 +246,7 @@ async function checkAuthState() {
 const addWorkButton = document.getElementById('add-work-button');
 addWorkButton?.addEventListener('click', () => {
   document.getElementById('my-works-container')?.classList.add('hidden');
-  document.querySelector('#works h2[data-i18n="my_works"]')?.classList.add('hidden');
+  document.getElementById('my-works-title-row')?.classList.add('hidden');
   addWorkButton.classList.add('hidden');
   document.getElementById('add-work-container')?.classList.remove('hidden');
 });

@@ -109,7 +109,7 @@ const i18nResources = {
       total_words_encountered: 'Nombre total de mots rencontrés :',
       mastered_words: 'Mots maîtrisés :',
       review_vocabulary: 'Réviser le vocabulaire',
-      my_works: 'Mes œuvres',
+      my_works: 'Médiathèque',
       learn: 'Apprendre',
       delete: 'Supprimer',
       view_stats: 'Voir ses stats',
