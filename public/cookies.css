@@ -1,0 +1,13 @@
+.cookie-background {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.cookie {
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
