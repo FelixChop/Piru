@@ -162,9 +162,20 @@ async function removeWord() {
     window.location.href = '/';
     return;
   }
-  await fetch(`/vocab/${currentWord.id}?userId=${encodeURIComponent(userId)}`, {
-    method: 'DELETE',
-  });
+  try {
+    const res = await fetch(`/vocab/${currentWord.id}?userId=${encodeURIComponent(userId)}`, {
+      method: 'DELETE',
+    });
+    if (!res.ok) {
+      const retry = confirm('Failed to delete word. Retry?');
+      if (retry) return removeWord();
+      return;
+    }
+  } catch (err) {
+    const retry = confirm('Failed to delete word. Retry?');
+    if (retry) return removeWord();
+    return;
+  }
   const filter = (w) => w.id !== currentWord.id;
   seenWords = seenWords.filter(filter);
   reviewQueue = reviewQueue.filter(filter);

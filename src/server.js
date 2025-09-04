@@ -231,7 +231,9 @@ app.delete('/vocab/:id', (req, res) => {
     return res.status(400).json({ error: 'Missing userId' });
   }
   const ok = deleteWord(userId, req.params.id);
-  if (!ok) return res.status(404).json({ error: 'Not found' });
+  if (!ok) {
+    return res.status(404).json({ error: 'User or word not found' });
+  }
   res.status(204).end();
 });
 
