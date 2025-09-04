@@ -121,6 +121,7 @@ function displayWord(word) {
   showBtn.classList.remove('hidden');
   document.getElementById('delete-btn').classList.remove('hidden');
   document.getElementById('add-work-btn').classList.add('hidden');
+  document.getElementById('flashcard-buttons').classList.remove('hidden');
   document.getElementById('flashcard-section').classList.remove('hidden');
 }
 
@@ -156,6 +157,7 @@ async function loadNext() {
       document.getElementById('show-btn').classList.add('hidden');
       document.getElementById('delete-btn').classList.add('hidden');
       document.getElementById('add-work-btn').classList.remove('hidden');
+      document.getElementById('flashcard-buttons').classList.add('hidden');
       document.getElementById('flashcard-section').classList.remove('hidden');
     }
   } else {

@@ -691,3 +691,33 @@ button:hover:not(:disabled) {
   gap: 1rem;
 }
 
+.with-overlay main {
+  padding-bottom: 6rem;
+}
+
+.overlay-buttons {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 -2px 8px rgba(34, 31, 31, 0.1);
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  z-index: 1000;
+}
+
+#review-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#options.overlay-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
