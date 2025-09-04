@@ -520,18 +520,19 @@ button:hover:not(:disabled) {
 .game-list {
   display: grid;
   gap: 1rem;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
 }
 
-@media (min-width: 500px) {
+@media (max-width: 500px) {
   .game-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
 .game {
   position: relative;
   width: 100%;
+  max-width: 250px;
   height: 120px;
   border-radius: 10px;
   background: linear-gradient(135deg, #4a90e2, #9aa5b1);
@@ -544,6 +545,7 @@ button:hover:not(:disabled) {
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s;
+  justify-self: center;
 }
 
 .game span {
