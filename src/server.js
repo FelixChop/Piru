@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const logger = require('./logger');
 const { signup, login } = require('./auth');
 const { init } = require('./db');
 const { addWork, listWorks, listAllWorks, deleteWork, deleteUserWorks } = require('./works');
@@ -31,8 +32,7 @@ app.use(
 init().then(() => {
   if (process.env.NODE_ENV === 'staging') {
     signup('staging@example.com', 'staging123', 'fr', ['en'])
-      // eslint-disable-next-line no-console
-      .then(() => console.log('Staging user ready: staging@example.com / staging123'))
+      .then(() => logger.info('Staging user ready: staging@example.com / staging123'))
       .catch(() => {});
   }
 });
@@ -301,7 +301,7 @@ app.get('/stats/overview', (req, res) => {
 if (require.main === module) {
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+    logger.info(`Server listening on port ${port}`);
   });
 }
 
