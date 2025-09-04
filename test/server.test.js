@@ -26,7 +26,7 @@ before(async () => {
   app = require('../src/server');
 });
 const { _clearWorks } = require('../src/works');
-const { _clear: _clearVocab } = require('../src/vocab');
+const { _clear: _clearVocab, addWords } = require('../src/vocab');
 
 describe('Auth API', () => {
   beforeEach(async () => {
@@ -206,5 +206,19 @@ describe('Vocabulary API', () => {
       .get('/vocab/next')
       .query({ userId: 'u3' });
     assert.strictEqual(after.status, 204);
+  });
+
+  it('removes a manually added word', async () => {
+    const [word] = addWords('u4', [
+      { word: 'transient', definition: 'temporary', citation: 'sample sentence' },
+    ]);
+    const del = await request(app)
+      .delete(`/vocab/${word.id}`)
+      .query({ userId: 'u4' });
+    assert.strictEqual(del.status, 204);
+    const next = await request(app)
+      .get('/vocab/next')
+      .query({ userId: 'u4' });
+    assert.strictEqual(next.status, 204);
   });
 });
