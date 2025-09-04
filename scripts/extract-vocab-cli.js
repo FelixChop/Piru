@@ -27,7 +27,7 @@ async function main() {
 
   try {
     console.error('Extracting vocabulary...');
-    const vocab = await extractVocabulary(text, meta);
+    const { vocab } = await extractVocabulary(text, meta);
     console.log(JSON.stringify(vocab, null, 2));
   } catch (err) {
     console.error('Extraction failed', err.message);
