@@ -21,6 +21,10 @@
   let cookies = 0;
 
   async function loadProgress() {
+    // Prevent unauthenticated users from hitting the progress endpoint.
+    if (!localStorage.getItem('email')) {
+      return;
+    }
     try {
       const res = await fetch('/progress');
       if (res.ok) {

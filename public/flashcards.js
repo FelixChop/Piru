@@ -13,6 +13,11 @@ let progressMax = 10;
 let cookies = 0;
 
 async function loadProgress() {
+  // Only fetch progress if the user is logged in.
+  if (!localStorage.getItem('email')) {
+    updateProgress();
+    return;
+  }
   try {
     const res = await fetch('/progress');
     if (res.ok) {
