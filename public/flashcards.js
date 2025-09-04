@@ -70,10 +70,16 @@ async function loadWorks() {
   }
 }
 
+function formatCitation(text) {
+  const div = document.createElement('div');
+  div.textContent = text || '';
+  return div.innerHTML.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+}
+
 function displayWord(word) {
   const work = worksById.get(word.workId);
   document.getElementById('word').textContent = word.word;
-  document.getElementById('citation').textContent = word.citation || '';
+  document.getElementById('citation').innerHTML = formatCitation(word.citation);
   document.getElementById('citation-source').textContent = work
     ? `${work.title}${work.author ? ' — ' + work.author : ''}`
     : '';
@@ -108,7 +114,7 @@ async function loadNext() {
     } else {
       currentWord = null;
       document.getElementById('word').textContent = i18next.t('no_words');
-      document.getElementById('citation').textContent = '';
+      document.getElementById('citation').innerHTML = '';
       document.getElementById('citation-source').textContent = '';
       document.getElementById('definition').classList.add('hidden');
       document.getElementById('review-buttons').classList.add('hidden');
