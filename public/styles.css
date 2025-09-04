@@ -518,9 +518,15 @@ button:hover:not(:disabled) {
 
 
 .game-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 500px) {
+  .game-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .game {
