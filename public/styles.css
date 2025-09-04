@@ -1,5 +1,6 @@
 @import url('https://fonts.cdnfonts.com/css/gotham');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:ital,wght@1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
   --color-yellow: #fdd301;
@@ -596,8 +597,10 @@ button:hover:not(:disabled) {
   font-weight: bold;
   font-size: 1.3rem;
   transition: color 0.2s, text-shadow 0.2s, background-position 0.6s;
-  font-family: 'Cinzel', serif;
-  font-style: italic;
+  font-family: 'Press Start 2P', cursive;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 2;
 }
 
 .game .identifier {
@@ -605,6 +608,8 @@ button:hover:not(:disabled) {
   margin-top: 0.5rem;
   transition: background 0.2s, border-color 0.2s;
   transform: rotate(var(--rotate));
+  position: relative;
+  z-index: 1;
 }
 
 .game .identifier.square {
@@ -684,11 +689,31 @@ button:hover:not(:disabled) {
   margin-top: 0;
   opacity: 0.8;
   transform: translate(0, 0) rotate(var(--rotate));
-  animation: fall 1s linear forwards;
+  animation: fall 0.5s linear forwards;
+  z-index: 0;
+}
+
+.game .identifier.rain:not(.triangle) {
+  border: 2px solid #000;
+  background: #fff;
+  box-sizing: border-box;
 }
 
 .game .identifier.rain.triangle {
   border-bottom-color: #fff;
+  filter: drop-shadow(0 0 0 #000);
+}
+
+.game .rain-line {
+  position: absolute;
+  top: -20px;
+  width: 2px;
+  height: 40px;
+  background: #000;
+  opacity: 0.8;
+  transform: translate(0, 0) rotate(-30deg);
+  animation: fall 0.5s linear forwards;
+  z-index: 0;
 }
 
 @keyframes gold-sweep {
