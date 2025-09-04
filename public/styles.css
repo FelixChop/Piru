@@ -491,3 +491,15 @@ button:hover:not(:disabled) {
   background-color: var(--color-yellow);
 }
 
+.game-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.game {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+

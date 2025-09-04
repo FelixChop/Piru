@@ -63,7 +63,15 @@ const i18nResources = {
       winner: 'Winner:',
       waiting_for_opponent: 'Waiting for friend...',
       you: 'You',
-      friend: 'Friend'
+      friend: 'Friend',
+      select_game: 'Select a game',
+      flashcard_classic: 'Classic Flashcards',
+      flashcard_reverse: 'Reverse Flashcards',
+      quiz: 'Quiz',
+      quiz_reverse: 'Reverse Quiz',
+      unlock_for_cookie: 'Unlock for 1 cookie',
+      not_enough_cookies: 'Not enough cookies',
+      play: 'Play'
     }
   },
   fr: {
@@ -129,7 +137,15 @@ const i18nResources = {
       winner: 'Gagnant :',
       waiting_for_opponent: 'En attente de ton ami...',
       you: 'Toi',
-      friend: 'Ami'
+      friend: 'Ami',
+      select_game: 'Choisir un jeu',
+      flashcard_classic: 'Flashcard classique',
+      flashcard_reverse: 'Flashcard inversée',
+      quiz: 'Quiz',
+      quiz_reverse: 'Quiz inversé',
+      unlock_for_cookie: 'Débloquer contre 1 cookie',
+      not_enough_cookies: 'Pas assez de cookies',
+      play: 'Jouer'
     }
   },
   es: {
@@ -195,7 +211,15 @@ const i18nResources = {
       winner: 'Ganador:',
       waiting_for_opponent: 'Esperando a tu amigo...',
       you: 'Tú',
-      friend: 'Amigo'
+      friend: 'Amigo',
+      select_game: 'Elegir un juego',
+      flashcard_classic: 'Flashcards clásicas',
+      flashcard_reverse: 'Flashcards inversas',
+      quiz: 'Cuestionario',
+      quiz_reverse: 'Cuestionario inverso',
+      unlock_for_cookie: 'Desbloquear por 1 galleta',
+      not_enough_cookies: 'No hay suficientes galletas',
+      play: 'Jugar'
     }
   },
   it: {
@@ -261,7 +285,15 @@ const i18nResources = {
       winner: 'Vincitore:',
       waiting_for_opponent: "In attesa dell'amico...",
       you: 'Tu',
-      friend: 'Amico'
+      friend: 'Amico',
+      select_game: 'Scegli un gioco',
+      flashcard_classic: 'Flashcard classiche',
+      flashcard_reverse: 'Flashcard invertite',
+      quiz: 'Quiz',
+      quiz_reverse: 'Quiz inverso',
+      unlock_for_cookie: 'Sblocca per 1 biscotto',
+      not_enough_cookies: 'Biscotti insufficienti',
+      play: 'Gioca'
     }
   },
   de: {
@@ -327,7 +359,15 @@ const i18nResources = {
       winner: 'Gewinner:',
       waiting_for_opponent: 'Warte auf deinen Freund...',
       you: 'Du',
-      friend: 'Freund'
+      friend: 'Freund',
+      select_game: 'Wähle ein Spiel',
+      flashcard_classic: 'Klassische Flashcards',
+      flashcard_reverse: 'Umgekehrte Flashcards',
+      quiz: 'Quiz',
+      quiz_reverse: 'Umgekehrtes Quiz',
+      unlock_for_cookie: 'Für 1 Keks freischalten',
+      not_enough_cookies: 'Nicht genug Kekse',
+      play: 'Spielen'
     }
   }
 };
