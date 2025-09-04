@@ -42,20 +42,6 @@ document.getElementById('delete-btn').addEventListener('click', async () => {
   }
 });
 
-document.getElementById('challenge-btn').addEventListener('click', async () => {
-  const res = await fetch('/challenges', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ workId })
-  });
-  if (res.ok) {
-    const data = await res.json();
-    const link = `${window.location.origin}/flashcards.html?workId=${encodeURIComponent(workId)}&challengeId=${encodeURIComponent(data.id)}`;
-    const linkInput = document.getElementById('challenge-link');
-    linkInput.value = link;
-    document.getElementById('challenge-section').classList.remove('hidden');
-  }
-});
 
 const defaultLang = localStorage.getItem('nativeLanguage') || 'en';
 initI18n(defaultLang).then(() => {

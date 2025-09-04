@@ -3,8 +3,6 @@ let currentWord = null;
 let worksById = new Map();
 const params = new URLSearchParams(window.location.search);
 const workId = params.get('workId');
-const challengeId = params.get('challengeId');
-let score = 0;
 let seenWords = [];
 let reviewQueue = [];
 
@@ -86,9 +84,6 @@ function displayWord(word) {
   document.getElementById('delete-btn').classList.remove('hidden');
   document.getElementById('add-work-btn').classList.add('hidden');
   document.getElementById('flashcard-section').classList.remove('hidden');
-  if (challengeId) {
-    document.getElementById('finish-challenge-btn').classList.remove('hidden');
-  }
 }
 
 async function loadNext() {
@@ -121,9 +116,6 @@ async function loadNext() {
       document.getElementById('delete-btn').classList.add('hidden');
       document.getElementById('add-work-btn').classList.remove('hidden');
       document.getElementById('flashcard-section').classList.remove('hidden');
-      if (challengeId) {
-        document.getElementById('finish-challenge-btn').classList.remove('hidden');
-      }
     }
   } else {
     window.location.href = '/';
@@ -145,9 +137,6 @@ async function review(quality) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ wordId: currentWord.id, quality })
   });
-  if (challengeId && quality >= 4) {
-    score++;
-  }
   loadNext();
 }
 
@@ -186,33 +175,6 @@ document.getElementById('add-work-btn').addEventListener('click', () => {
   window.location.href = '/';
 });
 
-async function finishChallenge() {
-  const res = await fetch(`/challenges/${challengeId}/score`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ score })
-  });
-  if (res.ok) {
-    const data = await fetch(`/challenges/${challengeId}`);
-    if (data.ok) {
-      const result = await data.json();
-      const [me, other] = result.scores;
-      document.getElementById('your-score').textContent = `${i18next.t('your_score')} ${me ? me.score : 0}`;
-      document.getElementById('opponent-score').textContent = `${i18next.t('opponent_score')} ${other && typeof other.score === 'number' ? other.score : '-'}`;
-      const winnerEl = document.getElementById('winner');
-      if (result.winner) {
-        winnerEl.textContent = i18next.t('winner') + ' ' + result.winner;
-      } else {
-        winnerEl.textContent = i18next.t('waiting_for_opponent');
-      }
-      document.getElementById('challenge-results').classList.remove('hidden');
-    }
-  }
-}
-
-if (challengeId) {
-  document.getElementById('finish-challenge-btn').addEventListener('click', finishChallenge);
-}
 
 const defaultLang = localStorage.getItem('nativeLanguage') || 'en';
 initI18n(defaultLang).then(() => {
