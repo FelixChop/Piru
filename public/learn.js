@@ -4,15 +4,17 @@
       id: 'flashcard-classic',
       nameKey: 'flashcard_classic',
       link: 'flashcards.html',
-      unlocked: true
+      unlocked: true,
+      shape: 'square'
     },
     {
       id: 'flashcard-reverse',
       nameKey: 'flashcard_reverse',
-      link: 'flashcards.html?mode=reverse'
+      link: 'flashcards.html?mode=reverse',
+      shape: 'diamond'
     },
-    { id: 'quiz', nameKey: 'quiz', link: '#' },
-    { id: 'quiz-reverse', nameKey: 'quiz_reverse', link: '#' }
+    { id: 'quiz', nameKey: 'quiz', link: '#', shape: 'circle' },
+    { id: 'quiz-reverse', nameKey: 'quiz_reverse', link: '#', shape: 'triangle' }
   ];
 
   let progressMax = 0;
@@ -80,6 +82,10 @@
       span.setAttribute('data-i18n', game.nameKey);
       span.textContent = i18next.t(game.nameKey);
       div.appendChild(span);
+
+      const shape = document.createElement('div');
+      shape.className = `identifier ${game.shape || ''}`;
+      div.appendChild(shape);
 
       let hoverText = '';
       if (isUnlocked) {

@@ -547,13 +547,14 @@ button:hover:not(:disabled) {
 
 .game {
   position: relative;
-  width: 150px;
-  height: 150px;
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  width: 200px;
+  height: 120px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4a90e2, #9aa5b1);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   color: #fff;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -564,6 +565,38 @@ button:hover:not(:disabled) {
 .game span {
   pointer-events: none;
   font-weight: bold;
+}
+
+.game .identifier {
+  margin-top: 0.5rem;
+}
+
+.game .identifier.square {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+}
+
+.game .identifier.diamond {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  transform: rotate(45deg);
+}
+
+.game .identifier.circle {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.game .identifier.triangle {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid #fff;
 }
 
 .game:hover {
@@ -580,7 +613,7 @@ button:hover:not(:disabled) {
   display: flex;
   align-items: center;
   justify-content: center;
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  border-radius: 10px;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
   opacity: 0;
