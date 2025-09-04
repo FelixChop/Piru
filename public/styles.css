@@ -654,6 +654,25 @@ button:hover:not(:disabled) {
   margin-top: 1rem;
 }
 
+#subtitle-hist {
+  position: relative;
+  height: 30px;
+  background-color: var(--color-light);
+  margin-bottom: 0.25rem;
+}
+
+#subtitle-hist .bar {
+  position: absolute;
+  bottom: 0;
+  background-color: var(--color-gray);
+}
+
+#subtitle-hist .axis-label {
+  position: absolute;
+  left: -1.5rem;
+  font-size: 0.6rem;
+}
+
 #subtitle-scale {
   position: relative;
   height: 20px;
@@ -666,6 +685,14 @@ button:hover:not(:disabled) {
   bottom: 0;
   width: 2px;
   background-color: var(--color-gray);
+}
+
+#subtitle-scale .tick .label {
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
 }
 
 #subtitle-scale .tick.big {
@@ -687,7 +714,14 @@ button:hover:not(:disabled) {
 #subtitle-word-nav {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  gap: 0.5rem;
+}
+
+#subtitle-timestamp {
+  color: var(--color-gray);
+}
+
+#subtitle-snippet {
+  font-style: italic;
 }
 
