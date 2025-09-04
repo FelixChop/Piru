@@ -43,12 +43,12 @@
     localStorage.setItem('unlockedGames', JSON.stringify(arr));
   }
 
-  async function unlockGame(id) {
-    if (cookies < 1) {
+  async function unlockGame(id, cost = 1) {
+    if (cookies < cost) {
       alert(i18next.t('not_enough_cookies'));
       return false;
     }
-    cookies -= 1;
+    cookies -= cost;
     const userId = localStorage.getItem('userId');
     if (userId) {
       try {
@@ -76,6 +76,7 @@
     const unlocked = getUnlocked();
     games.forEach((game) => {
       const isUnlocked = game.unlocked || unlocked.includes(game.id);
+      const cost = game.cost || 1;
       const div = document.createElement('div');
       div.className = 'game';
       div.id = game.id;
@@ -89,18 +90,20 @@
       if (isUnlocked) {
         hoverText = i18next.t('play');
       } else {
-        hoverText = i18next.t('unlock_for_cookie');
         div.classList.add('locked');
-        if (cookies < 1) {
+        if (cookies < cost) {
           div.classList.add('no-cookie');
+          hoverText = i18next.t('cookie_count', { count: cost });
+        } else {
+          hoverText = i18next.t('unlock_question', { count: cost });
         }
       }
       div.setAttribute('data-hover', hoverText);
 
       div.addEventListener('click', async () => {
         if (div.classList.contains('locked')) {
-          if (cookies < 1) return;
-          const ok = await unlockGame(game.id);
+          if (cookies < cost) return;
+          const ok = await unlockGame(game.id, cost);
           if (ok) window.location.href = game.link;
         } else {
           window.location.href = game.link;

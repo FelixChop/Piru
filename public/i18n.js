@@ -71,6 +71,10 @@ const i18nResources = {
       quiz_reverse: 'Reverse Quiz',
       unlock_for_cookie: 'Unlock for 1 cookie',
       not_enough_cookies: 'Not enough cookies',
+      cookie_count: '{{count}} cookie',
+      cookie_count_plural: '{{count}} cookies',
+      unlock_question: 'Unlock? {{count}} cookie',
+      unlock_question_plural: 'Unlock? {{count}} cookies',
       play: 'Play'
     }
   },
@@ -145,6 +149,10 @@ const i18nResources = {
       quiz_reverse: 'Quiz inversé',
       unlock_for_cookie: 'Débloquer : 1 cookie',
       not_enough_cookies: 'Pas assez de cookies',
+      cookie_count: '{{count}} cookie',
+      cookie_count_plural: '{{count}} cookies',
+      unlock_question: 'Débloquer ? {{count}} cookie',
+      unlock_question_plural: 'Débloquer ? {{count}} cookies',
       play: 'Jouer'
     }
   },
@@ -219,6 +227,10 @@ const i18nResources = {
       quiz_reverse: 'Cuestionario inverso',
       unlock_for_cookie: 'Desbloquear por 1 galleta',
       not_enough_cookies: 'No hay suficientes galletas',
+      cookie_count: '{{count}} galleta',
+      cookie_count_plural: '{{count}} galletas',
+      unlock_question: '¿Desbloquear? {{count}} galleta',
+      unlock_question_plural: '¿Desbloquear? {{count}} galletas',
       play: 'Jugar'
     }
   },
@@ -293,6 +305,10 @@ const i18nResources = {
       quiz_reverse: 'Quiz inverso',
       unlock_for_cookie: 'Sblocca per 1 biscotto',
       not_enough_cookies: 'Biscotti insufficienti',
+      cookie_count: '{{count}} biscotto',
+      cookie_count_plural: '{{count}} biscotti',
+      unlock_question: 'Sbloccare? {{count}} biscotto',
+      unlock_question_plural: 'Sbloccare? {{count}} biscotti',
       play: 'Gioca'
     }
   },
@@ -367,6 +383,10 @@ const i18nResources = {
       quiz_reverse: 'Umgekehrtes Quiz',
       unlock_for_cookie: 'Für 1 Keks freischalten',
       not_enough_cookies: 'Nicht genug Kekse',
+      cookie_count: '{{count}} Keks',
+      cookie_count_plural: '{{count}} Kekse',
+      unlock_question: 'Freischalten? {{count}} Keks',
+      unlock_question_plural: 'Freischalten? {{count}} Kekse',
       play: 'Spielen'
     }
   }
