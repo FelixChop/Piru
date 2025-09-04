@@ -22,6 +22,8 @@ const DEFAULT_THUMBNAILS = {
   custom: '/default-thumbnails/custom.svg',
 };
 
+const SUBTITLE_BATCH_SIZE = 10;
+
 function normalizeTitle(title) {
   return title
     .toLowerCase()
@@ -221,8 +223,10 @@ async function extractVocabulary(text, meta = {}) {
         if (subtitleText) subtitles.push(subtitleText);
       }
     }
-    for (let i = 0; i < subtitles.length; i += 3) {
-      const batch = subtitles.slice(i, i + 3).join(' ');
+    for (let i = 0; i < subtitles.length; i += SUBTITLE_BATCH_SIZE) {
+      const batch = subtitles
+        .slice(i, i + SUBTITLE_BATCH_SIZE)
+        .join(' ');
       const items = await chatgpt.extractVocabularyWithLLM(
         batch,
         undefined,
@@ -376,4 +380,5 @@ module.exports = {
   deleteWork,
   deleteUserWorks,
   _clearWorks,
+  SUBTITLE_BATCH_SIZE,
 };

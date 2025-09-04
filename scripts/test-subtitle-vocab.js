@@ -5,6 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 const chatgpt = require('../src/chatgpt');
+const { SUBTITLE_BATCH_SIZE } = require('../src/works');
 
 // This script now uses the real OpenAI API via chatgpt.extractVocabularyWithLLM.
 // Ensure the environment variable OPENAI_API_KEY is set before running it.
@@ -21,8 +22,10 @@ async function extractFromSubtitle(filePath) {
     }
   }
   const vocabMap = new Map();
-  for (let i = 0; i < subtitles.length; i += 3) {
-    const batch = subtitles.slice(i, i + 3).join(' ');
+  for (let i = 0; i < subtitles.length; i += SUBTITLE_BATCH_SIZE) {
+    const batch = subtitles
+      .slice(i, i + SUBTITLE_BATCH_SIZE)
+      .join(' ');
     const items = await chatgpt.extractVocabularyWithLLM(batch);
     for (const item of items) {
       if (item && item.word && !vocabMap.has(item.word)) {
