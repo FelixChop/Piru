@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="cookies.css" />
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
 </head>
-<body>
+<body class="with-overlay">
   <header>
     <a href="/"><img src="/images/parrot_grey_no_title.png" alt="Piru logo" class="logo" /></a>
     <div class="site-text">
@@ -24,17 +24,19 @@
   <main>
     <section id="flashcard-section" class="hidden">
       <div id="flashcard-content">
-      <div id="word"></div>
+        <div id="word"></div>
+        <div id="definition" class="hidden"></div>
+        <div id="citation"></div>
+        <div id="citation-source"></div>
+        <button id="add-work-btn" class="hidden" data-i18n="add_work"></button>
+      </div>
+      <div id="flashcard-buttons" class="overlay-buttons">
         <button id="show-btn" class="btn-main" data-i18n="show_definition"></button>
         <button id="delete-btn" class="btn-danger" data-i18n="delete_known"></button>
         <div id="review-buttons" class="hidden">
           <button data-quality="1" class="btn-main" data-i18n="i_dont_know"></button>
           <button data-quality="4" class="btn-secondary" data-i18n="i_know"></button>
         </div>
-        <div id="definition" class="hidden"></div>
-        <div id="citation"></div>
-        <div id="citation-source"></div>
-        <button id="add-work-btn" class="hidden" data-i18n="add_work"></button>
       </div>
     </section>
   </main>
