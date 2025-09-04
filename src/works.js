@@ -402,7 +402,8 @@ function listWorks(userId) {
         thumbnail,
         subtitleDuration,
       }) => {
-        const { learned } = getWorkStats(userId, id);
+        const { total, learned } = getWorkStats(userId, id);
+        const known = vocab.length - total;
         return {
           id,
           title,
@@ -414,6 +415,7 @@ function listWorks(userId) {
           subtitleDuration,
           vocabCount: vocab.length,
           learnedCount: learned,
+          knownCount: known,
         };
       }
     );
@@ -431,7 +433,8 @@ function listAllWorks() {
       thumbnail,
       subtitleDuration,
     }) => {
-      const { learned } = getWorkStats(userId, id);
+      const { total, learned } = getWorkStats(userId, id);
+      const known = vocab.length - total;
       return {
         id,
         userId,
@@ -443,6 +446,7 @@ function listAllWorks() {
         subtitleDuration,
         vocabCount: vocab.length,
         learnedCount: learned,
+        knownCount: known,
       };
     }
   );
