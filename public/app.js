@@ -163,11 +163,28 @@ async function loadWorks() {
       const item = document.createElement('div');
       item.className = 'work-item';
 
+      const total = w.vocabCount || 0;
+      const learned = w.learnedCount || 0;
+      const known = w.knownCount || 0;
+      const learnedPercent = total ? (learned / total) * 100 : 0;
+      const knownPercent = total ? (known / total) * 100 : 0;
+      const progress = total ? Math.round(((learned + known) / total) * 100) : 0;
+
       const stats = getDifficulty(w.vocabCount || (w.vocab ? w.vocab.length : 0));
+      const badgeWrapper = document.createElement('div');
+      badgeWrapper.className = 'difficulty-badge-wrapper';
+
       const badge = document.createElement('div');
       badge.className = `difficulty-badge badge-${stats.class}`;
       badge.textContent = stats.label;
-      item.appendChild(badge);
+      badgeWrapper.appendChild(badge);
+
+      const progressText = document.createElement('div');
+      progressText.className = 'difficulty-progress';
+      progressText.textContent = `${progress}%`;
+      badgeWrapper.appendChild(progressText);
+
+      item.appendChild(badgeWrapper);
 
       const thumb = document.createElement('div');
       thumb.className = 'work-thumb';
@@ -182,13 +199,6 @@ async function loadWorks() {
         placeholder.textContent = i18next.t(w.type);
         thumb.appendChild(placeholder);
       }
-
-      const total = w.vocabCount || 0;
-      const learned = w.learnedCount || 0;
-      const known = w.knownCount || 0;
-      const learnedPercent = total ? (learned / total) * 100 : 0;
-      const knownPercent = total ? (known / total) * 100 : 0;
-      const progress = total ? Math.round(((learned + known) / total) * 100) : 0;
 
       const overlay = document.createElement('div');
       overlay.className = 'work-progress';
