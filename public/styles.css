@@ -501,13 +501,22 @@ button:hover:not(:disabled) {
   height: 10px;
   background-color: #ccc;
   border-radius: 5px;
-  overflow: hidden;
+  position: relative;
+  overflow: visible;
 }
 
 #progress-bar {
   height: 100%;
   width: 0%;
   background-color: var(--color-yellow);
+}
+
+#progress-cookie {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  font-size: 1rem;
 }
 
 
