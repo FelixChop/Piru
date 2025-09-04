@@ -173,10 +173,29 @@ button:hover:not(:disabled) {
 
 #word {
   font-size: 2rem;
-  font-family: 'UnifrakturMaguntia', cursive;
-  border: 2px solid #000;
   padding: 0.5rem 1rem;
   display: inline-block;
+  position: relative;
+}
+
+#word::before,
+#word::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 12px;
+  border: 2px solid #000;
+}
+
+#word::before {
+  left: -16px;
+  border-right: none;
+}
+
+#word::after {
+  right: -16px;
+  border-left: none;
 }
 
 #citation {
