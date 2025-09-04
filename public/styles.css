@@ -551,7 +551,18 @@ button:hover:not(:disabled) {
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-size: 0.6rem;
+}
+
+.difficulty-badge-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
   margin-bottom: 0.25rem;
+}
+
+.difficulty-progress {
+  font-size: 0.6rem;
 }
 
 .badge-easy {
