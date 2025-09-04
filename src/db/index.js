@@ -3,13 +3,13 @@ const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 
 const dbFile = process.env.NODE_ENV === 'staging' ? 'piru-staging.sqlite' : 'piru.sqlite';
-// Store the SQLite database in the current working directory instead of the
-// module directory. When Piru is installed as a dependency or run globally,
-// the module directory may be read-only, which would prevent SQLite from
-// creating or writing to the database file and result in a SQLITE_READONLY
-// error. Using `process.cwd()` ensures the database lives in a writable
-// location for the running user.
-const dbPath = path.join(process.cwd(), dbFile);
+// Store the SQLite database in a predictable location so that data persists
+// regardless of where the server is started from. The directory can be
+// overridden with the `PIRU_DB_DIR` environment variable. By default we use
+// the project root.
+const dbDir = process.env.PIRU_DB_DIR || path.resolve(__dirname, '..', '..');
+if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
+const dbPath = path.join(dbDir, dbFile);
 
 const db = new sqlite3.Database(dbPath);
 
