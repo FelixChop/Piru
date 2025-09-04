@@ -712,7 +712,7 @@ button:hover:not(:disabled) {
 }
 
 .game.unlocked:hover span {
-  background: linear-gradient(90deg, #fff 0%, #ffd700 50%, #fff 100%);
+  background: linear-gradient(90deg, #fff 0%, var(--hover-color) 50%, #fff 100%);
   background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -721,11 +721,16 @@ button:hover:not(:disabled) {
 }
 
 .game.unlocked:hover .identifier {
-  background: #ffd700;
+  background: var(--hover-color);
+  border-color: var(--hover-color);
 }
 
 .game.unlocked:hover .identifier.triangle {
-  border-bottom-color: #ffd700;
+  border-bottom-color: var(--hover-color);
+}
+
+.game.unlocked:hover .rain-line {
+  background: var(--hover-color);
 }
 
 .game .identifier.rain {
@@ -734,6 +739,7 @@ button:hover:not(:disabled) {
   left: 0;
   margin-top: 0;
   opacity: 0.8;
+  --dx: 0px;
   transform: translate(0, 0) rotate(var(--rotate));
   animation: fall 0.5s linear forwards;
   z-index: 0;
@@ -754,9 +760,10 @@ button:hover:not(:disabled) {
   position: absolute;
   top: -20px;
   width: 2px;
-  height: 40px;
+  height: 20px;
   background: #000;
   opacity: 0.8;
+  --dx: 0px;
   transform: translate(0, 0) rotate(var(--rotate));
   animation: fall 0.5s linear forwards;
   z-index: 0;
@@ -776,7 +783,7 @@ button:hover:not(:disabled) {
 
 @keyframes fall {
   to {
-    transform: translateY(160px) rotate(var(--rotate));
+    transform: translate(var(--dx), 160px) rotate(var(--rotate));
     opacity: 0;
   }
 }

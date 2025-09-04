@@ -5,16 +5,30 @@
       nameKey: 'flashcard_classic',
       link: 'flashcards.html',
       unlocked: true,
-      shape: 'square'
+      shape: 'square',
+      color: 'var(--color-yellow)'
     },
     {
       id: 'flashcard-reverse',
       nameKey: 'flashcard_reverse',
       link: 'flashcards.html?mode=reverse',
-      shape: 'diamond'
+      shape: 'diamond',
+      color: 'var(--color-blue)'
     },
-    { id: 'quiz', nameKey: 'quiz', link: 'quiz.html', shape: 'circle' },
-    { id: 'quiz-reverse', nameKey: 'quiz_reverse', link: 'quiz.html?mode=reverse', shape: 'triangle' }
+    {
+      id: 'quiz',
+      nameKey: 'quiz',
+      link: 'quiz.html',
+      shape: 'circle',
+      color: 'var(--color-pink)'
+    },
+    {
+      id: 'quiz-reverse',
+      nameKey: 'quiz_reverse',
+      link: 'quiz.html?mode=reverse',
+      shape: 'triangle',
+      color: 'var(--color-green)'
+    }
   ];
 
   const params = new URLSearchParams(window.location.search);
@@ -80,10 +94,12 @@
   }
 
   function rainShapes(div, shape) {
-    const cols = 5;
+    const cols = 10;
     const rows = 4;
     const widthStep = 100 / cols;
     const heightStep = 30;
+    const angle = 30;
+    const dx = 160 * Math.tan((angle * Math.PI) / 180);
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const leftPercent = c * widthStep + widthStep / 2;
@@ -93,6 +109,8 @@
         drop.className = `identifier ${shape} rain`;
         drop.style.left = `calc(${leftPercent}% - 10px)`;
         drop.style.top = `${topOffset}px`;
+        drop.style.setProperty('--rotate', `-${angle}deg`);
+        drop.style.setProperty('--dx', `${dx}px`);
         div.appendChild(drop);
         drop.addEventListener('animationend', () => drop.remove());
 
@@ -100,7 +118,8 @@
         line.className = 'rain-line';
         line.style.left = `calc(${leftPercent}% - 1px)`;
         line.style.top = `${topOffset}px`;
-        line.style.setProperty('--rotate', '-30deg');
+        line.style.setProperty('--rotate', `-${angle}deg`);
+        line.style.setProperty('--dx', `${dx}px`);
         div.appendChild(line);
         line.addEventListener('animationend', () => line.remove());
       }
@@ -118,6 +137,11 @@
       const div = document.createElement('div');
       div.className = 'game';
       div.id = game.id;
+      div.style.setProperty('--hover-color', game.color);
+
+      const icon = document.createElement('div');
+      icon.className = `identifier ${game.shape}`;
+      div.appendChild(icon);
 
       const span = document.createElement('span');
       span.setAttribute('data-i18n', game.nameKey);
