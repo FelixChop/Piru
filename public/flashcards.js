@@ -13,10 +13,8 @@ let progressMax = 10;
 let cookies = 0;
 
 async function loadProgress() {
-  const userId = localStorage.getItem('userId');
-  if (!userId) return;
   try {
-    const res = await fetch(`/progress?userId=${userId}`);
+    const res = await fetch('/progress');
     if (res.ok) {
       const data = await res.json();
       progressMax = data.progressMax;
@@ -44,16 +42,11 @@ function incrementProgress() {
     progress = 0;
     progressMax += 1;
     cookies += 1;
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      fetch('/progress', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, progressMax, cookies }),
-      }).then(() => window.dispatchEvent(new Event('cookiechange')));
-    } else {
-      window.dispatchEvent(new Event('cookiechange'));
-    }
+    fetch('/progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ progressMax, cookies }),
+    }).then(() => window.dispatchEvent(new Event('cookiechange')));
   }
   localStorage.setItem('flashcardProgress', progress);
   updateProgress();
@@ -65,12 +58,12 @@ updateProgress();
 window.addEventListener('cookiechange', loadProgress);
 
 async function loadWorks() {
-  const userId = localStorage.getItem('userId');
-  if (!userId) return;
-  const res = await fetch(`/works?userId=${userId}`);
+  const res = await fetch('/works');
   if (res.ok) {
     const works = await res.json();
     worksById = new Map(works.map((w) => [w.id, w]));
+  } else if (res.status === 401) {
+    window.location.href = '/';
   }
 }
 
@@ -94,19 +87,13 @@ function displayWord(word) {
 }
 
 async function loadNext() {
-  const userId = localStorage.getItem('userId');
-  if (!userId) {
-    window.location.href = '/';
-    return;
-  }
-
   if (reviewQueue.length > 0) {
     currentWord = reviewQueue.shift();
     displayWord(currentWord);
     return;
   }
 
-  const res = await fetch(`/vocab/next?userId=${userId}${workId ? `&workId=${workId}` : ''}`);
+  const res = await fetch(`/vocab/next${workId ? `?workId=${workId}` : ''}`);
   if (res.status === 200) {
     currentWord = await res.json();
     if (!seenWords.find((w) => w.id === currentWord.id)) {
@@ -147,12 +134,11 @@ function showDefinition() {
 }
 
 async function review(quality) {
-  const userId = localStorage.getItem('userId');
   if (!currentWord) return;
   await fetch('/vocab/review', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, wordId: currentWord.id, quality })
+    body: JSON.stringify({ wordId: currentWord.id, quality })
   });
   if (challengeId && quality >= 4) {
     score++;
@@ -161,16 +147,15 @@ async function review(quality) {
 }
 
 async function removeWord() {
-  const userId = localStorage.getItem('userId');
   if (!currentWord) return;
-  if (!userId) {
-    window.location.href = '/';
-    return;
-  }
   try {
-    const res = await fetch(`/vocab/${currentWord.id}?userId=${encodeURIComponent(userId)}`, {
+    const res = await fetch(`/vocab/${currentWord.id}`, {
       method: 'DELETE',
     });
+    if (res.status === 401) {
+      window.location.href = '/';
+      return;
+    }
     if (!res.ok) {
       const retry = confirm('Failed to delete word. Retry?');
       if (retry) return removeWord();
@@ -197,23 +182,21 @@ document.getElementById('add-work-btn').addEventListener('click', () => {
 });
 
 async function finishChallenge() {
-  const userId = localStorage.getItem('userId');
   const res = await fetch(`/challenges/${challengeId}/score`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, score })
+    body: JSON.stringify({ score })
   });
   if (res.ok) {
     const data = await fetch(`/challenges/${challengeId}`);
     if (data.ok) {
       const result = await data.json();
-      const me = result.scores.find((s) => s.userId === userId);
-      const other = result.scores.find((s) => s.userId !== userId);
+      const [me, other] = result.scores;
       document.getElementById('your-score').textContent = `${i18next.t('your_score')} ${me ? me.score : 0}`;
       document.getElementById('opponent-score').textContent = `${i18next.t('opponent_score')} ${other && typeof other.score === 'number' ? other.score : '-'}`;
       const winnerEl = document.getElementById('winner');
       if (result.winner) {
-        winnerEl.textContent = i18next.t('winner') + ' ' + (result.winner === userId ? i18next.t('you') : i18next.t('friend'));
+        winnerEl.textContent = i18next.t('winner') + ' ' + result.winner;
       } else {
         winnerEl.textContent = i18next.t('waiting_for_opponent');
       }

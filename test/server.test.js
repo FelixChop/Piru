@@ -28,6 +28,20 @@ before(async () => {
 const { _clearWorks } = require('../src/works');
 const { _clear: _clearVocab, addWords } = require('../src/vocab');
 
+async function signupAndLogin(email, options = {}) {
+  const agent = request.agent(app);
+  const password = options.password || 'secret';
+  const signupRes = await agent.post('/auth/signup').send({
+    email,
+    password,
+    nativeLanguage: 'en',
+    learningLanguages: ['fr'],
+    ...options,
+  });
+  await agent.post('/auth/login').send({ email, password });
+  return { agent, userId: signupRes.body.id, password };
+}
+
 describe('Auth API', () => {
   beforeEach(async () => {
     await _clearUsers();
@@ -90,13 +104,8 @@ describe('Auth API', () => {
   });
 
   it('deletes an account', async () => {
-    const signup = await request(app)
-      .post('/auth/signup')
-      .send({ email: 'delete@example.com', password: 'secret', nativeLanguage: 'en', learningLanguages: ['fr'] });
-    const userId = signup.body.id;
-    const delRes = await request(app)
-      .delete('/auth/account')
-      .query({ userId });
+    const { agent } = await signupAndLogin('delete@example.com');
+    const delRes = await agent.delete('/auth/account');
     assert.strictEqual(delRes.status, 204);
     const loginRes = await request(app)
       .post('/auth/login')
@@ -104,11 +113,9 @@ describe('Auth API', () => {
     assert.strictEqual(loginRes.status, 401);
   });
 
-  it('returns 404 when deleting a non-existent account', async () => {
-    const res = await request(app)
-      .delete('/auth/account')
-      .query({ userId: 'missing-user' });
-    assert.strictEqual(res.status, 404);
+  it('returns 401 when deleting a non-existent account', async () => {
+    const res = await request(app).delete('/auth/account');
+    assert.strictEqual(res.status, 401);
   });
 });
 
@@ -119,45 +126,38 @@ describe('Works API', () => {
   });
 
   it('creates a work', async () => {
-    const res = await request(app)
+    const { agent } = await signupAndLogin('user1@example.com');
+    const res = await agent
       .post('/works')
-      .send({ userId: 'user1', title: 'Book', author: 'Author', content: 'An extraordinary narrative with enigmatic characters.', type: 'book' });
+      .send({ title: 'Book', author: 'Author', content: 'An extraordinary narrative with enigmatic characters.', type: 'book' });
     assert.strictEqual(res.status, 201);
     assert.strictEqual(res.body.title, 'Book');
     assert.strictEqual(res.body.type, 'book');
   });
 
   it('lists works for a user', async () => {
-    await request(app)
+    const { agent } = await signupAndLogin('user42@example.com');
+    await agent
       .post('/works')
-      .send({ userId: 'user42', title: 'Story', author: 'A', content: 'mysterious adventures occur here', type: 'book' });
-    const res = await request(app)
-      .get('/works')
-      .query({ userId: 'user42' });
+      .send({ title: 'Story', author: 'A', content: 'mysterious adventures occur here', type: 'book' });
+    const res = await agent.get('/works');
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.body.length, 1);
     assert.strictEqual(res.body[0].title, 'Story');
   });
 
   it('deletes a work and its vocabulary', async () => {
-    await request(app)
+    const { agent } = await signupAndLogin('apid@example.com');
+    await agent
       .post('/works')
-      .send({ userId: 'apiDel', title: 'T', author: 'A', content: 'alpha beta', type: 'book' });
-    const list = await request(app)
-      .get('/works')
-      .query({ userId: 'apiDel' });
+      .send({ title: 'T', author: 'A', content: 'alpha beta', type: 'book' });
+    const list = await agent.get('/works');
     const workId = list.body[0].id;
-    let next = await request(app)
-      .get('/vocab/next')
-      .query({ userId: 'apiDel', workId });
+    let next = await agent.get('/vocab/next').query({ workId });
     assert.strictEqual(next.status, 200);
-    const delRes = await request(app)
-      .delete(`/works/${workId}`)
-      .query({ userId: 'apiDel' });
+    const delRes = await agent.delete(`/works/${workId}`);
     assert.strictEqual(delRes.status, 204);
-    next = await request(app)
-      .get('/vocab/next')
-      .query({ userId: 'apiDel', workId });
+    next = await agent.get('/vocab/next').query({ workId });
     assert.strictEqual(next.status, 204);
   });
 });
@@ -168,57 +168,49 @@ describe('Vocabulary API', () => {
   });
 
   it('extracts vocabulary from text', async () => {
-    const res = await request(app)
+    const { agent } = await signupAndLogin('u1@example.com');
+    const res = await agent
       .post('/vocab/extract')
-      .send({ userId: 'u1', text: 'astonishing intricacies manifest' });
+      .send({ text: 'astonishing intricacies manifest' });
     assert.strictEqual(res.status, 201);
   });
 
   it('returns next word and updates after review', async () => {
-    await request(app)
+    const { agent } = await signupAndLogin('u2@example.com');
+    await agent
       .post('/vocab/extract')
-      .send({ userId: 'u2', text: 'remarkable phenomena abound' });
-    const next = await request(app)
-      .get('/vocab/next')
-      .query({ userId: 'u2' });
+      .send({ text: 'remarkable phenomena abound' });
+    const next = await agent.get('/vocab/next');
     assert.strictEqual(next.status, 200);
     const wordId = next.body.id;
-    const review = await request(app)
+    const review = await agent
       .post('/vocab/review')
-      .send({ userId: 'u2', wordId, quality: 4 });
+      .send({ wordId, quality: 4 });
     assert.strictEqual(review.status, 200);
   });
 
   it('deletes a word', async () => {
-    await request(app)
+    const { agent } = await signupAndLogin('u3@example.com');
+    await agent
       .post('/vocab/extract')
-      .send({ userId: 'u3', text: 'peculiar chronicles emerge' });
-    const next = await request(app)
-      .get('/vocab/next')
-      .query({ userId: 'u3' });
+      .send({ text: 'peculiar chronicles emerge' });
+    const next = await agent.get('/vocab/next');
     assert.strictEqual(next.status, 200);
     const wordId = next.body.id;
-    const del = await request(app)
-      .delete(`/vocab/${wordId}`)
-      .query({ userId: 'u3' });
+    const del = await agent.delete(`/vocab/${wordId}`);
     assert.strictEqual(del.status, 204);
-    const after = await request(app)
-      .get('/vocab/next')
-      .query({ userId: 'u3' });
+    const after = await agent.get('/vocab/next');
     assert.strictEqual(after.status, 204);
   });
 
   it('removes a manually added word', async () => {
-    const [word] = addWords('u4', [
+    const { agent, userId } = await signupAndLogin('u4@example.com');
+    const [word] = addWords(userId, [
       { word: 'transient', definition: 'temporary', citation: 'sample sentence' },
     ]);
-    const del = await request(app)
-      .delete(`/vocab/${word.id}`)
-      .query({ userId: 'u4' });
+    const del = await agent.delete(`/vocab/${word.id}`);
     assert.strictEqual(del.status, 204);
-    const next = await request(app)
-      .get('/vocab/next')
-      .query({ userId: 'u4' });
+    const next = await agent.get('/vocab/next');
     assert.strictEqual(next.status, 204);
   });
 });

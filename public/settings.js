@@ -3,14 +3,8 @@
   if (btn) {
     btn.addEventListener('click', async () => {
       if (!confirm(i18next.t('confirm_delete_account'))) return;
-      const userId = localStorage.getItem('userId');
-      if (!userId) {
-        window.location.href = '/';
-        return;
-      }
-      const res = await fetch(`/auth/account?userId=${userId}`, { method: 'DELETE' });
+      const res = await fetch('/auth/account', { method: 'DELETE' });
       if (res.ok) {
-        localStorage.removeItem('userId');
         localStorage.removeItem('nativeLanguage');
         localStorage.removeItem('email');
         localStorage.removeItem('isAdmin');

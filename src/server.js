@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
 const logger = require('./logger');
 const { signup, login } = require('./auth');
 const { init } = require('./db');
@@ -19,6 +20,13 @@ const { createChallenge, submitScore, getChallenge } = require('./challenges');
 
 const app = express();
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'dev-secret',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
 app.use(
   '/thumbnails',
@@ -51,17 +59,25 @@ app.post('/auth/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await login(email, password);
+    req.session.userId = user.id;
     res.json(user);
   } catch (err) {
     res.status(401).json({ error: err.message });
   }
 });
 
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) return res.status(500).json({ error: 'Failed to logout' });
+    res.status(204).end();
+  });
+});
+
 // Progress endpoints
 app.get('/progress', async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   if (!userId) {
-    return res.status(400).json({ error: 'Missing userId' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   try {
     const progress = await getProgress(userId);
@@ -73,8 +89,12 @@ app.get('/progress', async (req, res) => {
 });
 
 app.post('/progress', async (req, res) => {
-  const { userId, progressMax, cookies } = req.body;
-  if (!userId || typeof progressMax !== 'number' || typeof cookies !== 'number') {
+  const userId = req.session.userId;
+  const { progressMax, cookies } = req.body;
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  if (typeof progressMax !== 'number' || typeof cookies !== 'number') {
     return res.status(400).json({ error: 'Missing fields' });
   }
   try {
@@ -86,9 +106,9 @@ app.post('/progress', async (req, res) => {
 });
 
 app.delete('/auth/account', async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   if (!userId) {
-    return res.status(400).json({ error: 'Missing userId' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   try {
     // Remove any user-specific data before deleting the actual user record.
@@ -100,6 +120,7 @@ app.delete('/auth/account', async (req, res) => {
     if (!deleted) {
       return res.status(404).json({ error: 'User not found' });
     }
+    req.session.destroy(() => {});
     res.status(204).end();
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete account' });
@@ -108,11 +129,15 @@ app.delete('/auth/account', async (req, res) => {
 
 // Works endpoints
 app.post('/works', async (req, res) => {
-  const { userId, title, author, content, type, thumbnail } = req.body;
+  const userId = req.session.userId;
+  const { title, author, content, type, thumbnail } = req.body;
   // `content` may be an empty string if no preview text is available, so we only
   // validate that the field exists rather than requiring a truthy value.
-  if (!userId || typeof content === 'undefined' || !type) {
-    return res.status(400).json({ error: 'Missing userId, content, or type' });
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  if (typeof content === 'undefined' || !type) {
+    return res.status(400).json({ error: 'Missing content or type' });
   }
   try {
     const work = await addWork(userId, title, author, content, type, thumbnail);
@@ -123,18 +148,18 @@ app.post('/works', async (req, res) => {
 });
 
 app.get('/works', (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   if (!userId) {
-    return res.status(400).json({ error: 'Missing userId' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   const works = listWorks(userId);
   res.json(works);
 });
 
 app.delete('/works/:id', (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   if (!userId) {
-    return res.status(400).json({ error: 'Missing userId' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   const ok = deleteWork(req.params.id, userId);
   if (!ok) return res.status(404).json({ error: 'Not found' });
@@ -143,7 +168,7 @@ app.delete('/works/:id', (req, res) => {
 
 // Admin endpoints
 app.get('/admin/users', async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   try {
     if (!(await isAdmin(userId))) {
       return res.status(403).json({ error: 'Forbidden' });
@@ -156,7 +181,7 @@ app.get('/admin/users', async (req, res) => {
 });
 
 app.delete('/admin/users/:id', async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   try {
     if (!(await isAdmin(userId))) {
       return res.status(403).json({ error: 'Forbidden' });
@@ -169,7 +194,7 @@ app.delete('/admin/users/:id', async (req, res) => {
 });
 
 app.get('/admin/works', async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   if (!(await isAdmin(userId))) {
     return res.status(403).json({ error: 'Forbidden' });
   }
@@ -178,7 +203,7 @@ app.get('/admin/works', async (req, res) => {
 });
 
 app.delete('/admin/works/:id', async (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   if (!(await isAdmin(userId))) {
     return res.status(403).json({ error: 'Forbidden' });
   }
@@ -189,9 +214,13 @@ app.delete('/admin/works/:id', async (req, res) => {
 
 // Vocabulary endpoints
 app.post('/vocab/extract', async (req, res) => {
-  const { userId, text } = req.body;
-  if (!userId || !text) {
-    return res.status(400).json({ error: 'Missing userId or text' });
+  const userId = req.session.userId;
+  const { text } = req.body;
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  if (!text) {
+    return res.status(400).json({ error: 'Missing text' });
   }
   try {
     const vocab = await extractVocabularyWithLLM(text);
@@ -203,9 +232,10 @@ app.post('/vocab/extract', async (req, res) => {
 });
 
 app.get('/vocab/next', (req, res) => {
-  const { userId, workId } = req.query;
+  const userId = req.session.userId;
+  const { workId } = req.query;
   if (!userId) {
-    return res.status(400).json({ error: 'Missing userId' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   const word = getNextWord(userId, workId);
   if (!word) return res.status(204).end();
@@ -213,8 +243,12 @@ app.get('/vocab/next', (req, res) => {
 });
 
 app.post('/vocab/review', (req, res) => {
-  const { userId, wordId, quality } = req.body;
-  if (!userId || !wordId || typeof quality !== 'number') {
+  const userId = req.session.userId;
+  const { wordId, quality } = req.body;
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  if (!wordId || typeof quality !== 'number') {
     return res.status(400).json({ error: 'Missing fields' });
   }
   try {
@@ -226,9 +260,9 @@ app.post('/vocab/review', (req, res) => {
 });
 
 app.delete('/vocab/:id', (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   if (!userId) {
-    return res.status(400).json({ error: 'Missing userId' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   const ok = deleteWord(userId, req.params.id);
   if (!ok) {
@@ -239,18 +273,26 @@ app.delete('/vocab/:id', (req, res) => {
 
 // Challenge endpoints
 app.post('/challenges', (req, res) => {
-  const { userId, workId } = req.body;
-  if (!userId || !workId) {
-    return res.status(400).json({ error: 'Missing userId or workId' });
+  const userId = req.session.userId;
+  const { workId } = req.body;
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  if (!workId) {
+    return res.status(400).json({ error: 'Missing workId' });
   }
   const { id } = createChallenge(workId, userId);
   res.status(201).json({ id });
 });
 
 app.post('/challenges/:id/score', (req, res) => {
-  const { userId, score } = req.body;
-  if (!userId || typeof score !== 'number') {
-    return res.status(400).json({ error: 'Missing userId or score' });
+  const userId = req.session.userId;
+  const { score } = req.body;
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  if (typeof score !== 'number') {
+    return res.status(400).json({ error: 'Missing score' });
   }
   const challenge = submitScore(req.params.id, userId, score);
   if (!challenge) return res.status(404).json({ error: 'Not found' });
@@ -290,9 +332,9 @@ app.get('/api/lyrics/text', async (req, res) => {
 
 // Stats endpoints
 app.get('/stats/overview', (req, res) => {
-  const { userId } = req.query;
+  const userId = req.session.userId;
   if (!userId) {
-    return res.status(400).json({ error: 'Missing userId' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   const overview = getOverview(userId);
   res.json(overview);

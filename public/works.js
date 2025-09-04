@@ -26,7 +26,7 @@ function renderBookResults(results) {
         const res = await fetch('/works', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId, title, author, content, type: 'book' })
+          body: JSON.stringify({ title, author, content, type: 'book' })
         });
         if (res.ok) {
           loadWorks();
@@ -90,7 +90,7 @@ function renderMovieResults(results) {
         const res = await fetch('/works', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId, title: detail.Title, author: '', content, type, thumbnail: poster })
+          body: JSON.stringify({ title: detail.Title, author: '', content, type, thumbnail: poster })
         });
         if (res.ok) {
           loadWorks();
@@ -172,7 +172,6 @@ function renderLyricsResults(results) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              userId,
               title: song.title,
               author: song.artist.name,
               content,

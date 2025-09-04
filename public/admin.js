@@ -1,7 +1,7 @@
-const adminId = localStorage.getItem('userId');
+// Uses server-side session to identify the admin.
 
 async function loadUsers() {
-  const res = await fetch(`/admin/users?userId=${adminId}`);
+  const res = await fetch('/admin/users');
   const users = await res.json();
   const list = document.getElementById('user-list');
   list.innerHTML = '';
@@ -11,7 +11,7 @@ async function loadUsers() {
     const btn = document.createElement('button');
     btn.textContent = 'Delete';
     btn.addEventListener('click', async () => {
-      await fetch(`/admin/users/${u.id}?userId=${adminId}`, { method: 'DELETE' });
+      await fetch(`/admin/users/${u.id}`, { method: 'DELETE' });
       loadUsers();
     });
     li.appendChild(btn);
@@ -20,7 +20,7 @@ async function loadUsers() {
 }
 
 async function loadWorks() {
-  const res = await fetch(`/admin/works?userId=${adminId}`);
+  const res = await fetch('/admin/works');
   const works = await res.json();
   const list = document.getElementById('admin-work-list');
   list.innerHTML = '';
@@ -30,7 +30,7 @@ async function loadWorks() {
     const btn = document.createElement('button');
     btn.textContent = 'Delete';
     btn.addEventListener('click', async () => {
-      await fetch(`/admin/works/${w.id}?userId=${adminId}`, { method: 'DELETE' });
+      await fetch(`/admin/works/${w.id}`, { method: 'DELETE' });
       loadWorks();
     });
     li.appendChild(btn);

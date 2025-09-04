@@ -22,6 +22,20 @@ let app;
 const { _clearUsers } = require('../src/auth');
 const { _clearWorks } = require('../src/works');
 
+async function signupAndLogin(email, options = {}) {
+  const agent = request.agent(app);
+  const password = options.password || 'pass';
+  const signupRes = await agent.post('/auth/signup').send({
+    email,
+    password,
+    nativeLanguage: 'en',
+    learningLanguages: ['fr'],
+    ...options,
+  });
+  await agent.post('/auth/login').send({ email, password });
+  return { agent, userId: signupRes.body.id };
+}
+
 describe('Admin API', () => {
   before(async () => {
     await init();
@@ -34,44 +48,27 @@ describe('Admin API', () => {
   });
 
   it('allows admin to list users', async () => {
-    const adminRes = await request(app)
-      .post('/auth/signup')
-      .send({ email: 'admin@example.com', password: 'pass', nativeLanguage: 'en', learningLanguages: ['fr'], isAdmin: true });
-    const adminId = adminRes.body.id;
-    await request(app)
-      .post('/auth/signup')
-      .send({ email: 'user@example.com', password: 'pass', nativeLanguage: 'fr', learningLanguages: ['en'] });
-    const res = await request(app)
-      .get('/admin/users')
-      .query({ userId: adminId });
+    const { agent: adminAgent } = await signupAndLogin('admin@example.com', { isAdmin: true });
+    await signupAndLogin('user@example.com');
+    const res = await adminAgent.get('/admin/users');
     assert.strictEqual(res.status, 200);
     assert.ok(res.body.length >= 2);
   });
 
   it('prevents non-admin from accessing user list', async () => {
-    await request(app)
-      .post('/auth/signup')
-      .send({ email: 'admin2@example.com', password: 'pass', nativeLanguage: 'en', learningLanguages: ['fr'], isAdmin: true });
-    const userRes = await request(app)
-      .post('/auth/signup')
-      .send({ email: 'user2@example.com', password: 'pass', nativeLanguage: 'fr', learningLanguages: ['en'] });
-    const res = await request(app)
-      .get('/admin/users')
-      .query({ userId: userRes.body.id });
+    await signupAndLogin('admin2@example.com', { isAdmin: true });
+    const { agent: userAgent } = await signupAndLogin('user2@example.com');
+    const res = await userAgent.get('/admin/users');
     assert.strictEqual(res.status, 403);
   });
 
   it('lists works for admin', async () => {
-    const adminRes = await request(app)
-      .post('/auth/signup')
-      .send({ email: 'admin3@example.com', password: 'pass', nativeLanguage: 'en', learningLanguages: ['fr'], isAdmin: true });
-    const adminId = adminRes.body.id;
-    await request(app)
+    const { agent: adminAgent } = await signupAndLogin('admin3@example.com', { isAdmin: true });
+    const { agent: userAgent } = await signupAndLogin('u1@example.com');
+    await userAgent
       .post('/works')
-      .send({ userId: 'u1', title: 'Book', author: 'A', content: 'An extraordinary narrative.', type: 'book' });
-    const res = await request(app)
-      .get('/admin/works')
-      .query({ userId: adminId });
+      .send({ title: 'Book', author: 'A', content: 'An extraordinary narrative.', type: 'book' });
+    const res = await adminAgent.get('/admin/works');
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.body.length, 1);
   });
