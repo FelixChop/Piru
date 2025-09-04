@@ -8,6 +8,57 @@ let score = 0;
 let seenWords = [];
 let reviewQueue = [];
 
+let progress = Number(localStorage.getItem('flashcardProgress') || '0');
+let progressMax = 10;
+let cookies = 0;
+
+async function loadProgress() {
+  const userId = localStorage.getItem('userId');
+  if (!userId) return;
+  try {
+    const res = await fetch(`/progress?userId=${userId}`);
+    if (res.ok) {
+      const data = await res.json();
+      progressMax = data.progressMax;
+      cookies = data.cookies;
+    }
+    updateProgress();
+  } catch (err) {}
+}
+
+function updateProgress() {
+  const bar = document.getElementById('progress-bar');
+  if (bar) {
+    bar.style.width = `${(progress / progressMax) * 100}%`;
+  }
+}
+
+function incrementProgress() {
+  progress += 1;
+  if (progress >= progressMax) {
+    progress = 0;
+    progressMax += 1;
+    cookies += 1;
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      fetch('/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, progressMax, cookies }),
+      }).then(() => window.dispatchEvent(new Event('cookiechange')));
+    } else {
+      window.dispatchEvent(new Event('cookiechange'));
+    }
+  }
+  localStorage.setItem('flashcardProgress', progress);
+  updateProgress();
+}
+
+loadProgress();
+updateProgress();
+
+window.addEventListener('cookiechange', loadProgress);
+
 async function loadWorks() {
   const userId = localStorage.getItem('userId');
   if (!userId) return;
@@ -83,6 +134,7 @@ async function loadNext() {
 }
 
 function showDefinition() {
+  incrementProgress();
   document.getElementById('definition').classList.remove('hidden');
   document.getElementById('review-buttons').classList.remove('hidden');
   document.getElementById('show-btn').classList.add('hidden');

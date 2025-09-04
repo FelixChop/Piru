@@ -21,18 +21,31 @@ function init() {
       if (err) return reject(err);
       db.all("PRAGMA table_info(users);", (err, rows) => {
         if (err) return reject(err);
-        const hasIsAdmin = rows.some((row) => row.name === 'is_admin');
-        if (!hasIsAdmin) {
-          db.run(
-            'ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0',
-            (err) => {
-              if (err) return reject(err);
-              resolve();
-            }
-          );
-        } else {
-          resolve();
+        const queries = [];
+        if (!rows.some((row) => row.name === 'is_admin')) {
+          queries.push('ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0');
         }
+        if (!rows.some((row) => row.name === 'flashcard_progress_max')) {
+          queries.push(
+            'ALTER TABLE users ADD COLUMN flashcard_progress_max INTEGER DEFAULT 10'
+          );
+        }
+        if (!rows.some((row) => row.name === 'cookie_count')) {
+          queries.push(
+            'ALTER TABLE users ADD COLUMN cookie_count INTEGER DEFAULT 0'
+          );
+        }
+        if (queries.length === 0) return resolve();
+        db.serialize(() => {
+          const runNext = (idx) => {
+            if (idx >= queries.length) return resolve();
+            db.run(queries[idx], (err) => {
+              if (err) return reject(err);
+              runNext(idx + 1);
+            });
+          };
+          runNext(0);
+        });
       });
     });
   });

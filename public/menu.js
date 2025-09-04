@@ -39,9 +39,48 @@
         localStorage.removeItem('nativeLanguage');
         localStorage.removeItem('email');
         localStorage.removeItem('isAdmin');
+        localStorage.removeItem('flashcardProgress');
+        localStorage.removeItem('cookieCount');
         window.location.href = '/';
       });
     }
+
+    const cookieDisplay = menu.querySelector('#cookie-count');
+    async function renderCookies() {
+      if (cookieDisplay) {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          cookieDisplay.textContent = '🍪0';
+          return;
+        }
+        const res = await fetch(`/progress?userId=${userId}`);
+        if (res.ok) {
+          const data = await res.json();
+          cookieDisplay.textContent = `🍪${data.cookies}`;
+        }
+      }
+    }
+    if (cookieDisplay) {
+      cookieDisplay.addEventListener('click', async () => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+        const res = await fetch(`/progress?userId=${userId}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.cookies > 0) {
+          const newCookies = data.cookies - 1;
+          await fetch('/progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, progressMax: data.progressMax, cookies: newCookies }),
+          });
+          alert('Piru is happy!');
+          window.dispatchEvent(new Event('cookiechange'));
+        }
+      });
+    }
+    renderCookies();
+    window.addEventListener('cookiechange', renderCookies);
 
     const userId = localStorage.getItem('userId');
     if (!userId) {
