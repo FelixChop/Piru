@@ -79,6 +79,17 @@
     return true;
   }
 
+  function rainShapes(div, shape) {
+    for (let i = 0; i < 5; i++) {
+      const drop = document.createElement('div');
+      drop.className = `identifier ${shape} rain`;
+      drop.style.left = `${Math.random() * 100}%`;
+      drop.style.animationDelay = `${Math.random() * 0.5}s`;
+      div.appendChild(drop);
+      drop.addEventListener('animationend', () => drop.remove());
+    }
+  }
+
   function renderGames() {
     const container = document.getElementById('games');
     if (!container) return;
@@ -119,6 +130,12 @@
           if (ok) window.location.href = game.link;
         } else {
           window.location.href = game.link;
+        }
+      });
+
+      div.addEventListener('mouseenter', () => {
+        if (isUnlocked) {
+          rainShapes(div, game.shape || '');
         }
       });
 
