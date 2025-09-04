@@ -81,6 +81,21 @@ function formatCitation(text) {
   return `"${html}"`;
 }
 
+function setReviewState(revealed) {
+  const reviewButtons = document.getElementById('review-buttons');
+  const showBtn = document.getElementById('show-btn');
+  const deleteBtn = document.getElementById('delete-btn');
+  if (revealed) {
+    reviewButtons.classList.remove('hidden');
+    showBtn.classList.add('hidden');
+    deleteBtn.classList.add('hidden');
+  } else {
+    reviewButtons.classList.add('hidden');
+    showBtn.classList.remove('hidden');
+    deleteBtn.classList.remove('hidden');
+  }
+}
+
 function displayWord(word) {
   const work = worksById.get(word.workId);
   const showBtn = document.getElementById('show-btn');
@@ -117,9 +132,7 @@ function displayWord(word) {
     showBtn.dataset.i18n = 'show_definition';
     showBtn.textContent = i18next.t('show_definition');
   }
-  document.getElementById('review-buttons').classList.add('hidden');
-  showBtn.classList.remove('hidden');
-  document.getElementById('delete-btn').classList.remove('hidden');
+  setReviewState(false);
   document.getElementById('add-work-btn').classList.add('hidden');
   document.getElementById('flashcard-buttons').classList.remove('hidden');
   document.getElementById('flashcard-section').classList.remove('hidden');
@@ -174,9 +187,7 @@ function showDefinition() {
   } else {
     document.getElementById('definition').classList.remove('hidden');
   }
-  document.getElementById('review-buttons').classList.remove('hidden');
-  document.getElementById('show-btn').classList.add('hidden');
-  document.getElementById('delete-btn').classList.add('hidden');
+  setReviewState(true);
 }
 
 async function review(quality) {
