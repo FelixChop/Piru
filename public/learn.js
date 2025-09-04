@@ -91,19 +91,17 @@
       shape.className = `identifier ${game.shape || ''}`;
       div.appendChild(shape);
 
-      let hoverText = '';
       if (isUnlocked) {
-        hoverText = i18next.t('play');
+        div.classList.add('unlocked');
       } else {
         div.classList.add('locked');
         if (cookies < cost) {
           div.classList.add('no-cookie');
-          hoverText = i18next.t('cookie_count', { count: cost });
+          div.setAttribute('data-hover', i18next.t('cookie_count', { count: cost }));
         } else {
-          hoverText = i18next.t('unlock_question', { count: cost });
+          div.setAttribute('data-hover', i18next.t('unlock_question', { count: cost }));
         }
       }
-      div.setAttribute('data-hover', hoverText);
 
       div.addEventListener('click', async () => {
         if (div.classList.contains('locked')) {
