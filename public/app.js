@@ -1,4 +1,4 @@
-let userId = localStorage.getItem('userId');
+let userId = null;
 const storedNativeLanguage = localStorage.getItem('nativeLanguage');
 
 const nativeLanguages = [
@@ -66,7 +66,6 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   const data = await res.json();
   if (res.ok) {
     userId = data.id;
-    localStorage.setItem('userId', userId);
     if (data.email) {
       localStorage.setItem('email', data.email);
     }
@@ -122,7 +121,7 @@ document.getElementById('work-form').addEventListener('submit', async (e) => {
     const res = await fetch('/works', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, title, author, content, type })
+      body: JSON.stringify({ title, author, content, type })
     });
     const data = await res.json();
     if (res.ok) {
@@ -143,7 +142,8 @@ function getDifficulty(count) {
 }
 
 async function loadWorks() {
-  const res = await fetch(`/works?userId=${userId}`);
+  const res = await fetch('/works');
+  if (!res.ok) return;
   const works = await res.json();
   const container = document.getElementById('my-works-container');
   const carousel = document.getElementById('work-carousel');
@@ -245,6 +245,4 @@ function initAuthenticatedState() {
   loadWorks();
 }
 
-if (userId) {
-  initAuthenticatedState();
-}
+initAuthenticatedState();

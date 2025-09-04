@@ -33,9 +33,11 @@
 
     const logoutLink = menu.querySelector('#logout-link');
     if (logoutLink) {
-      logoutLink.addEventListener('click', (e) => {
+      logoutLink.addEventListener('click', async (e) => {
         e.preventDefault();
-        localStorage.removeItem('userId');
+        try {
+          await fetch('/logout', { method: 'POST' });
+        } catch (err) {}
         localStorage.removeItem('nativeLanguage');
         localStorage.removeItem('email');
         localStorage.removeItem('isAdmin');
@@ -48,15 +50,12 @@
     const cookieDisplay = menu.querySelector('#cookie-count');
     async function renderCookies() {
       if (cookieDisplay) {
-        const userId = localStorage.getItem('userId');
-        if (!userId) {
-          cookieDisplay.textContent = '🍪0';
-          return;
-        }
-        const res = await fetch(`/progress?userId=${userId}`);
+        const res = await fetch('/progress');
         if (res.ok) {
           const data = await res.json();
           cookieDisplay.textContent = `🍪${data.cookies}`;
+        } else {
+          cookieDisplay.textContent = '🍪0';
         }
       }
     }
@@ -68,12 +67,8 @@
     renderCookies();
     window.addEventListener('cookiechange', renderCookies);
 
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      menu.classList.add('hidden');
-    } else {
-      menu.classList.remove('hidden');
-    }
+    // Show menu by default; server-side session determines access.
+    menu.classList.remove('hidden');
   }
 
   document.addEventListener('DOMContentLoaded', loadMenu);

@@ -19,10 +19,8 @@
   let cookies = 0;
 
   async function loadProgress() {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
     try {
-      const res = await fetch(`/progress?userId=${userId}`);
+      const res = await fetch('/progress');
       if (res.ok) {
         const data = await res.json();
         progressMax = data.progressMax;
@@ -49,17 +47,14 @@
       return false;
     }
     cookies -= 1;
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      try {
-        await fetch('/progress', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId, progressMax, cookies })
-        });
-        window.dispatchEvent(new Event('cookiechange'));
-      } catch (err) {}
-    }
+    try {
+      await fetch('/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ progressMax, cookies })
+      });
+      window.dispatchEvent(new Event('cookiechange'));
+    } catch (err) {}
     const unlocked = getUnlocked();
     if (!unlocked.includes(id)) {
       unlocked.push(id);

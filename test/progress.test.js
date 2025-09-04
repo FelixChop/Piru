@@ -17,7 +17,8 @@ beforeEach(async () => {
 
 describe('Progress API', () => {
   it('retrieves and updates progress data', async () => {
-    const signup = await request(app)
+    const agent = request.agent(app);
+    await agent
       .post('/auth/signup')
       .send({
         email: 'prog@example.com',
@@ -25,19 +26,22 @@ describe('Progress API', () => {
         nativeLanguage: 'en',
         learningLanguages: ['fr'],
       });
-    const userId = signup.body.id;
+    await agent.post('/auth/login').send({
+      email: 'prog@example.com',
+      password: 'secret',
+    });
 
-    let res = await request(app).get('/progress').query({ userId });
+    let res = await agent.get('/progress');
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.body.progressMax, 10);
     assert.strictEqual(res.body.cookies, 0);
 
-    res = await request(app)
+    res = await agent
       .post('/progress')
-      .send({ userId, progressMax: 11, cookies: 2 });
+      .send({ progressMax: 11, cookies: 2 });
     assert.strictEqual(res.status, 204);
 
-    res = await request(app).get('/progress').query({ userId });
+    res = await agent.get('/progress');
     assert.strictEqual(res.status, 200);
     assert.strictEqual(res.body.progressMax, 11);
     assert.strictEqual(res.body.cookies, 2);

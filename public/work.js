@@ -1,14 +1,17 @@
 (function() {
 const params = new URLSearchParams(window.location.search);
 const workId = params.get('workId');
-const userId = localStorage.getItem('userId');
-if (!userId || !workId) {
+if (!workId) {
   window.location.href = '/';
   return;
 }
 
 async function loadWork() {
-  const res = await fetch(`/works?userId=${userId}`);
+  const res = await fetch('/works');
+  if (!res.ok) {
+    window.location.href = '/';
+    return;
+  }
   const works = await res.json();
   const work = works.find(w => w.id === workId);
   if (!work) {
@@ -33,7 +36,7 @@ document.getElementById('learn-btn').addEventListener('click', () => {
 
 document.getElementById('delete-btn').addEventListener('click', async () => {
   if (!confirm(i18next.t('confirm_delete_work'))) return;
-  const res = await fetch(`/works/${encodeURIComponent(workId)}?userId=${userId}`, { method: 'DELETE' });
+  const res = await fetch(`/works/${encodeURIComponent(workId)}`, { method: 'DELETE' });
   if (res.ok) {
     window.location.href = '/';
   }
@@ -43,7 +46,7 @@ document.getElementById('challenge-btn').addEventListener('click', async () => {
   const res = await fetch('/challenges', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, workId })
+    body: JSON.stringify({ workId })
   });
   if (res.ok) {
     const data = await res.json();

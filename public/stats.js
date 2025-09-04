@@ -1,16 +1,13 @@
 (function() {
 
 async function loadStats() {
-  const userId = localStorage.getItem('userId');
-  if (!userId) {
-    window.location.href = '/';
-    return;
-  }
-  const res = await fetch(`/stats/overview?userId=${userId}`);
+  const res = await fetch('/stats/overview');
   if (res.ok) {
     const data = await res.json();
     document.getElementById('total-words').textContent = data.totalWords;
     document.getElementById('mastered-words').textContent = data.masteredWords;
+  } else if (res.status === 401) {
+    window.location.href = '/';
   }
 }
 
