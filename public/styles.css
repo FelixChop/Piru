@@ -315,11 +315,13 @@ button:hover:not(:disabled) {
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
+  font-style: italic;
 }
 
 #menu-email::before {
   content: '👤';
   margin-right: 0.5rem;
+  font-style: normal;
 }
 
 #menu-options a:hover {
@@ -343,6 +345,16 @@ button:hover:not(:disabled) {
 
 #stats-link::before {
   content: '📈';
+  margin-right: 0.5rem;
+}
+
+#settings-link::before {
+  content: '⚙️';
+  margin-right: 0.5rem;
+}
+
+#logout-link::before {
+  content: '🚪';
   margin-right: 0.5rem;
 }
 
