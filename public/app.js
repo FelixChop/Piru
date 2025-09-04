@@ -147,7 +147,7 @@ async function loadWorks() {
   const works = await res.json();
   const container = document.getElementById('my-works-container');
   const carousel = document.getElementById('work-carousel');
-  const title = document.querySelector('#works h2[data-i18n="my_works"]');
+  const title = document.getElementById('my-works-title');
   carousel.innerHTML = '';
 // <<<<<<< codex/add-default-thumbnail-by-item-type
 //   works.forEach((w) => {
