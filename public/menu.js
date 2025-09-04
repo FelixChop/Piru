@@ -1,9 +1,9 @@
 (function() {
   function loadMenu() {
     const menu = document.getElementById('menu');
-    if (!menu) return;
+    if (!menu) return Promise.resolve();
 
-    fetch('/menu.html')
+    return fetch('/menu.html')
       .then((res) => res.text())
       .then((html) => {
         menu.innerHTML = html;
@@ -14,7 +14,9 @@
           setupMenu(menu);
         }
       })
-      .catch((err) => console.error('Failed to load menu:', err));
+      .catch((err) => {
+        console.error('Failed to load menu:', err);
+      });
   }
 
   function setupMenu(menu) {
@@ -84,5 +86,6 @@
     menu.classList.remove('hidden');
   }
 
+  window.loadMenu = loadMenu;
   document.addEventListener('DOMContentLoaded', loadMenu);
 })();
