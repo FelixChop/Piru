@@ -83,7 +83,17 @@ async function loadQuestion() {
       btn.textContent = mode === 'reverse' ? w.word : w.definition;
       btn.disabled = false;
     });
-    document.getElementById('result').textContent = '';
+    const resultEl = document.getElementById('result');
+    if (mode === 'reverse') {
+      questionEl.classList.add('small-text');
+      document.querySelectorAll('#options button').forEach((b) => b.classList.add('large-text'));
+      resultEl.classList.add('large-text');
+    } else {
+      questionEl.classList.remove('small-text');
+      document.querySelectorAll('#options button').forEach((b) => b.classList.remove('large-text'));
+      resultEl.classList.remove('large-text');
+    }
+    resultEl.textContent = '';
     document.getElementById('options').classList.remove('hidden');
     document.getElementById('add-work-btn').classList.add('hidden');
     document.getElementById('quiz-section').classList.remove('hidden');

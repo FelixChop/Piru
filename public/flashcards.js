@@ -84,11 +84,15 @@ function formatCitation(text) {
 function displayWord(word) {
   const work = worksById.get(word.workId);
   const showBtn = document.getElementById('show-btn');
+  const wordEl = document.getElementById('word');
+  const definitionEl = document.getElementById('definition');
   if (mode === 'reverse') {
-    document.getElementById('word').textContent = word.definition;
-    document.getElementById('word').classList.remove('hidden');
-    document.getElementById('definition').textContent = word.word;
-    document.getElementById('definition').classList.add('hidden');
+    wordEl.textContent = word.definition;
+    wordEl.classList.remove('hidden');
+    wordEl.classList.add('small-text');
+    definitionEl.textContent = word.word;
+    definitionEl.classList.add('hidden');
+    definitionEl.classList.add('large-text');
     document.getElementById('citation').innerHTML = formatCitation(word.citation);
     document.getElementById('citation').classList.add('hidden');
     document.getElementById('citation-source').textContent = work
@@ -98,16 +102,18 @@ function displayWord(word) {
     showBtn.dataset.i18n = 'show_word';
     showBtn.textContent = i18next.t('show_word');
   } else {
-    document.getElementById('word').textContent = word.word;
-    document.getElementById('word').classList.remove('hidden');
+    wordEl.textContent = word.word;
+    wordEl.classList.remove('hidden');
+    wordEl.classList.remove('small-text');
+    definitionEl.textContent = word.definition;
+    definitionEl.classList.add('hidden');
+    definitionEl.classList.remove('large-text');
     document.getElementById('citation').innerHTML = formatCitation(word.citation);
     document.getElementById('citation').classList.remove('hidden');
     document.getElementById('citation-source').textContent = work
       ? `${work.title}${work.author ? ' — ' + work.author : ''}`
       : '';
     document.getElementById('citation-source').classList.remove('hidden');
-    document.getElementById('definition').textContent = word.definition;
-    document.getElementById('definition').classList.add('hidden');
     showBtn.dataset.i18n = 'show_definition';
     showBtn.textContent = i18next.t('show_definition');
   }
