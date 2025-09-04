@@ -143,7 +143,7 @@ const i18nResources = {
       flashcard_reverse: 'Flashcard inversée',
       quiz: 'Quiz',
       quiz_reverse: 'Quiz inversé',
-      unlock_for_cookie: 'Débloquer contre 1 cookie',
+      unlock_for_cookie: 'Débloquer : 1 cookie',
       not_enough_cookies: 'Pas assez de cookies',
       play: 'Jouer'
     }
