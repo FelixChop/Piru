@@ -19,7 +19,14 @@ const { getProgress, updateProgress } = require('./progress');
 const { createChallenge, submitScore, getChallenge } = require('./challenges');
 
 const app = express();
-app.use(express.json());
+// Only parse JSON bodies for non-GET/HEAD requests that declare a JSON payload.
+const jsonParser = express.json();
+app.use((req, res, next) => {
+  if (req.method === 'GET' || req.method === 'HEAD' || !req.is('application/json')) {
+    return next();
+  }
+  return jsonParser(req, res, next);
+});
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'dev-secret',

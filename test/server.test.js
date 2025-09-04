@@ -125,6 +125,11 @@ describe('Works API', () => {
     _clearVocab();
   });
 
+  it('requires authentication to list works', async () => {
+    const res = await request(app).get('/works');
+    assert.strictEqual(res.status, 401);
+  });
+
   it('creates a work', async () => {
     const { agent } = await signupAndLogin('user1@example.com');
     const res = await agent
