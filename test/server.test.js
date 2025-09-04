@@ -188,4 +188,23 @@ describe('Vocabulary API', () => {
       .send({ userId: 'u2', wordId, quality: 4 });
     assert.strictEqual(review.status, 200);
   });
+
+  it('deletes a word', async () => {
+    await request(app)
+      .post('/vocab/extract')
+      .send({ userId: 'u3', text: 'peculiar chronicles emerge' });
+    const next = await request(app)
+      .get('/vocab/next')
+      .query({ userId: 'u3' });
+    assert.strictEqual(next.status, 200);
+    const wordId = next.body.id;
+    const del = await request(app)
+      .delete(`/vocab/${wordId}`)
+      .query({ userId: 'u3' });
+    assert.strictEqual(del.status, 204);
+    const after = await request(app)
+      .get('/vocab/next')
+      .query({ userId: 'u3' });
+    assert.strictEqual(after.status, 204);
+  });
 });
