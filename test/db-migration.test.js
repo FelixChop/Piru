@@ -40,7 +40,13 @@ describe('Database migration', () => {
       });
     });
     const hasIsAdmin = columns.some((col) => col.name === 'is_admin');
+    const hasProgressMax = columns.some(
+      (col) => col.name === 'flashcard_progress_max'
+    );
+    const hasCookie = columns.some((col) => col.name === 'cookie_count');
     assert.strictEqual(hasIsAdmin, true);
+    assert.strictEqual(hasProgressMax, true);
+    assert.strictEqual(hasCookie, true);
     await close();
   });
 

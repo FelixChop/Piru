@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash TEXT NOT NULL,
     native_language TEXT NOT NULL,
     is_admin INTEGER DEFAULT 0,
+    flashcard_progress_max INTEGER DEFAULT 10,
+    cookie_count INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

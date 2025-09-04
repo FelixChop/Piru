@@ -6,7 +6,14 @@ const { addWork, listWorks, listAllWorks, deleteWork, deleteUserWorks } = requir
 const { isAdmin, listUsers, deleteUser } = require('./admin');
 const { extractVocabularyWithLLM } = require('./chatgpt');
 const { getOverview } = require('./stats');
-const { addWords, getNextWord, reviewWord, deleteUserVocab, deleteWord } = require('./vocab');
+const {
+  addWords,
+  getNextWord,
+  reviewWord,
+  deleteUserVocab,
+  deleteWord,
+} = require('./vocab');
+const { getProgress, updateProgress } = require('./progress');
 const { createChallenge, submitScore, getChallenge } = require('./challenges');
 
 const app = express();
@@ -47,6 +54,34 @@ app.post('/auth/login', async (req, res) => {
     res.json(user);
   } catch (err) {
     res.status(401).json({ error: err.message });
+  }
+});
+
+// Progress endpoints
+app.get('/progress', async (req, res) => {
+  const { userId } = req.query;
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId' });
+  }
+  try {
+    const progress = await getProgress(userId);
+    if (!progress) return res.status(404).json({ error: 'User not found' });
+    res.json(progress);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load progress' });
+  }
+});
+
+app.post('/progress', async (req, res) => {
+  const { userId, progressMax, cookies } = req.body;
+  if (!userId || typeof progressMax !== 'number' || typeof cookies !== 'number') {
+    return res.status(400).json({ error: 'Missing fields' });
+  }
+  try {
+    await updateProgress(userId, progressMax, cookies);
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update progress' });
   }
 });
 

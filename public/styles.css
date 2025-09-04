@@ -179,6 +179,12 @@ button:hover:not(:disabled) {
   z-index: 2000;
 }
 
+.cookie-counter {
+  margin-right: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
 .burger-button {
   background: none;
   border: none;
@@ -467,5 +473,20 @@ button:hover:not(:disabled) {
 .badge-advanced {
   background-color: var(--color-pink);
   color: var(--color-light);
+}
+
+#progress-container {
+  width: 100%;
+  height: 10px;
+  background-color: #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: var(--color-yellow);
 }
 
