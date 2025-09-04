@@ -11,14 +11,12 @@ Tu ne sélectionnes que le vocabulaire **vraiment difficile** ou **trompeur** po
 Ta réponse doit être en **format JSON strict**, avec les clés suivantes :
 
 * "word" : la forme affichée à l’apprenant.
-
-  * Pour les verbes ou expressions verbales : utilise toujours **l’infinitif avec "to"*, et garde entre parenthèses le contexte si nécessaire.
-  * Exemple : "to roll down (the window)"
 * "lemma" : la forme canonique à apprendre (sans contexte).
 
+  * Pour les verbes ou expressions verbales : utilise toujours **l’infinitif avec "to"*
   * Exemple : "to roll down"
-* "definition" : une traduction et une explication claire en français.
-* "citation" : la citation exacte du texte, avec le mot en *italique*.
+* "definition" : une traduction et une définition claire en français pour bien comprendre la signification du mot de vocabulaire en anglais.
+* "citation" : la citation exacte du texte, avec le mot ou l'expression en *italique*.
 * "to_learn" : booléen (`true` si c’est du vocabulaire à apprendre, `false` si c’est une référence culturelle ou un contexte mais pas un mot à mémoriser).
 
 Si aucun mot n’est difficile, tu renvoies un JSON vide : `[]`. Il est possible qu'aucun mot ne soit difficile.
