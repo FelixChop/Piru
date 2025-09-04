@@ -80,20 +80,30 @@
   }
 
   function rainShapes(div, shape) {
-    const numDrops = 20;
-    for (let i = 0; i < numDrops; i++) {
-      const left = Math.random() * 100;
-      const drop = document.createElement('div');
-      drop.className = `identifier ${shape} rain`;
-      drop.style.left = `calc(${left}% - 10px)`;
-      div.appendChild(drop);
-      drop.addEventListener('animationend', () => drop.remove());
+    const cols = 5;
+    const rows = 4;
+    const widthStep = 100 / cols;
+    const heightStep = 30;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const leftPercent = c * widthStep + widthStep / 2;
+        const topOffset = -20 - r * heightStep;
 
-      const line = document.createElement('div');
-      line.className = 'rain-line';
-      line.style.left = `calc(${left}% - 1px)`;
-      div.appendChild(line);
-      line.addEventListener('animationend', () => line.remove());
+        const drop = document.createElement('div');
+        drop.className = `identifier ${shape} rain`;
+        drop.style.left = `calc(${leftPercent}% - 10px)`;
+        drop.style.top = `${topOffset}px`;
+        div.appendChild(drop);
+        drop.addEventListener('animationend', () => drop.remove());
+
+        const line = document.createElement('div');
+        line.className = 'rain-line';
+        line.style.left = `calc(${leftPercent}% - 1px)`;
+        line.style.top = `${topOffset}px`;
+        line.style.setProperty('--rotate', '-30deg');
+        div.appendChild(line);
+        line.addEventListener('animationend', () => line.remove());
+      }
     }
   }
 
@@ -113,10 +123,6 @@
       span.setAttribute('data-i18n', game.nameKey);
       span.textContent = i18next.t(game.nameKey);
       div.appendChild(span);
-
-      const shape = document.createElement('div');
-      shape.className = `identifier ${game.shape || ''}`;
-      div.appendChild(shape);
 
       if (isUnlocked) {
         div.classList.add('unlocked');
