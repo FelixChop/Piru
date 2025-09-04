@@ -174,7 +174,7 @@ async function getBookPages(title, author) {
 
 async function extractVocabulary(text, meta = {}) {
   const vocabMap = new Map();
-  if (!text) return [];
+  if (!text) return { vocab: [], subtitleDuration: 0 };
 
   function mergeItems(items) {
     for (const item of items || []) {
@@ -185,6 +185,11 @@ async function extractVocabulary(text, meta = {}) {
         : item.citation
         ? [item.citation]
         : [];
+      const times = Array.isArray(item.timestamps)
+        ? item.timestamps
+        : item.timestamp !== undefined
+        ? [item.timestamp]
+        : [];
       if (!vocabMap.has(key)) {
         const citations = incoming.slice(0, 3);
         const first = citations[0];
@@ -193,6 +198,8 @@ async function extractVocabulary(text, meta = {}) {
           word: item.word, // preserve original casing
           citation: first ?? item.citation,
           citations,
+          timestamp: times[0],
+          timestamps: times,
         });
       } else {
         const existing = vocabMap.get(key);
@@ -209,31 +216,80 @@ async function extractVocabulary(text, meta = {}) {
         if (!existing.citation && existing.citations.length) {
           existing.citation = existing.citations[0];
         }
+        existing.timestamps = existing.timestamps || [];
+        for (const t of times) {
+          if (t != null && !existing.timestamps.includes(t)) {
+            existing.timestamps.push(t);
+          }
+        }
+        if (existing.timestamp == null && existing.timestamps.length) {
+          existing.timestamp = existing.timestamps[0];
+        }
+        if (existing.timestamp != null && times.length) {
+          existing.timestamp = Math.min(existing.timestamp, ...times);
+        }
       }
     }
   }
 
   if (meta.isSubtitle) {
+    const parseTimestamp = (s) => {
+      const m = s.match(/(\d{2}):(\d{2}):(\d{2}),(\d{3})/);
+      if (!m) return 0;
+      const [h, mi, se, ms] = m.slice(1).map(Number);
+      return h * 3600 + mi * 60 + se + ms / 1000;
+    };
     const blocks = text.split(/\r?\n\r?\n/);
     const subtitles = [];
+    let lastTime = 0;
     for (const block of blocks) {
       const lines = block.trim().split(/\r?\n/);
       if (lines.length >= 3) {
+        const [startStr, endStr] = lines[1].split(/ --> /);
+        const start = parseTimestamp(startStr);
+        const end = endStr ? parseTimestamp(endStr) : start;
+        if (end > lastTime) lastTime = end;
         const subtitleText = lines.slice(2).join(' ').trim();
-        if (subtitleText) subtitles.push(subtitleText);
+        if (subtitleText) subtitles.push({ text: subtitleText, time: start });
       }
     }
     for (let i = 0; i < subtitles.length; i += SUBTITLE_BATCH_SIZE) {
-      const batch = subtitles
-        .slice(i, i + SUBTITLE_BATCH_SIZE)
-        .join(' ');
+      const batchSubs = subtitles.slice(i, i + SUBTITLE_BATCH_SIZE);
+      const batch = batchSubs.map((s) => s.text).join(' ');
       const items = await chatgpt.extractVocabularyWithLLM(
         batch,
         undefined,
         meta
       );
+      for (const item of items || []) {
+        const cits = Array.isArray(item.citations)
+          ? item.citations
+          : item.citation
+          ? [item.citation]
+          : [];
+        const ts = [];
+        for (const cit of cits) {
+          const match = batchSubs.find(
+            (sub) =>
+              sub.text === cit ||
+              sub.text.includes(cit) ||
+              cit.includes(sub.text)
+          );
+          if (match) {
+            ts.push(match.time);
+          }
+        }
+        if (ts.length) {
+          item.timestamp = ts[0];
+          item.timestamps = ts;
+        }
+      }
       mergeItems(items);
     }
+    const vocabList = Array.from(vocabMap.values()).sort(
+      (a, b) => (a.timestamp ?? Infinity) - (b.timestamp ?? Infinity)
+    );
+    return { vocab: vocabList, subtitleDuration: lastTime };
   } else {
     const CHUNK_SIZE = 10_000;
     for (let i = 0; i < text.length; i += CHUNK_SIZE) {
@@ -245,8 +301,9 @@ async function extractVocabulary(text, meta = {}) {
       );
       mergeItems(items);
     }
+    const vocabList = Array.from(vocabMap.values());
+    return { vocab: vocabList, subtitleDuration: 0 };
   }
-  return Array.from(vocabMap.values());
 }
 
 /**
@@ -275,8 +332,16 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
   }
   const vocabPages = [];
   let allVocab = [];
+  let subtitleDuration = 0;
   for (const { page, text } of pages) {
-    const vocab = await extractVocabulary(text, { title, author, isSubtitle });
+    const { vocab, subtitleDuration: sd } = await extractVocabulary(text, {
+      title,
+      author,
+      isSubtitle,
+    });
+    if (isSubtitle) {
+      subtitleDuration = sd;
+    }
     const withWork = Array.isArray(vocab)
       ? vocab.map((v) => ({ ...v, workId: id, page }))
       : [];
@@ -300,12 +365,22 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
     pages: vocabPages,
     vocab: allVocab,
     thumbnail,
+    subtitleDuration,
   };
   works.set(id, work);
   if (allVocab.length) {
     addWords(userId, allVocab);
   }
-  return { id, title, author, type, pages: vocabPages, vocab: allVocab, thumbnail };
+  return {
+    id,
+    title,
+    author,
+    type,
+    pages: vocabPages,
+    vocab: allVocab,
+    thumbnail,
+    subtitleDuration,
+  };
 }
 
 /**
@@ -316,9 +391,8 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
 function listWorks(userId) {
   return Array.from(works.values())
     .filter((w) => w.userId === userId)
-    .map(({ id, title, author, type, vocab, pages, thumbnail }) => {
-      const { learned } = getWorkStats(userId, id);
-      return {
+    .map(
+      ({
         id,
         title,
         author,
@@ -326,15 +400,37 @@ function listWorks(userId) {
         vocab,
         pages,
         thumbnail,
-        vocabCount: vocab.length,
-        learnedCount: learned,
-      };
-    });
+        subtitleDuration,
+      }) => {
+        const { learned } = getWorkStats(userId, id);
+        return {
+          id,
+          title,
+          author,
+          type,
+          vocab,
+          pages,
+          thumbnail,
+          subtitleDuration,
+          vocabCount: vocab.length,
+          learnedCount: learned,
+        };
+      }
+    );
 }
 
 function listAllWorks() {
   return Array.from(works.values()).map(
-    ({ id, userId, title, author, vocab, pages, thumbnail }) => {
+    ({
+      id,
+      userId,
+      title,
+      author,
+      vocab,
+      pages,
+      thumbnail,
+      subtitleDuration,
+    }) => {
       const { learned } = getWorkStats(userId, id);
       return {
         id,
@@ -344,6 +440,7 @@ function listAllWorks() {
         vocab,
         pages,
         thumbnail,
+        subtitleDuration,
         vocabCount: vocab.length,
         learnedCount: learned,
       };

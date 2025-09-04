@@ -228,7 +228,7 @@ describe('Works management', () => {
         citation: 'Second',
       },
     ];
-    const vocab = await extractVocabulary('irrelevant', {});
+    const { vocab } = await extractVocabulary('irrelevant', {});
     assert.strictEqual(vocab.length, 1);
     assert.strictEqual(vocab[0].word, 'Alpha');
     assert.deepStrictEqual(vocab[0].citations, ['First', 'Second']);

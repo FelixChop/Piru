@@ -8,7 +8,9 @@ if (!workId) {
 
 function initSubtitleNav(work) {
   if (work.type !== 'movie' && work.type !== 'series') return;
-  const vocab = work.vocab || [];
+  const vocab = (work.vocab || [])
+    .filter((v) => typeof v.timestamp === 'number')
+    .sort((a, b) => a.timestamp - b.timestamp);
   if (!vocab.length) return;
   const nav = document.getElementById('subtitle-nav');
   nav.classList.remove('hidden');
@@ -16,12 +18,13 @@ function initSubtitleNav(work) {
   const hist = document.getElementById('subtitle-hist');
   scale.innerHTML = '';
   hist.innerHTML = '';
-  const duration = vocab.length * 5; // fake minutes
-  const bins = Math.ceil(duration / 5);
+  const durationSec = work.subtitleDuration || Math.max(...vocab.map((v) => v.timestamp));
+  const roundedDurationSec = Math.ceil(durationSec / 300) * 300 || 300;
+  const bins = Math.ceil(roundedDurationSec / 300);
   const counts = new Array(bins).fill(0);
-  vocab.forEach((_, i) => {
-    const bin = Math.floor(i);
-    counts[bin]++;
+  vocab.forEach((entry) => {
+    const bin = Math.floor((entry.timestamp || 0) / 300);
+    if (bin < counts.length) counts[bin]++;
   });
   const maxCount = Math.max(...counts, 1);
   counts.forEach((count, i) => {
@@ -43,14 +46,14 @@ function initSubtitleNav(work) {
   zeroLabel.textContent = '0';
   hist.appendChild(zeroLabel);
 
-  for (let m = 0; m <= duration; m += 5) {
+  for (let t = 0; t <= roundedDurationSec; t += 300) {
     const tick = document.createElement('div');
-    tick.className = 'tick ' + (m % 30 === 0 ? 'big' : 'small');
-    tick.style.left = `${(m / duration) * 100}%`;
-    if (m === 5 || (m % 30 === 0 && m !== 0)) {
+    tick.className = 'tick ' + (t % 1800 === 0 ? 'big' : 'small');
+    tick.style.left = `${(t / roundedDurationSec) * 100}%`;
+    if (t === 300 || (t % 1800 === 0 && t !== 0)) {
       const label = document.createElement('span');
       label.className = 'label';
-      label.textContent = m === 5 ? '5 min' : `${m} min`;
+      label.textContent = t === 300 ? '5 min' : `${t / 60} min`;
       tick.appendChild(label);
     }
     scale.appendChild(tick);
@@ -66,11 +69,12 @@ function initSubtitleNav(work) {
     const entry = vocab[index];
     wordSpan.textContent = entry ? entry.word : '';
     snippetSpan.textContent = entry && entry.citation ? entry.citation : '';
-    const minutes = index * 5;
-    const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
-    timeSpan.textContent = `${h}:${String(m).padStart(2, '0')}`;
-    marker.style.left = `${((index * 5) / duration) * 100}%`;
+    const time = entry ? entry.timestamp : 0;
+    const h = Math.floor(time / 3600);
+    const m = Math.floor((time % 3600) / 60);
+    const s = Math.floor(time % 60);
+    timeSpan.textContent = `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    marker.style.left = `${(time / roundedDurationSec) * 100}%`;
   }
   document.getElementById('prev-word').addEventListener('click', () => {
     if (index > 0) {
