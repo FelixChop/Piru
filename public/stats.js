@@ -15,7 +15,7 @@ async function loadStats() {
 }
 
 document.getElementById('review-vocab-button').addEventListener('click', () => {
-  window.location.href = 'flashcards.html';
+  window.location.href = 'learn.html';
 });
 
 const defaultLang = localStorage.getItem('nativeLanguage') || 'en';

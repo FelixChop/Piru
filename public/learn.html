@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piru - Learn</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="cookies.css" />
+</head>
+<body>
+  <header>
+    <a href="/"><img src="/images/parrot_grey_no_title.png" alt="Piru logo" class="logo" /></a>
+    <div class="site-text">
+      <h1><a href="/" class="home-link" data-i18n="site_name">Piru</a></h1>
+      <p data-i18n="tagline">Learn foreign languages while having fun.</p>
+    </div>
+    <nav id="menu" class="hidden"></nav>
+  </header>
+  <h2 class="page-title" data-i18n="select_game"></h2>
+  <main>
+    <div id="games" class="game-list"></div>
+  </main>
+  <script src="/lib/i18next/umd/i18next.min.js"></script>
+  <script src="i18n.js"></script>
+  <script src="learn.js"></script>
+  <script src="menu.js"></script>
+  <script src="cookies.js"></script>
+</body>
+</html>
