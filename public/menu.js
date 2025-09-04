@@ -18,6 +18,7 @@
   function setupMenu(menu) {
     const toggle = menu.querySelector('#menu-toggle');
     const options = menu.querySelector('#menu-options');
+    const header = document.querySelector('header');
     if (!toggle || !options) return;
 
     toggle.addEventListener('click', () => {
@@ -25,6 +26,9 @@
       toggle.classList.toggle('open');
       const expanded = !options.classList.contains('hidden');
       toggle.setAttribute('aria-expanded', expanded);
+      if (header) {
+        header.classList.toggle('menu-open', expanded);
+      }
     });
 
     const logoutLink = menu.querySelector('#logout-link');
