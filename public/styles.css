@@ -804,6 +804,10 @@ button:hover:not(:disabled) {
   gap: 0.5rem;
 }
 
+#review-buttons.hidden {
+  display: none;
+}
+
 #options.overlay-buttons {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
