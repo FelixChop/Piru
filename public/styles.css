@@ -76,8 +76,9 @@ main {
 .page-title {
   max-width: 600px;
   margin: 2rem auto;
-  font-family: 'Cinzel', serif;
-  font-style: italic;
+  font-family: 'Gotham', sans-serif;
+  font-style: normal;
+  color: #000;
 }
 
 .title-row {
