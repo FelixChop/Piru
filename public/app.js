@@ -183,6 +183,25 @@ async function loadWorks() {
         thumb.appendChild(placeholder);
       }
 
+      const total = w.vocabCount || 0;
+      const learned = w.learnedCount || 0;
+      const known = w.knownCount || 0;
+      const learnedPercent = total ? (learned / total) * 100 : 0;
+      const knownPercent = total ? (known / total) * 100 : 0;
+      const progress = total ? Math.round(((learned + known) / total) * 100) : 0;
+
+      const overlay = document.createElement('div');
+      overlay.className = 'work-progress';
+      const kpi = document.createElement('div');
+      kpi.className = 'work-progress-kpi';
+      kpi.textContent = `${progress}%`;
+      overlay.appendChild(kpi);
+      const chart = document.createElement('div');
+      chart.className = 'work-progress-chart';
+      chart.style.background = `conic-gradient(var(--color-yellow) 0 ${learnedPercent}%, var(--color-green) ${learnedPercent}% ${learnedPercent + knownPercent}%, var(--color-gray-light) ${learnedPercent + knownPercent}% 100%)`;
+      overlay.appendChild(chart);
+      thumb.appendChild(overlay);
+
       item.appendChild(thumb);
 
       const caption = document.createElement('div');
