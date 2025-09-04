@@ -13,8 +13,8 @@
       link: 'flashcards.html?mode=reverse',
       shape: 'diamond'
     },
-    { id: 'quiz', nameKey: 'quiz', link: '#', shape: 'circle' },
-    { id: 'quiz-reverse', nameKey: 'quiz_reverse', link: '#', shape: 'triangle' }
+    { id: 'quiz', nameKey: 'quiz', link: 'quiz.html', shape: 'circle' },
+    { id: 'quiz-reverse', nameKey: 'quiz_reverse', link: 'quiz.html?mode=reverse', shape: 'triangle' }
   ];
 
   let progressMax = 0;

@@ -3,6 +3,7 @@ let currentWord = null;
 let worksById = new Map();
 const params = new URLSearchParams(window.location.search);
 const workId = params.get('workId');
+const mode = params.get('mode');
 let seenWords = [];
 let reviewQueue = [];
 
@@ -78,15 +79,36 @@ function formatCitation(text) {
 
 function displayWord(word) {
   const work = worksById.get(word.workId);
-  document.getElementById('word').textContent = word.word;
-  document.getElementById('citation').innerHTML = formatCitation(word.citation);
-  document.getElementById('citation-source').textContent = work
-    ? `${work.title}${work.author ? ' — ' + work.author : ''}`
-    : '';
-  document.getElementById('definition').textContent = word.definition;
-  document.getElementById('definition').classList.add('hidden');
+  const showBtn = document.getElementById('show-btn');
+  if (mode === 'reverse') {
+    document.getElementById('word').textContent = word.definition;
+    document.getElementById('word').classList.remove('hidden');
+    document.getElementById('definition').textContent = word.word;
+    document.getElementById('definition').classList.add('hidden');
+    document.getElementById('citation').innerHTML = formatCitation(word.citation);
+    document.getElementById('citation').classList.add('hidden');
+    document.getElementById('citation-source').textContent = work
+      ? `${work.title}${work.author ? ' — ' + work.author : ''}`
+      : '';
+    document.getElementById('citation-source').classList.add('hidden');
+    showBtn.dataset.i18n = 'show_word';
+    showBtn.textContent = i18next.t('show_word');
+  } else {
+    document.getElementById('word').textContent = word.word;
+    document.getElementById('word').classList.remove('hidden');
+    document.getElementById('citation').innerHTML = formatCitation(word.citation);
+    document.getElementById('citation').classList.remove('hidden');
+    document.getElementById('citation-source').textContent = work
+      ? `${work.title}${work.author ? ' — ' + work.author : ''}`
+      : '';
+    document.getElementById('citation-source').classList.remove('hidden');
+    document.getElementById('definition').textContent = word.definition;
+    document.getElementById('definition').classList.add('hidden');
+    showBtn.dataset.i18n = 'show_definition';
+    showBtn.textContent = i18next.t('show_definition');
+  }
   document.getElementById('review-buttons').classList.add('hidden');
-  document.getElementById('show-btn').classList.remove('hidden');
+  showBtn.classList.remove('hidden');
   document.getElementById('delete-btn').classList.remove('hidden');
   document.getElementById('add-work-btn').classList.add('hidden');
   document.getElementById('flashcard-section').classList.remove('hidden');
@@ -114,8 +136,11 @@ async function loadNext() {
     } else {
       currentWord = null;
       document.getElementById('word').textContent = i18next.t('no_words');
+      document.getElementById('word').classList.remove('hidden');
       document.getElementById('citation').innerHTML = '';
+      document.getElementById('citation').classList.add('hidden');
       document.getElementById('citation-source').textContent = '';
+      document.getElementById('citation-source').classList.add('hidden');
       document.getElementById('definition').classList.add('hidden');
       document.getElementById('review-buttons').classList.add('hidden');
       document.getElementById('show-btn').classList.add('hidden');
@@ -130,7 +155,14 @@ async function loadNext() {
 
 function showDefinition() {
   incrementProgress();
-  document.getElementById('definition').classList.remove('hidden');
+  if (mode === 'reverse') {
+    document.getElementById('word').classList.add('hidden');
+    document.getElementById('definition').classList.remove('hidden');
+    document.getElementById('citation').classList.remove('hidden');
+    document.getElementById('citation-source').classList.remove('hidden');
+  } else {
+    document.getElementById('definition').classList.remove('hidden');
+  }
   document.getElementById('review-buttons').classList.remove('hidden');
   document.getElementById('show-btn').classList.add('hidden');
   document.getElementById('delete-btn').classList.add('hidden');

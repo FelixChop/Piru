@@ -213,4 +213,17 @@ describe('Vocabulary API', () => {
     const next = await agent.get('/vocab/next');
     assert.strictEqual(next.status, 204);
   });
+
+  it('returns random words', async () => {
+    const { agent, userId } = await signupAndLogin('u5@example.com');
+    addWords(userId, [
+      { word: 'alpha', definition: 'first', citation: '' },
+      { word: 'beta', definition: 'second', citation: '' },
+      { word: 'gamma', definition: 'third', citation: '' },
+      { word: 'delta', definition: 'fourth', citation: '' },
+    ]);
+    const res = await agent.get('/vocab/random').query({ count: 3 });
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.length, 3);
+  });
 });

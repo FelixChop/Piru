@@ -11,6 +11,7 @@ const { getOverview } = require('./stats');
 const {
   addWords,
   getNextWord,
+  getRandomWords,
   reviewWord,
   deleteUserVocab,
   deleteWord,
@@ -229,6 +230,17 @@ app.post('/vocab/extract', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Extraction failed' });
   }
+});
+
+app.get('/vocab/random', (req, res) => {
+  const userId = req.session.userId;
+  const count = Number(req.query.count) || 1;
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  const words = getRandomWords(userId, count);
+  if (words.length === 0) return res.status(204).end();
+  res.json(words);
 });
 
 app.get('/vocab/next', (req, res) => {

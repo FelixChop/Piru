@@ -38,6 +38,15 @@ function getNextWord(userId, workId) {
   return dueWords[0];
 }
 
+function getRandomWords(userId, count) {
+  const store = vocab.get(userId);
+  if (!store) return [];
+  const all = Array.from(store.values());
+  if (all.length === 0) return [];
+  const shuffled = all.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
 function reviewWord(userId, wordId, quality) {
   const store = vocab.get(userId);
   if (!store) throw new Error('User not found');
@@ -96,6 +105,7 @@ function getWorkStats(userId, workId) {
 module.exports = {
   addWords,
   getNextWord,
+  getRandomWords,
   reviewWord,
   deleteWord,
   deleteWorkVocab,
