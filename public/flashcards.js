@@ -166,7 +166,6 @@ async function loadNext() {
 function showDefinition() {
   incrementProgress();
   if (mode === 'reverse') {
-    document.getElementById('word').classList.add('hidden');
     document.getElementById('definition').classList.remove('hidden');
     document.getElementById('citation').classList.remove('hidden');
     document.getElementById('citation-source').classList.remove('hidden');
