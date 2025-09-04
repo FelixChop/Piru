@@ -14,7 +14,7 @@ async function loadProgress() {
     return;
   }
   try {
-    const res = await fetch('/progress');
+    const res = await fetch('/progress', { credentials: 'include' });
     if (res.ok) {
       const data = await res.json();
       progressMax = data.progressMax;
@@ -46,6 +46,7 @@ function incrementProgress() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ progressMax, cookies }),
+      credentials: 'include',
     }).then(() => window.dispatchEvent(new Event('cookiechange')));
   }
   localStorage.setItem('flashcardProgress', progress);
@@ -64,7 +65,11 @@ function showNoWords() {
 }
 
 async function loadQuestion() {
-  const res = await fetch(`/vocab/random?count=4${workId ? `&workId=${encodeURIComponent(workId)}` : ''}`);
+  const res = await fetch(`/vocab/random?count=4${workId ? `&workId=${encodeURIComponent(workId)}` : ''}` , { credentials: 'include' });
+  if (res.status === 401) {
+    window.location.href = '/';
+    return;
+  }
   if (res.status === 200) {
     const words = await res.json();
     if (words.length < 4) {
