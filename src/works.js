@@ -269,12 +269,15 @@ async function extractVocabulary(text, meta = {}) {
           : [];
         const ts = [];
         for (const cit of cits) {
-          const match = batchSubs.find(
-            (sub) =>
-              sub.text === cit ||
-              sub.text.includes(cit) ||
-              cit.includes(sub.text)
-          );
+          const lc = String(cit).toLowerCase();
+          const match = batchSubs.find((sub) => {
+            const subText = sub.text.toLowerCase();
+            return (
+              subText === lc ||
+              subText.includes(lc) ||
+              lc.includes(subText)
+            );
+          });
           if (match) {
             ts.push(match.time);
           }

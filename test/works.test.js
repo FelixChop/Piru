@@ -190,6 +190,33 @@ describe('Works management', () => {
     ]);
   });
 
+  it('matches subtitle citations case-insensitively', async () => {
+    chatgpt.extractVocabularyWithLLM = async (chunk) => {
+      if (chunk.includes('Hedwig')) {
+        return [
+          {
+            id: crypto.randomUUID(),
+            word: 'hedwig',
+            definition: '',
+            citation:
+              "i can't let you out, hedwig. i'm not allowed to use magic outside of school.",
+          },
+        ];
+      }
+      return [];
+    };
+    const work = await addWork(
+      'caseSubUser',
+      'Harry Potter and the Chamber of Secrets',
+      '',
+      '',
+      'movie'
+    );
+    const entry = work.vocab.find((v) => v.word === 'hedwig');
+    assert.ok(entry);
+    assert.strictEqual(typeof entry.timestamp, 'number');
+  });
+
   it('merges vocabulary entries with different casing', async () => {
     chatgpt.extractVocabularyWithLLM = async () => [
       {
