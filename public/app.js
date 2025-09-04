@@ -245,4 +245,15 @@ function initAuthenticatedState() {
   loadWorks();
 }
 
-initAuthenticatedState();
+async function checkAuthState() {
+  try {
+    const res = await fetch('/progress');
+    if (res.ok) {
+      initAuthenticatedState();
+    }
+  } catch (err) {
+    // ignore network errors
+  }
+}
+
+checkAuthState();
