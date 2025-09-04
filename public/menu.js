@@ -10,7 +10,9 @@
         if (typeof updateContent === 'function') {
           updateContent();
         }
-        setupMenu(menu);
+        if (localStorage.getItem('email')) {
+          setupMenu(menu);
+        }
       })
       .catch((err) => console.error('Failed to load menu:', err));
   }
@@ -52,17 +54,22 @@
       if (!cookieDisplay) {
         return;
       }
-      // Skip the progress request entirely for anonymous users.
+      // Hide the counter for anonymous users.
       if (!localStorage.getItem('email')) {
-        cookieDisplay.textContent = '🍪0';
+        cookieDisplay.classList.add('hidden');
         return;
       }
-      const res = await fetch('/progress');
-      if (res.ok) {
-        const data = await res.json();
-        cookieDisplay.textContent = `🍪${data.cookies}`;
-      } else {
-        cookieDisplay.textContent = '🍪0';
+      try {
+        const res = await fetch('/progress');
+        if (res.ok) {
+          const data = await res.json();
+          cookieDisplay.textContent = `🍪${data.cookies}`;
+          cookieDisplay.classList.remove('hidden');
+        } else {
+          cookieDisplay.classList.add('hidden');
+        }
+      } catch {
+        cookieDisplay.classList.add('hidden');
       }
     }
     if (cookieDisplay) {
