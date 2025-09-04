@@ -80,11 +80,13 @@
   }
 
   function rainShapes(div, shape) {
-    for (let i = 0; i < 5; i++) {
+    const numDrops = 5;
+    const interval = 100 / (numDrops + 1);
+    for (let i = 0; i < numDrops; i++) {
       const drop = document.createElement('div');
       drop.className = `identifier ${shape} rain`;
-      drop.style.left = `${Math.random() * 100}%`;
-      drop.style.animationDelay = `${Math.random() * 0.5}s`;
+      drop.style.left = `calc(${(i + 1) * interval}% - 10px)`;
+      drop.style.animationDelay = '0s';
       div.appendChild(drop);
       drop.addEventListener('animationend', () => drop.remove());
     }
