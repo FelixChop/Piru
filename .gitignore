@@ -215,3 +215,6 @@ __marimo__/
 
 # Generated vocabulary output
 difficult-words*.json
+
+# Logs
+logs/

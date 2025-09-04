@@ -25,9 +25,14 @@ async function loadProgress() {
 }
 
 function updateProgress() {
+  const percent = (progress / progressMax) * 100;
   const bar = document.getElementById('progress-bar');
   if (bar) {
-    bar.style.width = `${(progress / progressMax) * 100}%`;
+    bar.style.width = `${percent}%`;
+  }
+  const cookie = document.getElementById('progress-cookie');
+  if (cookie) {
+    cookie.style.left = `${percent}%`;
   }
 }
 
