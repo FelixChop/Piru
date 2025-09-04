@@ -246,6 +246,10 @@ function initAuthenticatedState() {
 }
 
 async function checkAuthState() {
+  // Avoid hitting the progress endpoint when the user is not logged in.
+  if (!localStorage.getItem('email')) {
+    return;
+  }
   try {
     const res = await fetch('/progress');
     if (res.ok) {

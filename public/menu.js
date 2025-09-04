@@ -49,14 +49,20 @@
 
     const cookieDisplay = menu.querySelector('#cookie-count');
     async function renderCookies() {
-      if (cookieDisplay) {
-        const res = await fetch('/progress');
-        if (res.ok) {
-          const data = await res.json();
-          cookieDisplay.textContent = `🍪${data.cookies}`;
-        } else {
-          cookieDisplay.textContent = '🍪0';
-        }
+      if (!cookieDisplay) {
+        return;
+      }
+      // Skip the progress request entirely for anonymous users.
+      if (!localStorage.getItem('email')) {
+        cookieDisplay.textContent = '🍪0';
+        return;
+      }
+      const res = await fetch('/progress');
+      if (res.ok) {
+        const data = await res.json();
+        cookieDisplay.textContent = `🍪${data.cookies}`;
+      } else {
+        cookieDisplay.textContent = '🍪0';
       }
     }
     if (cookieDisplay) {
