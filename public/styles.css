@@ -628,3 +628,44 @@ button:hover:not(:disabled) {
   cursor: not-allowed;
 }
 
+#subtitle-nav {
+  margin-top: 1rem;
+}
+
+#subtitle-scale {
+  position: relative;
+  height: 20px;
+  background-color: var(--color-light);
+  margin-bottom: 0.5rem;
+}
+
+#subtitle-scale .tick {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-gray);
+}
+
+#subtitle-scale .tick.big {
+  height: 12px;
+}
+
+#subtitle-scale .tick.small {
+  height: 6px;
+}
+
+#subtitle-progress-marker {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background-color: var(--color-pink);
+}
+
+#subtitle-word-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
