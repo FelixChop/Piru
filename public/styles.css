@@ -180,7 +180,8 @@ button:hover:not(:disabled) {
 }
 
 .cookie-counter {
-  margin-right: 1rem;
+  margin-right: 2rem;
+  font-size: 1.25rem;
   cursor: pointer;
   user-select: none;
 }

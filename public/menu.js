@@ -61,22 +61,8 @@
       }
     }
     if (cookieDisplay) {
-      cookieDisplay.addEventListener('click', async () => {
-        const userId = localStorage.getItem('userId');
-        if (!userId) return;
-        const res = await fetch(`/progress?userId=${userId}`);
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data.cookies > 0) {
-          const newCookies = data.cookies - 1;
-          await fetch('/progress', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, progressMax: data.progressMax, cookies: newCookies }),
-          });
-          alert('Piru is happy!');
-          window.dispatchEvent(new Event('cookiechange'));
-        }
+      cookieDisplay.addEventListener('click', () => {
+        alert('Révise ton vocabulaire pour gagner des cookies !');
       });
     }
     renderCookies();
