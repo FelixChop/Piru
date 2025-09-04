@@ -3,6 +3,7 @@ let current = null;
 let correctIndex = 0;
 const params = new URLSearchParams(window.location.search);
 const mode = params.get('mode');
+const workId = params.get('workId');
 let progress = Number(localStorage.getItem('flashcardProgress') || '0');
 let progressMax = 10;
 let cookies = 0;
@@ -63,7 +64,7 @@ function showNoWords() {
 }
 
 async function loadQuestion() {
-  const res = await fetch('/vocab/random?count=4');
+  const res = await fetch(`/vocab/random?count=4${workId ? `&workId=${encodeURIComponent(workId)}` : ''}`);
   if (res.status === 200) {
     const words = await res.json();
     if (words.length < 4) {

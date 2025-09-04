@@ -17,6 +17,15 @@
     { id: 'quiz-reverse', nameKey: 'quiz_reverse', link: 'quiz.html?mode=reverse', shape: 'triangle' }
   ];
 
+  const params = new URLSearchParams(window.location.search);
+  const workId = params.get('workId');
+  if (workId) {
+    games.forEach((game) => {
+      const sep = game.link.includes('?') ? '&' : '?';
+      game.link = `${game.link}${sep}workId=${encodeURIComponent(workId)}`;
+    });
+  }
+
   let progressMax = 0;
   let cookies = 0;
 

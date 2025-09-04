@@ -235,10 +235,11 @@ app.post('/vocab/extract', async (req, res) => {
 app.get('/vocab/random', (req, res) => {
   const userId = req.session.userId;
   const count = Number(req.query.count) || 1;
+  const { workId } = req.query;
   if (!userId) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
-  const words = getRandomWords(userId, count);
+  const words = getRandomWords(userId, count, workId);
   if (words.length === 0) return res.status(204).end();
   res.json(words);
 });

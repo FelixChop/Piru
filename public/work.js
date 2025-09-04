@@ -72,7 +72,7 @@ async function loadWork() {
 }
 
 document.getElementById('learn-btn').addEventListener('click', () => {
-  window.location.href = `flashcards.html?workId=${encodeURIComponent(workId)}`;
+  window.location.href = `learn.html?workId=${encodeURIComponent(workId)}`;
 });
 
 document.getElementById('delete-btn').addEventListener('click', async () => {
