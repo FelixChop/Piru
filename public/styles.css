@@ -179,12 +179,13 @@ button:hover:not(:disabled) {
 #citation {
   font-style: italic;
   text-align: left;
+  color: var(--color-dark);
 }
 
 #citation-source {
   font-style: italic;
   text-align: right;
-  color: #555;
+  color: var(--color-gray);
 }
 
 #menu {

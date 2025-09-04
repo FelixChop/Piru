@@ -72,9 +72,13 @@ async function loadWorks() {
 }
 
 function formatCitation(text) {
+  if (!text) {
+    return '';
+  }
   const div = document.createElement('div');
-  div.textContent = text || '';
-  return div.innerHTML.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+  div.textContent = text;
+  const html = div.innerHTML.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+  return `"${html}"`;
 }
 
 function displayWord(word) {
