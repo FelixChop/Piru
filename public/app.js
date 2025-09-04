@@ -147,37 +147,12 @@ async function loadWorks() {
   const works = await res.json();
   const container = document.getElementById('my-works-container');
   const carousel = document.getElementById('work-carousel');
-  const title = document.querySelector('#works h2[data-i18n="my_works"]');
   const addWorkContainer = document.getElementById('add-work-container');
   const addWorkButton = document.getElementById('add-work-button');
   if (addWorkContainer) addWorkContainer.classList.add('hidden');
   if (addWorkButton) addWorkButton.classList.remove('hidden');
+  const title = document.getElementById('my-works-title');
   carousel.innerHTML = '';
-// <<<<<<< codex/add-default-thumbnail-by-item-type
-//   works.forEach((w) => {
-//     const item = document.createElement('div');
-//     item.className = 'work-item';
-//     if (w.thumbnail) {
-//       const img = document.createElement('img');
-//       img.src = w.thumbnail;
-//       img.alt = w.title || 'thumbnail';
-//       item.appendChild(img);
-//     } else {
-//       const img = document.createElement('img');
-//       img.src = DEFAULT_THUMBNAILS[w.type] || DEFAULT_THUMBNAILS.custom;
-//       img.alt = w.title || 'thumbnail';
-//       item.appendChild(img);
-//     }
-//     const caption = document.createElement('div');
-//     caption.className = 'work-caption';
-//     caption.textContent = w.title || 'Untitled';
-//     item.appendChild(caption);
-//     const learnBtn = document.createElement('button');
-//     learnBtn.className = 'learn-btn';
-//     learnBtn.textContent = i18next.t('learn');
-//     learnBtn.addEventListener('click', () => {
-//       window.location.href = `flashcards.html?workId=${encodeURIComponent(w.id)}`;
-// =======
   if (works.length === 0) {
     container.classList.add('hidden');
     if (title) title.classList.add('hidden');
