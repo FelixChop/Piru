@@ -9,7 +9,8 @@ if (!workId) {
 function initSubtitleNav(work) {
   if (work.type !== 'movie' && work.type !== 'series') return;
   const vocab = (work.vocab || [])
-    .filter((v) => typeof v.timestamp === 'number')
+    .map((v) => ({ ...v, timestamp: Number(v.timestamp) }))
+    .filter((v) => !Number.isNaN(v.timestamp))
     .sort((a, b) => a.timestamp - b.timestamp);
   if (!vocab.length) return;
   const nav = document.getElementById('subtitle-nav');
