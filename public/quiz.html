@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piru - Quiz</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="cookies.css" />
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <a href="/"><img src="/images/parrot_grey_no_title.png" alt="Piru logo" class="logo" /></a>
+    <div class="site-text">
+      <h1><a href="/" class="home-link" data-i18n="site_name">Piru</a></h1>
+      <p data-i18n="tagline">Learn foreign languages while having fun.</p>
+    </div>
+    <nav id="menu" class="hidden"></nav>
+  </header>
+  <div class="title-row">
+    <h2 class="page-title" data-i18n="vocabulary_review"></h2>
+    <div id="progress-container"><div id="progress-bar"></div><div id="progress-cookie">🍪</div></div>
+  </div>
+  <main>
+    <section id="quiz-section" class="hidden">
+      <div id="question"></div>
+      <div id="options">
+        <button class="choice btn-main" data-index="0"></button>
+        <button class="choice btn-main" data-index="1"></button>
+        <button class="choice btn-main" data-index="2"></button>
+        <button class="choice btn-main" data-index="3"></button>
+      </div>
+      <div id="result"></div>
+      <button id="add-work-btn" class="hidden" data-i18n="add_work"></button>
+    </section>
+  </main>
+  <script src="/lib/i18next/umd/i18next.min.js"></script>
+  <script src="i18n.js"></script>
+  <script src="quiz.js"></script>
+  <script src="menu.js"></script>
+  <script src="cookies.js"></script>
+</body>
+</html>
