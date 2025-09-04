@@ -23,6 +23,11 @@
     const toggle = menu.querySelector('#menu-toggle');
     const options = menu.querySelector('#menu-options');
     const header = document.querySelector('header');
+    const emailDisplay = menu.querySelector('#menu-email');
+    const email = localStorage.getItem('email');
+    if (emailDisplay && email) {
+      emailDisplay.textContent = email;
+    }
     if (!toggle || !options) return;
 
     toggle.addEventListener('click', () => {
