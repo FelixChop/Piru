@@ -35,6 +35,10 @@ Initialize the local SQLite database (creates tables if they don't exist):
 npm run init-db
 ```
 
+The database file is stored in the project root by default. To keep it in a
+different location, set the `PIRU_DB_DIR` environment variable before running
+any commands.
+
 ### Vocabulary extraction CLI
 
 Extract difficult vocabulary from a text file or large subtitle. The CLI will

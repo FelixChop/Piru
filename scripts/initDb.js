@@ -2,10 +2,12 @@ const fs = require('fs');
 const path = require('path');
 
 const dbFile = process.env.NODE_ENV === 'staging' ? 'piru-staging.sqlite' : 'piru.sqlite';
-// Use the current working directory for the SQLite database so that the
-// initialization script works even when the project files are installed in a
-// read-only location (for example when Piru is installed globally).
-const dbPath = path.join(process.cwd(), dbFile);
+// Use the same location strategy as the main application so that the
+// initialization script operates on the correct database regardless of where
+// it is executed from. The directory can be overridden with `PIRU_DB_DIR`.
+const dbDir = process.env.PIRU_DB_DIR || path.resolve(__dirname, '..');
+if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
+const dbPath = path.join(dbDir, dbFile);
 
 if (process.env.NODE_ENV === 'test' && fs.existsSync(dbPath)) {
   fs.unlinkSync(dbPath);
