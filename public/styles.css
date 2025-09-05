@@ -752,7 +752,9 @@ button:hover:not(:disabled) {
 }
 
 .game .identifier.rain.triangle {
-  border-bottom-color: #fff;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid #fff;
   filter: drop-shadow(0 0 0 #000);
 }
 
