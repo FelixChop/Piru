@@ -96,7 +96,7 @@
   function rainShapes(div, shape) {
     const cols = 20;
     const rows = 8;
-    const widthStep = 200 / cols;
+    const widthStep = 100 / cols;
     const heightStep = 60;
     const angle = 30;
     const dx = 160 * Math.tan((angle * Math.PI) / 180);
