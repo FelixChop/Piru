@@ -22,16 +22,18 @@
     <div id="progress-container"><div id="progress-bar"></div><div id="progress-cookie">🍪</div></div>
   </div>
   <main>
-    <section id="quiz-section" class="hidden">
-      <div id="question"></div>
-      <div id="options" class="overlay-buttons">
+    <section id="flashcard-section" class="hidden">
+      <div id="flashcard-content">
+        <div id="word"></div>
+        <div id="definition" class="hidden"></div>
+        <button id="add-work-btn" class="hidden" data-i18n="add_work"></button>
+      </div>
+      <div id="quiz-buttons" class="overlay-buttons">
         <button class="choice btn-main" data-index="0"></button>
         <button class="choice btn-main" data-index="1"></button>
         <button class="choice btn-main" data-index="2"></button>
         <button class="choice btn-main" data-index="3"></button>
       </div>
-      <div id="result"></div>
-      <button id="add-work-btn" class="hidden" data-i18n="add_work"></button>
     </section>
   </main>
   <script src="/lib/i18next/umd/i18next.min.js"></script>
