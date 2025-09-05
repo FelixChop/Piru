@@ -143,6 +143,10 @@
       div.id = game.id;
       div.style.setProperty('--hover-color', game.color);
 
+      const icon = document.createElement('div');
+      icon.className = `identifier ${game.shape}`;
+      div.appendChild(icon);
+
       const span = document.createElement('span');
       span.setAttribute('data-i18n', game.nameKey);
       span.textContent = i18next.t(game.nameKey);
@@ -172,8 +176,7 @@
 
       div.addEventListener('mouseenter', () => {
         if (isUnlocked) {
-          const shape = game.id === 'quiz-reverse' ? 'triangle' : (game.shape || '');
-          rainShapes(div, shape);
+          rainShapes(div, game.shape || '');
         }
       });
 
