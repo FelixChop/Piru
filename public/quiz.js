@@ -58,10 +58,11 @@ updateProgress();
 window.addEventListener('cookiechange', loadProgress);
 
 function showNoWords() {
-  document.getElementById('question').textContent = i18next.t('no_words');
-  document.getElementById('options').classList.add('hidden');
+  const wordEl = document.getElementById('word');
+  wordEl.textContent = i18next.t('no_words');
+  document.getElementById('quiz-buttons').classList.add('hidden');
   document.getElementById('add-work-btn').classList.remove('hidden');
-  document.getElementById('quiz-section').classList.remove('hidden');
+  document.getElementById('flashcard-section').classList.remove('hidden');
 }
 
 async function loadQuestion() {
@@ -78,31 +79,32 @@ async function loadQuestion() {
     }
     correctIndex = Math.floor(Math.random() * words.length);
     current = words[correctIndex];
-    const questionEl = document.getElementById('question');
+    const wordEl = document.getElementById('word');
+    const defEl = document.getElementById('definition');
     if (mode === 'reverse') {
-      questionEl.textContent = current.definition;
+      wordEl.textContent = current.definition;
+      wordEl.classList.add('small-text');
+      defEl.classList.add('large-text');
     } else {
-      questionEl.textContent = current.word;
+      wordEl.textContent = current.word;
+      wordEl.classList.remove('small-text');
+      defEl.classList.remove('large-text');
     }
+    defEl.textContent = '';
+    defEl.classList.add('hidden');
     words.forEach((w, i) => {
-      const btn = document.querySelector(`#options button[data-index="${i}"]`);
+      const btn = document.querySelector(`#quiz-buttons button[data-index="${i}"]`);
       btn.textContent = mode === 'reverse' ? w.word : w.definition;
       btn.disabled = false;
+      if (mode === 'reverse') {
+        btn.classList.add('large-text');
+      } else {
+        btn.classList.remove('large-text');
+      }
     });
-    const resultEl = document.getElementById('result');
-    if (mode === 'reverse') {
-      questionEl.classList.add('small-text');
-      document.querySelectorAll('#options button').forEach((b) => b.classList.add('large-text'));
-      resultEl.classList.add('large-text');
-    } else {
-      questionEl.classList.remove('small-text');
-      document.querySelectorAll('#options button').forEach((b) => b.classList.remove('large-text'));
-      resultEl.classList.remove('large-text');
-    }
-    resultEl.textContent = '';
-    document.getElementById('options').classList.remove('hidden');
+    document.getElementById('quiz-buttons').classList.remove('hidden');
     document.getElementById('add-work-btn').classList.add('hidden');
-    document.getElementById('quiz-section').classList.remove('hidden');
+    document.getElementById('flashcard-section').classList.remove('hidden');
   } else if (res.status === 204) {
     showNoWords();
   } else {
@@ -111,18 +113,19 @@ async function loadQuestion() {
 }
 
 function selectOption(idx) {
-  const result = document.getElementById('result');
+  const defEl = document.getElementById('definition');
   if (idx === correctIndex) {
-    result.textContent = '✓';
+    defEl.textContent = '✓';
     incrementProgress();
   } else {
-    result.textContent = mode === 'reverse' ? current.word : current.definition;
+    defEl.textContent = mode === 'reverse' ? current.word : current.definition;
   }
-  document.querySelectorAll('#options button').forEach((b) => (b.disabled = true));
+  defEl.classList.remove('hidden');
+  document.querySelectorAll('#quiz-buttons button').forEach((b) => (b.disabled = true));
   setTimeout(loadQuestion, 1000);
 }
 
-document.querySelectorAll('#options button').forEach((btn) => {
+document.querySelectorAll('#quiz-buttons button').forEach((btn) => {
   btn.addEventListener('click', () => selectOption(Number(btn.dataset.index)));
 });
 
