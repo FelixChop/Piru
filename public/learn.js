@@ -94,7 +94,7 @@
   }
 
   function rainShapes(div, shape) {
-    const cols = 10;
+    const cols = 20;
     const rows = 4;
     const widthStep = 100 / cols;
     const heightStep = 30;
