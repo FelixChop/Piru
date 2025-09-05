@@ -747,14 +747,14 @@ button:hover:not(:disabled) {
 
 .game .identifier.rain:not(.triangle) {
   border: 2px solid #000;
-  background: #fff;
+  background: var(--hover-color);
   box-sizing: border-box;
 }
 
 .game .identifier.rain.triangle {
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 20px solid #fff;
+  border-bottom: 20px solid var(--hover-color);
   filter: drop-shadow(0 0 0 #000);
 }
 
