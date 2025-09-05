@@ -94,10 +94,10 @@
   }
 
   function rainShapes(div, shape) {
-    const cols = 20;
-    const rows = 8;
-    const widthStep = 100 / cols;
-    const heightStep = 60;
+    const cols = 10;
+    const rows = 6;
+    const widthStep = 200 / cols;
+    const heightStep = 50;
     const angle = 30;
     const dx = 160 * Math.tan((angle * Math.PI) / 180);
     for (let r = 0; r < rows; r++) {
@@ -107,21 +107,25 @@
 
         const drop = document.createElement('div');
         drop.className = `identifier ${shape} rain`;
-        drop.style.left = `calc(${leftPercent}% - 10px)`;
+        drop.style.left = `calc(${leftPercent}% - 100px)`;
         drop.style.top = `${topOffset}px`;
-        // drop.style.setProperty('--rotate', `-${angle}deg`);
         drop.style.setProperty('--dx', `${dx}px`);
         div.appendChild(drop);
         drop.addEventListener('animationend', () => drop.remove());
 
-        const line = document.createElement('div');
-        line.className = 'rain-line';
-        line.style.left = `calc(${leftPercent}% - 1px)`;
-        line.style.top = `${topOffset}px`;
-        line.style.setProperty('--rotate', `-${angle}deg`);
-        line.style.setProperty('--dx', `${dx}px`);
-        div.appendChild(line);
-        line.addEventListener('animationend', () => line.remove());
+        for (let i = 0; i < 3; i++) {
+          const leftPercentRain = leftPercent + 3*i - 5
+          const topOffsetRain = topOffset
+
+          const line = document.createElement('div');
+          line.className = 'rain-line';
+          line.style.left = `calc(${leftPercentRain}% - 100px)`;
+          line.style.top = `calc(${topOffsetRain}px - 20px)`;
+          line.style.setProperty('--rotate', `-${angle}deg`);
+          line.style.setProperty('--dx', `${dx}px`);
+          div.appendChild(line);
+          line.addEventListener('animationend', () => line.remove());
+        }
       }
     }
   }
