@@ -720,17 +720,13 @@ button:hover:not(:disabled) {
   animation: gold-sweep 0.05s forwards;
 }
 
-.game.unlocked:hover .identifier {
+.game.unlocked:hover .identifier:not(.rain) {
   background: var(--hover-color);
   border-color: var(--hover-color);
 }
 
-.game.unlocked:hover .identifier.triangle {
+.game.unlocked:hover .identifier.triangle:not(.rain) {
   border-bottom-color: var(--hover-color);
-}
-
-.game.unlocked:hover .rain-line {
-  background: var(--hover-color);
 }
 
 .game .identifier.rain {
@@ -763,7 +759,7 @@ button:hover:not(:disabled) {
   top: -20px;
   width: 2px;
   height: 20px;
-  background: #000;
+  background: var(--hover-color);
   opacity: 0.8;
   --dx: 0px;
   transform: translate(0, 0) rotate(var(--rotate));
