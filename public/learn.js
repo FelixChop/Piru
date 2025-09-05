@@ -95,9 +95,9 @@
 
   function rainShapes(div, shape) {
     const cols = 20;
-    const rows = 4;
-    const widthStep = 100 / cols;
-    const heightStep = 30;
+    const rows = 8;
+    const widthStep = 200 / cols;
+    const heightStep = 60;
     const angle = 30;
     const dx = 160 * Math.tan((angle * Math.PI) / 180);
     for (let r = 0; r < rows; r++) {
@@ -109,7 +109,7 @@
         drop.className = `identifier ${shape} rain`;
         drop.style.left = `calc(${leftPercent}% - 10px)`;
         drop.style.top = `${topOffset}px`;
-        drop.style.setProperty('--rotate', `-${angle}deg`);
+        // drop.style.setProperty('--rotate', `-${angle}deg`);
         drop.style.setProperty('--dx', `${dx}px`);
         div.appendChild(drop);
         drop.addEventListener('animationend', () => drop.remove());
