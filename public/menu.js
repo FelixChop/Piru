@@ -84,8 +84,41 @@
         alert('Révise ton vocabulaire pour gagner des cookies !');
       });
     }
+    const wordDisplay = menu.querySelector('#word-count');
+    const remainingBadge = menu.querySelector('#words-remaining');
+    const learnedBadge = menu.querySelector('#words-learned');
+    async function renderWords() {
+      if (!wordDisplay) return;
+      if (!localStorage.getItem('email')) {
+        wordDisplay.classList.add('hidden');
+        return;
+      }
+      try {
+        const res = await fetch('/stats/overview');
+        if (res.ok) {
+          const data = await res.json();
+          const remaining = Math.max(data.totalWords - data.masteredWords, 0);
+          if (remainingBadge) remainingBadge.textContent = remaining;
+          if (learnedBadge) learnedBadge.textContent = data.masteredWords;
+          wordDisplay.classList.remove('hidden');
+        } else {
+          wordDisplay.classList.add('hidden');
+        }
+      } catch {
+        wordDisplay.classList.add('hidden');
+      }
+    }
+    if (wordDisplay) {
+      wordDisplay.addEventListener('click', () => {
+        window.location.href = 'learn.html';
+      });
+    }
     renderCookies();
-    window.addEventListener('cookiechange', renderCookies);
+    renderWords();
+    window.addEventListener('cookiechange', () => {
+      renderCookies();
+      renderWords();
+    });
 
     // Show menu by default; server-side session determines access.
     menu.classList.remove('hidden');
