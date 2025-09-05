@@ -21,6 +21,7 @@ const {
   deleteWork,
   _clearWorks,
   extractVocabulary,
+  SUBTITLE_BATCH_SIZE,
 } = require('../src/works');
 const { getNextWord, _clear: _clearVocab } = require('../src/vocab');
 
@@ -259,5 +260,22 @@ describe('Works management', () => {
     assert.strictEqual(vocab.length, 1);
     assert.strictEqual(vocab[0].word, 'Alpha');
     assert.deepStrictEqual(vocab[0].citations, ['First', 'Second']);
+  });
+
+  it('reports progress for subtitle chunks', async () => {
+    chatgpt.extractVocabularyWithLLM = async () => [];
+    const blocks = [];
+    const count = SUBTITLE_BATCH_SIZE * 2 + 5;
+    for (let i = 0; i < count; i++) {
+      blocks.push(`${i + 1}\n00:00:00,000 --> 00:00:01,000\nline ${i + 1}`);
+    }
+    const srt = blocks.join('\n\n');
+    const calls = [];
+    await extractVocabulary(srt, { isSubtitle: true }, (done, total) => {
+      calls.push([done, total]);
+    });
+    const expectedTotal = Math.ceil(count / SUBTITLE_BATCH_SIZE);
+    assert.strictEqual(calls.length, expectedTotal);
+    assert.deepStrictEqual(calls[calls.length - 1], [expectedTotal, expectedTotal]);
   });
 });

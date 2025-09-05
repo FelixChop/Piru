@@ -172,9 +172,11 @@ async function getBookPages(title, author) {
   }
 }
 
-async function extractVocabulary(text, meta = {}) {
+async function extractVocabulary(text, meta = {}, onProgress) {
   const vocabMap = new Map();
   if (!text) return { vocab: [], subtitleDuration: 0 };
+  let totalChunks = 0;
+  let processed = 0;
 
   function mergeItems(items) {
     for (const item of items || []) {
@@ -253,6 +255,7 @@ async function extractVocabulary(text, meta = {}) {
         if (subtitleText) subtitles.push({ text: subtitleText, time: start });
       }
     }
+    totalChunks = Math.ceil(subtitles.length / SUBTITLE_BATCH_SIZE);
     for (let i = 0; i < subtitles.length; i += SUBTITLE_BATCH_SIZE) {
       const batchSubs = subtitles.slice(i, i + SUBTITLE_BATCH_SIZE);
       const batch = batchSubs.map((s) => s.text).join(' ');
@@ -288,6 +291,8 @@ async function extractVocabulary(text, meta = {}) {
         }
       }
       mergeItems(items);
+      processed++;
+      if (onProgress) onProgress(processed, totalChunks);
     }
     const vocabList = Array.from(vocabMap.values()).sort(
       (a, b) => (a.timestamp ?? Infinity) - (b.timestamp ?? Infinity)
@@ -295,6 +300,7 @@ async function extractVocabulary(text, meta = {}) {
     return { vocab: vocabList, subtitleDuration: lastTime };
   } else {
     const CHUNK_SIZE = 10_000;
+    totalChunks = Math.ceil(text.length / CHUNK_SIZE);
     for (let i = 0; i < text.length; i += CHUNK_SIZE) {
       const chunk = text.slice(i, i + CHUNK_SIZE);
       const items = await chatgpt.extractVocabularyWithLLM(
@@ -303,6 +309,8 @@ async function extractVocabulary(text, meta = {}) {
         meta
       );
       mergeItems(items);
+      processed++;
+      if (onProgress) onProgress(processed, totalChunks);
     }
     const vocabList = Array.from(vocabMap.values());
     return { vocab: vocabList, subtitleDuration: 0 };
