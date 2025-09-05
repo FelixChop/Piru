@@ -169,6 +169,7 @@ async function loadWorks() {
       const learnedPercent = total ? (learned / total) * 100 : 0;
       const knownPercent = total ? (known / total) * 100 : 0;
       const progress = total ? Math.round(((learned + known) / total) * 100) : 0;
+      const remaining = Math.max(total - learned - known, 0);
 
       const stats = getDifficulty(w.vocabCount || (w.vocab ? w.vocab.length : 0));
       const badgeWrapper = document.createElement('div');
@@ -204,7 +205,8 @@ async function loadWorks() {
       overlay.className = 'work-progress';
       const kpi = document.createElement('div');
       kpi.className = 'work-progress-kpi';
-      kpi.textContent = `${progress}%`;
+      const remainingLabel = remaining > 99 ? i18next.t('remaining_over_99') : i18next.t('remaining_words', { count: remaining });
+      kpi.textContent = remainingLabel;
       overlay.appendChild(kpi);
       const chart = document.createElement('div');
       chart.className = 'work-progress-chart';

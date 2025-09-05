@@ -69,7 +69,10 @@ const i18nResources = {
       cookie_count_plural: '{{count}} cookies',
       unlock_question: 'Unlock? {{count}} cookie',
       unlock_question_plural: 'Unlock? {{count}} cookies',
-      play: 'Play'
+      play: 'Play',
+      remaining_words: '{{count}} remaining',
+      remaining_words_plural: '{{count}} remaining',
+      remaining_over_99: '99+ remaining'
     }
   },
   fr: {
@@ -141,7 +144,10 @@ const i18nResources = {
       cookie_count_plural: '{{count}} cookies',
       unlock_question: 'Débloquer ? {{count}} cookie',
       unlock_question_plural: 'Débloquer ? {{count}} cookies',
-      play: 'Jouer'
+      play: 'Jouer',
+      remaining_words: '{{count}} restant',
+      remaining_words_plural: '{{count}} restants',
+      remaining_over_99: '99+ restants'
     }
   },
   es: {
@@ -213,7 +219,10 @@ const i18nResources = {
       cookie_count_plural: '{{count}} galletas',
       unlock_question: '¿Desbloquear? {{count}} galleta',
       unlock_question_plural: '¿Desbloquear? {{count}} galletas',
-      play: 'Jugar'
+      play: 'Jugar',
+      remaining_words: '{{count}} restante',
+      remaining_words_plural: '{{count}} restantes',
+      remaining_over_99: '99+ restantes'
     }
   },
   it: {
@@ -285,7 +294,10 @@ const i18nResources = {
       cookie_count_plural: '{{count}} biscotti',
       unlock_question: 'Sbloccare? {{count}} biscotto',
       unlock_question_plural: 'Sbloccare? {{count}} biscotti',
-      play: 'Gioca'
+      play: 'Gioca',
+      remaining_words: '{{count}} rimanente',
+      remaining_words_plural: '{{count}} rimanenti',
+      remaining_over_99: '99+ rimanenti'
     }
   },
   de: {
@@ -357,7 +369,10 @@ const i18nResources = {
       cookie_count_plural: '{{count}} Kekse',
       unlock_question: 'Freischalten? {{count}} Keks',
       unlock_question_plural: 'Freischalten? {{count}} Kekse',
-      play: 'Spielen'
+      play: 'Spielen',
+      remaining_words: '{{count}} übrig',
+      remaining_words_plural: '{{count}} übrig',
+      remaining_over_99: '99+ übrig'
     }
   }
 };
