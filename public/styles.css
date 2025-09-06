@@ -223,6 +223,33 @@ button:hover:not(:disabled) {
   z-index: 2000;
 }
 
+.word-counter {
+  position: relative;
+  margin-right: 1rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.word-counter .badge {
+  position: absolute;
+  top: -0.5rem;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 9999px;
+  color: #fff;
+}
+
+.word-counter .badge.remaining {
+  right: -0.5rem;
+  background: var(--color-pink);
+}
+
+.word-counter .badge.learned {
+  left: -0.5rem;
+  background: var(--color-green);
+}
+
 .cookie-counter {
   margin-right: 2rem;
   font-size: 1.25rem;
