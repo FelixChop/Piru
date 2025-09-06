@@ -5,6 +5,14 @@
 const fs = require('fs');
 const { extractVocabulary } = require('../src/works');
 
+function renderProgress(done, total) {
+  const width = 20;
+  const ratio = total ? done / total : 0;
+  const filled = Math.round(ratio * width);
+  const bar = '#'.repeat(filled) + '-'.repeat(width - filled);
+  process.stderr.write(`\r[${bar}] ${done}/${total}`);
+}
+
 async function main() {
   if (process.argv.length < 3) {
     console.error('Usage: node scripts/extract-vocab-cli.js <file> [--title <title>] [--author <author>]');
@@ -27,7 +35,8 @@ async function main() {
 
   try {
     console.error('Extracting vocabulary...');
-    const { vocab } = await extractVocabulary(text, meta);
+    const { vocab } = await extractVocabulary(text, meta, renderProgress);
+    process.stderr.write('\n');
     console.log(JSON.stringify(vocab, null, 2));
   } catch (err) {
     console.error('Extraction failed', err.message);
