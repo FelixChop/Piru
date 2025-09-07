@@ -814,10 +814,12 @@ button:hover:not(:disabled) {
   gap: 0.5rem;
   flex-wrap: wrap;
   z-index: 1000;
+  box-sizing: border-box;
 }
 
 #flashcard-buttons button {
   flex: 1 1 45%;
+  box-sizing: border-box;
 }
 
 #review-buttons {
