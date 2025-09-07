@@ -7,6 +7,69 @@ const { addWords, deleteWorkVocab, getWorkStats } = require('./vocab');
 
 // In-memory store for works and their vocabulary entries
 const works = new Map(); // workId -> work object
+// Cache extracted vocabulary per normalized work key
+const workVocabCache = new Map(); // key -> vocab data loaded in memory
+const workVocabIndex = new Map(); // key -> filename on disk
+const VOCAB_CACHE_DIR = path.join(__dirname, '..', 'data', 'vocabCache');
+const VOCAB_CACHE_MAPPING = path.join(VOCAB_CACHE_DIR, 'mapping.csv');
+
+function loadWorkVocabCache() {
+  try {
+    const csv = fs.readFileSync(VOCAB_CACHE_MAPPING, 'utf8');
+    const lines = csv.split(/\r?\n/);
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      const [key, file] = line.split(',');
+      workVocabIndex.set(key, file);
+    }
+  } catch (err) {
+    // no cache on disk
+  }
+}
+
+function saveWorkVocabCache() {
+  try {
+    fs.mkdirSync(VOCAB_CACHE_DIR, { recursive: true });
+    const lines = [];
+    for (const [k, f] of workVocabIndex.entries()) {
+      lines.push(`${k},${f}`);
+    }
+    fs.writeFileSync(VOCAB_CACHE_MAPPING, lines.join('\n'));
+  } catch (err) {
+    // ignore write errors
+  }
+}
+
+function loadCachedVocab(cacheKey) {
+  const file = workVocabIndex.get(cacheKey);
+  if (!file) return false;
+  try {
+    const raw = fs.readFileSync(path.join(VOCAB_CACHE_DIR, file), 'utf8');
+    const data = JSON.parse(raw);
+    workVocabCache.set(cacheKey, data);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+function persistCachedVocab(cacheKey, entry) {
+  try {
+    fs.mkdirSync(VOCAB_CACHE_DIR, { recursive: true });
+    let file = workVocabIndex.get(cacheKey);
+    if (!file) {
+      file = `${crypto.randomUUID()}.json`;
+      workVocabIndex.set(cacheKey, file);
+    }
+    fs.writeFileSync(path.join(VOCAB_CACHE_DIR, file), JSON.stringify(entry));
+    saveWorkVocabCache();
+  } catch (err) {
+    // ignore write errors
+  }
+}
+
+// Load cache index from disk on startup
+loadWorkVocabCache();
 
 // Lazy-loaded mapping from normalized movie title -> subtitle filename
 let subtitleMap;
@@ -40,6 +103,13 @@ function normalizeAuthor(author) {
     .filter(Boolean)
     .sort()
     .join(' ');
+}
+
+function getVocabCacheKey(type, title, author) {
+  if (type === 'custom') return null;
+  const normalizedTitle = normalizeTitle(title);
+  const normalizedAuthor = author ? normalizeAuthor(author) : '';
+  return `${type}|${normalizedAuthor}|${normalizedTitle}`;
 }
 
 const TITLE_ALIASES = new Map([
@@ -329,10 +399,15 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
   const id = crypto.randomUUID();
   let pages = [{ page: 1, text: content }];
   let isSubtitle = false;
+  const cacheKey = getVocabCacheKey(type, title, author);
   if (type === 'movie') {
-    const subtitle = getSubtitleTextForTitle(title);
-    if (subtitle) {
-      pages = [{ page: 1, text: subtitle }];
+    if (!workVocabCache.has(cacheKey) && !workVocabIndex.has(cacheKey)) {
+      const subtitle = getSubtitleTextForTitle(title);
+      if (subtitle) {
+        pages = [{ page: 1, text: subtitle }];
+        isSubtitle = true;
+      }
+    } else {
       isSubtitle = true;
     }
   } else if (type === 'book') {
@@ -344,20 +419,43 @@ async function addWork(userId, title, author, content, type, thumbnailUrl) {
   const vocabPages = [];
   let allVocab = [];
   let subtitleDuration = 0;
-  for (const { page, text } of pages) {
-    const { vocab, subtitleDuration: sd } = await extractVocabulary(text, {
-      title,
-      author,
-      isSubtitle,
-    });
-    if (isSubtitle) {
-      subtitleDuration = sd;
+  if (cacheKey && !workVocabCache.has(cacheKey) && workVocabIndex.has(cacheKey)) {
+    loadCachedVocab(cacheKey);
+  }
+  if (cacheKey && workVocabCache.has(cacheKey)) {
+    const cached = workVocabCache.get(cacheKey);
+    subtitleDuration = cached.subtitleDuration;
+    for (const { page, vocab } of cached.vocabPages) {
+      const withWork = vocab.map((v) => ({ ...v, workId: id, page }));
+      vocabPages.push({ page, vocab: withWork });
+      allVocab = allVocab.concat(withWork);
     }
-    const withWork = Array.isArray(vocab)
-      ? vocab.map((v) => ({ ...v, workId: id, page }))
-      : [];
-    vocabPages.push({ page, vocab: withWork });
-    allVocab = allVocab.concat(withWork);
+  } else {
+    for (const { page, text } of pages) {
+      const { vocab, subtitleDuration: sd } = await extractVocabulary(text, {
+        title,
+        author,
+        isSubtitle,
+      });
+      if (isSubtitle) {
+        subtitleDuration = sd;
+      }
+      const cleaned = Array.isArray(vocab)
+        ? vocab.map(({ id: _id, workId, ...rest }) => ({ ...rest }))
+        : [];
+      const withWork = cleaned.map((v) => ({ ...v, workId: id, page }));
+      vocabPages.push({ page, vocab: withWork });
+      allVocab = allVocab.concat(withWork);
+    }
+    if (cacheKey) {
+      const cachePages = vocabPages.map(({ page, vocab }) => ({
+        page,
+        vocab: vocab.map(({ id: _id, workId: _w, ...rest }) => ({ ...rest })),
+      }));
+      const entry = { vocabPages: cachePages, subtitleDuration };
+      workVocabCache.set(cacheKey, entry);
+      persistCachedVocab(cacheKey, entry);
+    }
   }
   let thumbnail;
   if (type === 'movie' || type === 'series') {
@@ -484,6 +582,22 @@ function _clearWorks() {
   works.clear();
 }
 
+function _reloadWorkCache() {
+  workVocabCache.clear();
+  workVocabIndex.clear();
+  loadWorkVocabCache();
+}
+
+function _clearWorkCache() {
+  workVocabCache.clear();
+  workVocabIndex.clear();
+  try {
+    fs.rmSync(VOCAB_CACHE_DIR, { recursive: true, force: true });
+  } catch (err) {
+    // ignore
+  }
+}
+
 module.exports = {
   extractVocabulary,
   addWork,
@@ -492,5 +606,7 @@ module.exports = {
   deleteWork,
   deleteUserWorks,
   _clearWorks,
+  _clearWorkCache,
+  _reloadWorkCache,
   SUBTITLE_BATCH_SIZE,
 };

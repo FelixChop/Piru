@@ -1,6 +1,8 @@
 const { describe, it, beforeEach } = require('node:test');
 const assert = require('assert');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 const chatgpt = require('../src/chatgpt');
 
 chatgpt.extractVocabularyWithLLM = async (content) => {
@@ -22,6 +24,8 @@ const {
   _clearWorks,
   extractVocabulary,
   SUBTITLE_BATCH_SIZE,
+  _clearWorkCache,
+  _reloadWorkCache,
 } = require('../src/works');
 const { getNextWord, _clear: _clearVocab } = require('../src/vocab');
 
@@ -29,6 +33,7 @@ describe('Works management', () => {
   beforeEach(() => {
     _clearWorks();
     _clearVocab();
+    _clearWorkCache();
   });
 
   it('adds a work', async () => {
@@ -216,6 +221,102 @@ describe('Works management', () => {
     const entry = work.vocab.find((v) => v.word === 'hedwig');
     assert.ok(entry);
     assert.strictEqual(typeof entry.timestamp, 'number');
+  });
+
+  it('caches movie vocabulary for subsequent users', async () => {
+    let calls = 0;
+    chatgpt.extractVocabularyWithLLM = async (chunk) => {
+      calls++;
+      if (chunk.includes('Hedwig')) {
+        return [
+          {
+            id: crypto.randomUUID(),
+            word: 'hedwig',
+            definition: '',
+            citation: '',
+          },
+        ];
+      }
+      return [];
+    };
+    await addWork(
+      'firstUser',
+      'Harry Potter and the Chamber of Secrets',
+      '',
+      '',
+      'movie'
+    );
+    const initial = calls;
+    await addWork(
+      'secondUser',
+      'Harry Potter and the Chamber of Secrets',
+      '',
+      '',
+      'movie'
+    );
+    assert.strictEqual(calls, initial);
+    const next = getNextWord('secondUser');
+    assert.ok(next);
+    assert.strictEqual(next.word, 'hedwig');
+  });
+
+  it('persists vocabulary cache to disk', async () => {
+    let calls = 0;
+    chatgpt.extractVocabularyWithLLM = async (chunk) => {
+      calls++;
+      if (chunk.includes('Hedwig')) {
+        return [
+          {
+            id: crypto.randomUUID(),
+            word: 'hedwig',
+            definition: '',
+            citation: '',
+          },
+        ];
+      }
+      return [];
+    };
+    await addWork(
+      'firstUser',
+      'Harry Potter and the Chamber of Secrets',
+      '',
+      '',
+      'movie'
+    );
+    const mappingPath = path.join(
+      __dirname,
+      '..',
+      'data',
+      'vocabCache',
+      'mapping.csv'
+    );
+    assert.ok(fs.existsSync(mappingPath));
+    const lines = fs.readFileSync(mappingPath, 'utf8').trim().split(/\r?\n/);
+    assert.strictEqual(lines.length, 1);
+    const [, filename] = lines[0].split(',');
+    const vocabPath = path.join(
+      __dirname,
+      '..',
+      'data',
+      'vocabCache',
+      filename
+    );
+    assert.ok(fs.existsSync(vocabPath));
+    const initial = calls;
+    _reloadWorkCache();
+    _clearWorks();
+    _clearVocab();
+    await addWork(
+      'secondUser',
+      'Harry Potter and the Chamber of Secrets',
+      '',
+      '',
+      'movie'
+    );
+    assert.strictEqual(calls, initial);
+    const next = getNextWord('secondUser');
+    assert.ok(next);
+    assert.strictEqual(next.word, 'hedwig');
   });
 
   it('merges vocabulary entries with different casing', async () => {
