@@ -160,17 +160,13 @@ button:hover:not(:disabled) {
   height: 100px;
 }
 
-#flashcard-section {
+#flashcard-section,
+#quiz-section {
   text-align: center;
   margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
 }
 
 #flashcard-content {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
