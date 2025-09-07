@@ -608,19 +608,21 @@ button:hover:not(:disabled) {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  height: calc(100vh - 12rem);
 }
 
 @media (max-width: 500px) {
   .game-list {
     grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
   }
 }
 
 .game {
   position: relative;
   width: 100%;
-  max-width: 250px;
-  height: 120px;
+  height: 100%;
   border-radius: 10px;
   background: linear-gradient(135deg, #4a90e2, #9aa5b1);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -709,6 +711,10 @@ button:hover:not(:disabled) {
 
 .game.locked:hover::after {
   opacity: 1;
+}
+
+.game.locked:hover span {
+  opacity: 0;
 }
 
 .game.unlocked:hover span {

@@ -2,8 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Piru - QCM</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="cookies.css" />
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
 </head>
-<body>
+<body class="with-overlay">
+  <header>
+    <a href="/"><img src="/images/parrot_grey_no_title.png" alt="Piru logo" class="logo" /></a>
+    <div class="site-text">
+      <h1><a href="/" class="home-link" data-i18n="site_name">Piru</a></h1>
+      <p data-i18n="tagline">Learn foreign languages while having fun.</p>
+    </div>
+    <nav id="menu" class="hidden"></nav>
+  </header>
+  <div class="title-row">
+    <h2 class="page-title" data-i18n="vocabulary_review"></h2>
+    <div id="progress-container"><div id="progress-bar"></div><div id="progress-cookie">🍪</div></div>
+  </div>
+  <main>
+    <section id="quiz-section" class="hidden">
+      <div id="flashcard-content">
+        <div id="word"></div>
+      </div>
+      <div id="options" class="overlay-buttons">
+        <button data-choice="0" class="btn-main"></button>
+        <button data-choice="1" class="btn-main"></button>
+        <button data-choice="2" class="btn-main"></button>
+        <button data-choice="3" class="btn-main"></button>
+      </div>
+    </section>
+  </main>
+  <script src="/lib/i18next/umd/i18next.min.js"></script>
+  <script src="i18n.js"></script>
+  <script src="quiz.js"></script>
+  <script src="menu.js"></script>
+  <script src="cookies.js"></script>
 </body>
 </html>
