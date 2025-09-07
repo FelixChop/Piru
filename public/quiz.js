@@ -51,7 +51,7 @@
     const res = await fetch(`/vocab/next${workId ? `?workId=${workId}` : ''}`);
     if (res.status === 200) {
       currentWord = await res.json();
-      displayWord(currentWord);
+      await displayWord(currentWord);
     } else if (res.status === 204) {
       currentWord = null;
       document.getElementById('word').textContent = i18next.t('no_words');
@@ -61,15 +61,37 @@
     }
   }
 
-  function displayWord(word) {
+  async function displayWord(word) {
     const question = mode === 'reverse' ? word.definition : word.word;
     const answer = mode === 'reverse' ? word.word : word.definition;
     document.getElementById('word').textContent = question;
-    const optionTexts = [answer, '???', '???', '???'];
+
+    const choices = [{ text: answer, correct: true }];
+    try {
+      const res = await fetch(`/vocab/random?count=4${workId ? `&workId=${workId}` : ''}`);
+      if (res.ok) {
+        const randomWords = await res.json();
+        randomWords
+          .filter((w) => w.id !== word.id)
+          .slice(0, 3)
+          .forEach((w) => {
+            choices.push({
+              text: mode === 'reverse' ? w.word : w.definition,
+              correct: false,
+            });
+          });
+      }
+    } catch (err) {}
+
+    while (choices.length < 4) {
+      choices.push({ text: '???', correct: false });
+    }
+
+    choices.sort(() => Math.random() - 0.5);
     const prefixes = ['A. ', 'B. ', 'C. ', 'D. '];
     document.querySelectorAll('#options button').forEach((btn, i) => {
-      btn.textContent = prefixes[i] + optionTexts[i];
-      btn.dataset.correct = i === 0 ? 'true' : 'false';
+      btn.textContent = prefixes[i] + choices[i].text;
+      btn.dataset.correct = choices[i].correct ? 'true' : 'false';
     });
     document.getElementById('quiz-section').classList.remove('hidden');
   }
