@@ -811,9 +811,14 @@ button:hover:not(:disabled) {
   z-index: 1000;
 }
 
+#flashcard-buttons button {
+  flex: 1 1 45%;
+}
+
 #review-buttons {
   display: flex;
   gap: 0.5rem;
+  width: 100%;
 }
 
 #review-buttons.hidden {
