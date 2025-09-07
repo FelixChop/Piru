@@ -152,11 +152,9 @@
         div.classList.add('unlocked');
       } else {
         div.classList.add('locked');
+        div.setAttribute('data-hover', i18next.t('unlock_question', { count: cost }));
         if (cookies < cost) {
           div.classList.add('no-cookie');
-          div.setAttribute('data-hover', i18next.t('cookie_count', { count: cost }));
-        } else {
-          div.setAttribute('data-hover', i18next.t('unlock_question', { count: cost }));
         }
       }
 
